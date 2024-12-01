@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MBKM extends Model
 {
-    use HasFactory;
 
     protected $table = 'mbkm';
     protected $primaryKey = 'id_mbkm';
@@ -14,8 +13,8 @@ class MBKM extends Model
 
     protected $fillable = [
         'nama_instansi',
-        'deskripsi_mbkm',
-        'status_mbkm',
+        'deskripsi',
+        'status',
         'id_jenis_mbkm',
         'id_pengguna',
         'id_semester',

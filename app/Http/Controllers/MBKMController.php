@@ -17,9 +17,27 @@ class MBKMController extends Controller
      */
     public function index()
     {
-        $mbkm = MBKM::paginate(10);
-        // Return collection of Sidang as a resource
+        $mbkm = MBKM::paginate(5);
+        // Return collection of MBKM as a resource
         return MBKMResource::collection($mbkm);
+    }
+
+    public function getAllByIdSemester($id_semester)
+    {
+        if ($id_semester!=null) {
+            // Ambil data MBKM yang berhubungan dengan semester tertentu
+            $kumpulan_mbkm = MBKMResource::collection(MBKM::where('id_semester', $id_semester)->get());
+        } else {
+            // Jika tidak ada semester yang dipilih, kembalikan semua data MBKM
+            $kumpulan_mbkm = MBKMResource::collection(MBKM::paginate(5));
+        }
+        return $kumpulan_mbkm;
+    }
+
+    public function getByIdMBKM($id_mbkm)
+    {
+        $mbkm = MBKM::where('id_mbkm', $id_mbkm)->first();
+        return new MBKMResource($mbkm);
     }
 
     /**
@@ -30,7 +48,22 @@ class MBKMController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'namaInstansi' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'jenisMbkm' => 'required|integer',
+            'idPengguna'=> 'required|integer',
+            'idSemester'=> 'required|integer',
+        ]);
+
+        // Create a new MBKM record
+        $mbkm = new MBKM;
+        $mbkm->nama_instansi = $request->namaInstansi;
+        $mbkm->deskripsi = $request->deskripsi;
+        $mbkm->id_jenis_mbkm = $request->jenisMbkm;
+        $mbkm->id_pengguna = $request->idPengguna;
+        $mbkm->id_semester = $request->idSemester;
+        $mbkm->save();
     }
 
     /**

@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class KonversiSKS extends Model
 {
-    use HasFactory;
 
     protected $table = 'konversi_sks';
     protected $primaryKey = 'id_matakuliah_detail';
     public $timestamps = false;
 
     protected $fillable = [
-        
         'id_matakuliah',
         'id_pengguna',
-        'id_jenis_semester',
+        'id_semester',
     ];
 
     public function matakuliah()
     {
-        return $this->belongsTo(Matakuliah::class, 'id_matakuliah');
+        return $this->belongsTo(MataKuliah::class, 'id_matakuliah');
     }
 
     public function mahasiswa()
@@ -31,6 +29,6 @@ class KonversiSKS extends Model
 
     public function semester()
     {
-        return $this->belongsTo(JenisSemester::class, 'id_jenis_semester');
+        return $this->belongsTo(Semester::class, 'id_semester');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\JenisMBKM;
 use Illuminate\Http\Request;
+use App\Http\Resources\JenisMBKM as JenisMBKMResources;
 
 class JenisMBKMController extends Controller
 {
@@ -14,7 +15,8 @@ class JenisMBKMController extends Controller
      */
     public function index()
     {
-        //
+        $mbkm = JenisMBKM::all();
+        return JenisMBKMResources::collection($mbkm);
     }
 
     /**
