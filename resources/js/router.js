@@ -77,6 +77,26 @@ import PergantianNilaiAkhirSidangDosen from './pages/dosen/sidang/PergantianNila
 // * Mahasiswa
 import PendaftaranMBKM from './pages/mahasiswa/mbkm/daftar.vue';
 import KonversiSKS from './pages/mahasiswa/mbkm/KonversiSKS.vue';
+import Logbook from './pages/mahasiswa/mbkm/logbook.vue';
+
+import AddTopikMBKM from './pages/mahasiswa/topik_mbkm/Add.vue';
+import HistoriTopikMBKM from './pages/mahasiswa/topik_mbkm/Index.vue';
+import TopikMBKM from './pages/mahasiswa/topik_mbkm/Topik.vue';
+import EditTopikMBKM from './pages/mahasiswa/topik_mbkm/Edit.vue';
+
+import HistoriBimbinganMBKM from './pages/mahasiswa/bimbingan_mbkm/Index.vue';
+import AjukanBimbinganMBKM from './pages/mahasiswa/bimbingan_mbkm/Add.vue';
+
+import PengajuanSidangMahasiwaMBKM from './pages/mahasiswa/sidang_mbkm/Add.vue';
+import AddJadwalMahasiwaMBKM from './pages/mahasiswa/sidang_mbkm/AddJadwal.vue';
+import UpdateJadwalMahasiwaMBKM from './pages/mahasiswa/sidang_mbkm/UpdateJadwal.vue';
+import HistoriSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/Index.vue';
+import RevisiSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/Revisi.vue';
+import DetailSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/DetailSidang.vue';
+
+// * KoorKP
+import KonfirmasiMBKM from './pages/koor_kp/mbkm/Konfirmasi.vue';
+import KonversiMBKM from './pages/koor_kp/mbkm/DetailKonfirmasi.vue';
 
 Vue.use(Router)
 const router = new Router({
@@ -568,6 +588,8 @@ const router = new Router({
             jenisUser: "Tata Usaha"
         }
     },
+    /////////// MBKM //////////////////
+    // ! Mahasiswa
     {
         path: '/mbkm/pendaftaran',
         component: PendaftaranMBKM,
@@ -584,6 +606,130 @@ const router = new Router({
             jenisUser: "Mahasiswa"
         }
     },
+    {
+        path: '/mbkm/logbook',
+        component: Logbook,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/sidang-mbkm',
+        component: HistoriSidangMahasiswaMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/sidang-mbkm/detail/:id',
+        component: DetailSidangMahasiswaMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/sidang-mbkm/revisi/:id',
+        component: RevisiSidangMahasiswaMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/sidang-mbkm/jadwal-mahasiswa/:id',
+        component: AddJadwalMahasiwaMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/sidang-mbkm/update-jadwal-mahasiswa/:id',
+        component: UpdateJadwalMahasiwaMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/sidang-mbkm/:id',
+        component: PengajuanSidangMahasiwaMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/bimbingan-mbkm/:id',
+        component: HistoriBimbinganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/bimbingan-mbkm/ajukan/:id',
+        component: AjukanBimbinganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/topik-mbkm/histori',
+        component: HistoriTopikMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/topik-mbkm/histori/:id',
+        component: TopikMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/topik-mbkm/revisi/:id',
+        component: EditTopikMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/topik-mbkm/pengajuan',
+        component: AddTopikMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+
+    ////////////////// KOORKP/////////////////////////////
+    {
+        path: '/mbkm/konfirmasi',
+        component: KonfirmasiMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/mbkm/detail-konversi/:id',
+        name: 'KonversiMBKM',
+        component: KonversiMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    
     {
         path: '/*',
         name: 'credit',

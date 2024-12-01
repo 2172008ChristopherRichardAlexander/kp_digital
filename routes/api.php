@@ -484,4 +484,19 @@ Route::post('Users/UpdateProfile', 'UsersController@UpdateProfile');
 Route::post('koorkp/Users/register-pengguna', 'UsersController@registerUsers');
 
 // ! API : ####### MBKM #######
-Route::get('mbkm/pendaftaran', 'MBKMController@index');
+Route::post('mahasiswa/mbkm/pendaftaran', 'MBKMController@store');
+Route::get('mbkm/list', 'MBKMController@index');
+Route::get('mbkm/list/{id_semester}', 'MBKMController@getAllByIdSemester');
+Route::get('mbkm/list/konversi/{id_mbkm}', 'MBKMController@getByIdMBKM');
+
+// ! API : ####### Mata kuliah #######
+Route::get('mahasiswa/matakuliah', 'MatakuliahController@index');
+
+// ! API : ####### KonversiSKS #######
+Route::post('mahasiswa/konversi-sks', 'KonversiSKSController@store');
+Route::put('/konversi-sks', 'KonversiSKSController@store');
+Route::get('konversi-sks/{id_pengguna}', 'KonversiSKSController@getAllByIdPengguna');
+Route::put('konversi-sks/{id_pengguna}', 'KonversiSKSController@update');
+// ! API : ####### JenisMBKM #######
+Route::get('mahasiswa/jenis-mbkm', 'JenisMBKMController@index');
+

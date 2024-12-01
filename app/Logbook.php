@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Logbook extends Model
 {
-    use HasFactory;
-
     protected $table = 'logbook';
     protected $primaryKey = 'id_logbook';
     public $timestamps = false;

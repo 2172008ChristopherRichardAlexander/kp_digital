@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\MataKuliah;
 use Illuminate\Http\Request;
+use App\Http\Resources\MataKuliah as MataKuliahResources;
 
 class MataKuliahController extends Controller
 {
@@ -14,7 +15,8 @@ class MataKuliahController extends Controller
      */
     public function index()
     {
-        //
+        $mataKuliah = MataKuliah::all();
+        return MataKuliahResources::collection($mataKuliah);
     }
 
     /**
