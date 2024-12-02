@@ -26,7 +26,7 @@
         <strong class="loading-text">Loading...</strong>
       </div>
       <div class="daftar-keanggotaan" v-else>
-        <template v-if="id_kbk == 4">
+        <template v-if="id_kbk == 5">
           <!-- // * Other -->
           <div v-for="pengguna in other" :key="pengguna.id_jabatan_pengguna">
             <div class="title-keanggotaan">{{pengguna.jabatan.nama_jabatan}}</div>
@@ -46,7 +46,7 @@
         </template>
         <template v-else>
           <!-- // * Ketua -->
-          <div class="title-keanggotaan">Ketua KBK</div>
+          <div class="title-keanggotaan">Ketua RG</div>
           <div class="list-keanggotaan">
             <div
               class="row card-jabatan"
@@ -64,7 +64,7 @@
           </div>
           <!-- // * ################################################ -->
           <!-- // * Sekretaris -->
-          <div class="title-keanggotaan">Sekretaris KBK</div>
+          <div class="title-keanggotaan">Sekretaris RG</div>
           <div class="list-keanggotaan">
             <div
               class="row card-jabatan"
@@ -82,7 +82,7 @@
           </div>
           <!-- // * ################################################ -->
           <!-- // * Anggota -->
-          <div class="title-keanggotaan">Anggota KBK</div>
+          <div class="title-keanggotaan">Anggota RG</div>
           <div class="list-keanggotaan">
             <div
               class="row card-jabatan"
