@@ -122,13 +122,11 @@
         <router-link to="/mbkm/konversi" class="nav-link sidebar-menu-item">Konversi SKS</router-link>
         <router-link to="/mbkm/logbook" class="nav-link sidebar-menu-item">Logbook</router-link>
       </template>
-      <template v-if="cekJabatan('Dosen')">
+      <template v-if="cekJabatan('Dosen') || cekJabatan('Koordinator KP')">
         <router-link to="/mbkm/konfirmasi" class="nav-link sidebar-menu-item">Konfirmasi MBKM</router-link>
         <router-link to="/mbkm/jenis-mbkm" class="nav-link sidebar-menu-item">Jenis MBKM</router-link>
         <router-link to="/mbkm/mata-kuliah" class="nav-link sidebar-menu-item">Mata Kuliah</router-link>
-        <router-link to="/mbkm/logbook" class="nav-link sidebar-menu-item">Logbook</router-link>
-      </template>
-      <template v-if="cekJabatan('Koordinator KP')">
+        <router-link to="/mbkm/list-logbook" class="nav-link sidebar-menu-item">Logbook</router-link>
       </template>
       <div class="sidebar-menu">Topik MBKM</div>
       <template v-if="cekJabatan('Mahasiswa')">
