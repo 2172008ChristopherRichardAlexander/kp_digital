@@ -112,6 +112,7 @@
         <router-link to="/sidang/pembimbing-lapangan" class="nav-link sidebar-menu-item">Nilai Pembimbing
           Lapangan</router-link>
         <router-link to="/sidang/penilaian" class="nav-link sidebar-menu-item">Nilai Koordinator KP</router-link>
+        <router-link to="/sidang/list-laporan" class="nav-link sidebar-menu-item">Laporan</router-link>
       </template>
 
       <!-- MBKM -->
@@ -124,21 +125,10 @@
       <template v-if="cekJabatan('Dosen')">
         <router-link to="/mbkm/konfirmasi" class="nav-link sidebar-menu-item">Konfirmasi MBKM</router-link>
         <router-link to="/mbkm/jenis-mbkm" class="nav-link sidebar-menu-item">Jenis MBKM</router-link>
-        <!-- <router-link to="/mbkm/konversi" class="nav-link sidebar-menu-item"
-          >Konversi SKS</router-link
-        >
-        <router-link to="/mbkm/logbook" class="nav-link sidebar-menu-item"
-          >Logbook</router-link
-        > -->
+        <router-link to="/mbkm/mata-kuliah" class="nav-link sidebar-menu-item">Mata Kuliah</router-link>
+        <router-link to="/mbkm/logbook" class="nav-link sidebar-menu-item">Logbook</router-link>
       </template>
       <template v-if="cekJabatan('Koordinator KP')">
-
-        <!-- <router-link to="/mbkm/konversi" class="nav-link sidebar-menu-item"
-          >Konversi SKS</router-link
-        >
-        <router-link to="/mbkm/logbook" class="nav-link sidebar-menu-item"
-          >Logbook</router-link
-        > -->
       </template>
       <div class="sidebar-menu">Topik MBKM</div>
       <template v-if="cekJabatan('Mahasiswa')">

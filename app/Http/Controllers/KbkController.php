@@ -19,7 +19,7 @@ class KbkController extends Controller
     public function index()
     {
         // Get Kbk
-        $kbk = Kbk::where('id_kbk', '<', 4)->get();
+        $kbk = Kbk::where('id_kbk', '<', 5)->get();
         // Return collection of Kbk as a resource
         return KbkResource::collection($kbk);
     }
