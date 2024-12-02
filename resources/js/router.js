@@ -97,6 +97,9 @@ import DetailSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/DetailSidan
 // * KoorKP
 import KonfirmasiMBKM from './pages/koor_kp/mbkm/Konfirmasi.vue';
 import KonversiMBKM from './pages/koor_kp/mbkm/DetailKonfirmasi.vue';
+import ListMataKuliah from './pages/koor_kp/mbkm/MataKuliah.vue';
+import ListLogbook from './pages/koor_kp/mbkm/Logbook.vue';
+import JenisMbkm from './pages/koor_kp/mbkm/JenisMbkm.vue';
 
 Vue.use(Router)
 const router = new Router({
@@ -729,7 +732,30 @@ const router = new Router({
             jenisUser: "Koordinator KP"
         }
     },
-    
+    {
+        path: '/mbkm/mata-kuliah',
+        component: ListMataKuliah,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/mbkm/jenis-mbkm',
+        component: JenisMbkm,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/mbkm/list-logbook',
+        component: ListLogbook,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
     {
         path: '/*',
         name: 'credit',

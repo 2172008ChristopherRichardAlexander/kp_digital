@@ -497,6 +497,7 @@ Route::post('mahasiswa/konversi-sks', 'KonversiSKSController@store');
 Route::put('/konversi-sks', 'KonversiSKSController@store');
 Route::get('konversi-sks/{id_pengguna}', 'KonversiSKSController@getAllByIdPengguna');
 Route::put('konversi-sks/{id_pengguna}', 'KonversiSKSController@update');
+
 // ! API : ####### JenisMBKM #######
 Route::get('mahasiswa/jenis-mbkm', 'JenisMBKMController@index');
 
