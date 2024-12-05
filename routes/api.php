@@ -488,16 +488,33 @@ Route::post('mahasiswa/mbkm/pendaftaran', 'MBKMController@store');
 Route::get('mbkm/list', 'MBKMController@index');
 Route::get('mbkm/list/{id_semester}', 'MBKMController@getAllByIdSemester');
 Route::get('mbkm/list/konversi/{id_mbkm}', 'MBKMController@getByIdMBKM');
+Route::put('mbkm/{id}', 'MBKMController@update');
 
 // ! API : ####### Mata kuliah #######
 Route::get('mahasiswa/matakuliah', 'MatakuliahController@index');
+Route::post('matakuliah', 'MatakuliahController@store');
+Route::put('matakuliah', 'MatakuliahController@store');
+Route::delete('matakuliah/{mataKuliah}', 'MatakuliahController@destoy');
 
 // ! API : ####### KonversiSKS #######
 Route::post('mahasiswa/konversi-sks', 'KonversiSKSController@store');
 Route::put('/konversi-sks', 'KonversiSKSController@store');
 Route::get('konversi-sks/{id_pengguna}', 'KonversiSKSController@getAllByIdPengguna');
 Route::put('konversi-sks/{id_pengguna}', 'KonversiSKSController@update');
+Route::delete('konversi-sks/{id_pengguna}/{id_matakuliah_detail}', 'KonversiSKSController@deleteKonversiSKS');
 
 // ! API : ####### JenisMBKM #######
 Route::get('mahasiswa/jenis-mbkm', 'JenisMBKMController@index');
+Route::post('jenis-mbkm', 'JenisMBKMController@store');
+Route::put('jenis-mbkm', 'JenisMBKMController@store');
+Route::delete('jenis-mbkm/{jenisMBKM}', 'JenisMBKMController@destroy');
 
+// ! API : ####### JenisSemester #######
+Route::get('jenis-semester', 'JenisSemesterController@index');
+
+// ! API : ####### JenisDokumen #######
+Route::get('jenis-dokumen/list','JenisDokumenController@index');
+
+// ! API : ####### Dokumen #######
+Route::post('/dokumen/upload-template','DokumenController@uploadTemplate');
+Route::get('/dokumen/dokumen-mahasiswa','DokumenController@listDokumen');

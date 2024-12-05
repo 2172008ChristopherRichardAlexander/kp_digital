@@ -4,18 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Laporan extends Model
+class Dokumen extends Model
 {
 
-    protected $table = 'laporan';
-    protected $primaryKey = 'id_laporan';
+    protected $table = 'dokumen';
+    protected $primaryKey = 'id_dokumen';
     public $timestamps = false;
 
     protected $fillable = [
-        'file_laporan',
-        'deskripsi_laporan',
+        'file_dokumen',
+        'is_mbkm',
         'id_pengguna',
         'id_semester',
+        'id_jenis_dokumen',
     ];
 
     public function mahasiswa()
@@ -26,5 +27,10 @@ class Laporan extends Model
     public function semester()
     {
         return $this->belongsTo(Semester::class, 'id_semester');
+    }
+
+    public function jenisDokumen()
+    {
+        return $this->belongsTo(JenisDokumen::class, 'id_jenis_dokumen');
     }
 }

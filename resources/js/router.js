@@ -77,7 +77,7 @@ import PergantianNilaiAkhirSidangDosen from './pages/dosen/sidang/PergantianNila
 // * Mahasiswa
 import PendaftaranMBKM from './pages/mahasiswa/mbkm/daftar.vue';
 import KonversiSKS from './pages/mahasiswa/mbkm/KonversiSKS.vue';
-import Logbook from './pages/mahasiswa/mbkm/logbook.vue';
+import Logbook from './pages/mahasiswa/mbkm/Logbook.vue';
 
 import AddTopikMBKM from './pages/mahasiswa/topik_mbkm/Add.vue';
 import HistoriTopikMBKM from './pages/mahasiswa/topik_mbkm/Index.vue';
@@ -98,8 +98,10 @@ import DetailSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/DetailSidan
 import KonfirmasiMBKM from './pages/koor_kp/mbkm/Konfirmasi.vue';
 import KonversiMBKM from './pages/koor_kp/mbkm/DetailKonfirmasi.vue';
 import ListMataKuliah from './pages/koor_kp/mbkm/MataKuliah.vue';
-import ListLogbook from './pages/koor_kp/mbkm/Logbook.vue';
 import JenisMbkm from './pages/koor_kp/mbkm/JenisMbkm.vue';
+
+import ListDokumen from './pages/koor_kp/dokumen/Dokumen.vue';
+import TemplateDokumen from './pages/koor_kp/dokumen/Setting.vue';
 
 Vue.use(Router)
 const router = new Router({
@@ -525,6 +527,22 @@ const router = new Router({
             jenisUser: "Koordinator KP"
         }
     },
+    {
+        path: '/dokumen/list-dokumen-mahasiswa',
+        component: ListDokumen,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/dokumen/template-dokumen',
+        component: TemplateDokumen,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
     // * Mahasiswa
     {
         path: '/sidang',
@@ -720,7 +738,7 @@ const router = new Router({
         component: KonfirmasiMBKM,
         meta: {
             requiresAuth: true,
-            jenisUser: "Koordinator KP"
+            jenisUser: "Koordinator KP",
         }
     },
     {
@@ -743,14 +761,6 @@ const router = new Router({
     {
         path: '/mbkm/jenis-mbkm',
         component: JenisMbkm,
-        meta: {
-            requiresAuth: true,
-            jenisUser: "Koordinator KP"
-        }
-    },
-    {
-        path: '/mbkm/list-logbook',
-        component: ListLogbook,
         meta: {
             requiresAuth: true,
             jenisUser: "Koordinator KP"

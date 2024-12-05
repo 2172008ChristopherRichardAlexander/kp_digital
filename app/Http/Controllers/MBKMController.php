@@ -86,7 +86,9 @@ class MBKMController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $mbkm = MBKM::where('id_pengguna',$id)->first();
+        $mbkm->status = $request->input('status');
+        $mbkm->save();
     }
 
     /**

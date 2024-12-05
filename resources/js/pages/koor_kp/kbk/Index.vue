@@ -172,6 +172,7 @@ export default {
       this.other = [];
       Axios.get(`${config.apiUrl}/jabatan-pengguna/kbk/${this.id_kbk}`).then(
         response => {
+          console.log(response)
           if (response.data.data.length > 0) {
             this.data_anggota_kbk = response.data.data;
             this.ubahNamaAnggota();
@@ -195,11 +196,11 @@ export default {
             }
             // ! Filter Aggota
             nama_jabatan = element.jabatan.nama_jabatan.toLowerCase();
-            if (nama_jabatan.includes("ketua kbk")) {
+            if (nama_jabatan.includes("ketua kbk")||nama_jabatan.includes("ketua research group")){
               this.ketua_kbk.push(element);
-            } else if (nama_jabatan.includes("sekretaris kbk")) {
+            } else if (nama_jabatan.includes("sekretaris kbk")||nama_jabatan.includes("sekretaris research group")) {
               this.sekretaris_kbk.push(element);
-            } else if (nama_jabatan.includes("kbk")) {
+            } else if (nama_jabatan.includes("kbk")||nama_jabatan.includes("anggota research group")) {
               this.anggota_kbk.push(element);
             } else {
               if (nama_jabatan.includes("koordinator kp")) {

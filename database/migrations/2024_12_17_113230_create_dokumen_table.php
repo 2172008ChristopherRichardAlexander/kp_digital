@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLaporanTable extends Migration
+class CreateDokumenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateLaporanTable extends Migration
      */
     public function up()
     {
-        Schema::create('laporan', function (Blueprint $table) {
-            $table->increments('id_laporan');
-            $table->string('file_laporan');
-            $table->string('deskripsi');
+        Schema::create('dokumen', function (Blueprint $table) {
+            $table->increments('id_dokumen');
+            $table->string('file_dokumen');
+            $table->tinyInteger('is_mbkm');
             $table->integer('id_pengguna')->unsigned();
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');
             $table->integer('id_semester')->unsigned();
             $table->foreign('id_semester')->references('id_semester')->on('semester');
+            $table->integer('id_jenis_dokumen')->unsigned();
+            $table->foreign('id_jenis_dokumen')->references('id_jenis_dokumen')->on('jenis_dokumen');
         });
     }
 
@@ -31,6 +33,6 @@ class CreateLaporanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('laporan');
+        Schema::dropIfExists('Dokumen');
     }
 }
