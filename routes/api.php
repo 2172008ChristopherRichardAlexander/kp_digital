@@ -489,6 +489,7 @@ Route::get('mbkm/list', 'MBKMController@index');
 Route::get('mbkm/list/{id_semester}', 'MBKMController@getAllByIdSemester');
 Route::get('mbkm/list/konversi/{id_mbkm}', 'MBKMController@getByIdMBKM');
 Route::put('mbkm/{id}', 'MBKMController@update');
+Route::get('mahasiswa/mbkm/{id}', 'MBKMController@getAllByIdUser');
 
 // ! API : ####### Mata kuliah #######
 Route::get('mahasiswa/matakuliah', 'MatakuliahController@index');

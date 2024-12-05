@@ -34,6 +34,15 @@ class MBKMController extends Controller
         return $kumpulan_mbkm;
     }
 
+    public function getAllByIdUser($id)
+    {
+        $exists = MBKM::where('id_pengguna', $id)->exists();
+        // Mengembalikan response JSON dengan status 'exists'
+        return response()->json([
+            'exists' => $exists
+        ]);
+    }
+
     public function getByIdMBKM($id_mbkm)
     {
         $mbkm = MBKM::where('id_mbkm', $id_mbkm)->first();
