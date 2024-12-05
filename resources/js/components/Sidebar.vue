@@ -122,7 +122,15 @@
       <div class="sidebar-menu">MBKM</div>
       <template v-if="cekJabatan('Mahasiswa')">
         <router-link to="/mbkm/pendaftaran" class="nav-link sidebar-menu-item">Daftar MBKM</router-link>
-        <router-link to="/mbkm/konversi" class="nav-link sidebar-menu-item">Konversi SKS</router-link>
+        <template v-if="cekJabatan('Mahasiswa')">
+          <!-- Cek apakah Mahasiswa sudah terdaftar di tabel MBKM -->
+          <template v-if="isKonversiSKSAvailable">
+            <router-link to="/mbkm/konversi" class="nav-link sidebar-menu-item">Konversi SKS</router-link>
+          </template>
+          <template v-else>
+            <div class="nav-link sidebar-menu-item-disabled">Konversi SKS</div>
+          </template>
+        </template>
       </template>
       <template v-if="cekJabatan('Dosen') || cekJabatan('Koordinator KP')">
         <router-link to="/mbkm/konfirmasi" class="nav-link sidebar-menu-item">Konfirmasi MBKM</router-link>
@@ -202,9 +210,11 @@ export default {
       topik: null,
       placement: "right",
       id_pengguna: this.$store.getters.pengguna.UserId,
+      kode: this.$store.getters.pengguna.Id,
       id_batch_sidang: null,
       topik_sidang: null,
       loading_topik_sidang: true,
+      isKonversiSKSAvailable: false,
     };
   },
   computed: {
@@ -218,6 +228,9 @@ export default {
     });
     this.getBatchTopik();
     this.getTopikSidang();
+    this.cekMBKM(this.kode).then((exists) => {
+      this.isKonversiSKSAvailable = exists;
+    });
   },
   methods: {
     cekJabatan(jabatan) {
@@ -290,6 +303,17 @@ export default {
         this.loading_topik_sidang = false;
       });
     },
+    async cekMBKM(id_pengguna) {
+      console.log(this.id_pengguna);
+      return Axios.get(`${config.apiMahasiswaUrl}/mbkm/${id_pengguna}`)
+        .then((response) => {
+          console.log(response);
+          return response.data.exists;
+        })
+        .catch(() => {
+          return false;
+        });
+    },
   },
 };
 </script>
@@ -337,7 +361,7 @@ aside {
 .sidebar-menu-item-disabled:hover {
   padding-left: 35px;
   color: rgb(65, 72, 2);
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .sidebar-menu-item {
