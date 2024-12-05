@@ -112,21 +112,22 @@
         <router-link to="/sidang/pembimbing-lapangan" class="nav-link sidebar-menu-item">Nilai Pembimbing
           Lapangan</router-link>
         <router-link to="/sidang/penilaian" class="nav-link sidebar-menu-item">Nilai Koordinator KP</router-link>
-        <router-link to="/sidang/list-laporan" class="nav-link sidebar-menu-item">Laporan</router-link>
       </template>
-
+      <template v-if="cekJabatan('Koordinator KP')">
+        <div class="sidebar-menu">Dokumen</div>
+        <router-link to="/dokumen/list-dokumen-mahasiswa" class="nav-link sidebar-menu-item">List Dokumen</router-link>
+        <router-link to="/dokumen/template-dokumen" class="nav-link sidebar-menu-item">Setting</router-link>
+      </template>
       <!-- MBKM -->
       <div class="sidebar-menu">MBKM</div>
       <template v-if="cekJabatan('Mahasiswa')">
         <router-link to="/mbkm/pendaftaran" class="nav-link sidebar-menu-item">Daftar MBKM</router-link>
         <router-link to="/mbkm/konversi" class="nav-link sidebar-menu-item">Konversi SKS</router-link>
-        <router-link to="/mbkm/logbook" class="nav-link sidebar-menu-item">Logbook</router-link>
       </template>
       <template v-if="cekJabatan('Dosen') || cekJabatan('Koordinator KP')">
         <router-link to="/mbkm/konfirmasi" class="nav-link sidebar-menu-item">Konfirmasi MBKM</router-link>
         <router-link to="/mbkm/jenis-mbkm" class="nav-link sidebar-menu-item">Jenis MBKM</router-link>
         <router-link to="/mbkm/mata-kuliah" class="nav-link sidebar-menu-item">Mata Kuliah</router-link>
-        <router-link to="/mbkm/list-logbook" class="nav-link sidebar-menu-item">Logbook</router-link>
       </template>
       <div class="sidebar-menu">Topik MBKM</div>
       <template v-if="cekJabatan('Mahasiswa')">
@@ -220,6 +221,7 @@ export default {
   },
   methods: {
     cekJabatan(jabatan) {
+
       return this.$store.getters.jabatan.includes(jabatan);
     },
     getBatchTopik() {

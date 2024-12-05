@@ -133,7 +133,6 @@ export default {
           this.isBusyDosen = false;
         })
         .catch((response) => {
-          console.log(response);
         });
     },
     getJabatan(row) {
@@ -150,7 +149,7 @@ export default {
             });
           })
           .catch((response) => {
-            console.log(response);
+
           });
       }
     },

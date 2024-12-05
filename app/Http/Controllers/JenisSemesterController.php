@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\JenisSemester;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\JenisSemester as JenisSemesterResources;
 class JenisSemesterController extends Controller
 {
     /**
@@ -14,7 +14,8 @@ class JenisSemesterController extends Controller
      */
     public function index()
     {
-        //
+        $jenissemester = JenisSemester::all();
+        return JenisSemesterResources::collection($jenissemester);
     }
 
     /**

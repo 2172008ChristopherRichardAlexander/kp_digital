@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\MataKuliah;
+use App\JenisDokumen;
 use Illuminate\Http\Request;
-use App\Http\Resources\MataKuliah as MataKuliahResources;
+use App\Http\Resources\JenisDokumen as JenisDokumenResources;
 
-class MataKuliahController extends Controller
+class JenisDokumenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,10 @@ class MataKuliahController extends Controller
      */
     public function index()
     {
-        $mataKuliah = MataKuliah::all();
-        return MataKuliahResources::collection($mataKuliah);
+        $jenisDokumen = JenisDokumen::all();
+        return JenisDokumenResources::collection($jenisDokumen);
+        
+
     }
 
     /**
@@ -26,7 +28,7 @@ class MataKuliahController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -37,22 +39,16 @@ class MataKuliahController extends Controller
      */
     public function store(Request $request)
     {
-        $matakuliah = $request->isMethod('put') ? MataKuliah::find($request->id_matakuliah) : new MataKuliah;
-        $matakuliah->id_matakuliah = $request->input('id_matakuliah');
-        $matakuliah->nama_matakul = $request->input('nama_matakul');
-        $matakuliah->jumlah_sks = $request->input('jumlah_sks');
-        $matakuliah->id_jenis_semester = $request->input('id_jenis_semester');
-        $matakuliah->status = $request->input('status');
-        $matakuliah->save();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\MataKuliah  $mataKuliah
+     * @param  \App\JenisDokumen  $jenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function show(MataKuliah $mataKuliah)
+    public function show(JenisDokumen $jenisDokumen)
     {
         //
     }
@@ -60,10 +56,10 @@ class MataKuliahController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\MataKuliah  $mataKuliah
+     * @param  \App\JenisDokumen  $jenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function edit(MataKuliah $mataKuliah)
+    public function edit(JenisDokumen $jenisDokumen)
     {
         //
     }
@@ -72,10 +68,10 @@ class MataKuliahController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MataKuliah  $mataKuliah
+     * @param  \App\JenisDokumen  $jenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MataKuliah $mataKuliah)
+    public function update(Request $request, JenisDokumen $jenisDokumen)
     {
         //
     }
@@ -83,11 +79,11 @@ class MataKuliahController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\MataKuliah  $mataKuliah
+     * @param  \App\JenisDokumen  $jenisDokumen
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MataKuliah $mataKuliah)
+    public function destroy(JenisDokumen $jenisDokumen)
     {
-        $mataKuliah->delete();
+        //
     }
 }

@@ -37,7 +37,9 @@ class JenisMBKMController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $jenis_mbkm = $request->isMethod('put') ? JenisMBKM::find($request->id_jenis_mbkm) : new JenisMBKM;
+        $jenis_mbkm->nama_mbkm = $request->input('nama_mbkm');
+        $jenis_mbkm->save();
     }
 
     /**
@@ -82,6 +84,6 @@ class JenisMBKMController extends Controller
      */
     public function destroy(JenisMBKM $jenisMBKM)
     {
-        //
+        $jenisMBKM->delete();
     }
 }
