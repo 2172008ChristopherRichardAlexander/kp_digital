@@ -94,6 +94,9 @@ import HistoriSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/Index.vue'
 import RevisiSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/Revisi.vue';
 import DetailSidangMahasiswaMBKM from './pages/mahasiswa/sidang_mbkm/DetailSidang.vue';
 
+import ListTemplateDokumen from './pages/mahasiswa/dokumen/Template.vue';
+import UploadDokumenMahasiswa from './pages/mahasiswa/dokumen/Upload.vue';
+
 // * KoorKP
 import KonfirmasiMBKM from './pages/koor_kp/mbkm/Konfirmasi.vue';
 import KonversiMBKM from './pages/koor_kp/mbkm/DetailKonfirmasi.vue';
@@ -726,6 +729,22 @@ const router = new Router({
     {
         path: '/topik-mbkm/pengajuan',
         component: AddTopikMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/dokumen/list-template-dokumen',
+        component: ListTemplateDokumen,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Mahasiswa"
+        }
+    },
+    {
+        path: '/dokumen/upload-dokumen-mahasiswa',
+        component: UploadDokumenMahasiswa,
         meta: {
             requiresAuth: true,
             jenisUser: "Mahasiswa"

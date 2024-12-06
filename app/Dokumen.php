@@ -14,6 +14,7 @@ class Dokumen extends Model
     protected $fillable = [
         'file_dokumen',
         'is_mbkm',
+        'is_template',
         'id_pengguna',
         'id_semester',
         'id_jenis_dokumen',
