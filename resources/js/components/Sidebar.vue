@@ -113,10 +113,14 @@
           Lapangan</router-link>
         <router-link to="/sidang/penilaian" class="nav-link sidebar-menu-item">Nilai Koordinator KP</router-link>
       </template>
+      <div class="sidebar-menu">Dokumen</div>
       <template v-if="cekJabatan('Koordinator KP')">
-        <div class="sidebar-menu">Dokumen</div>
         <router-link to="/dokumen/list-dokumen-mahasiswa" class="nav-link sidebar-menu-item">List Dokumen</router-link>
         <router-link to="/dokumen/template-dokumen" class="nav-link sidebar-menu-item">Setting</router-link>
+      </template>
+      <template v-if="cekJabatan('Mahasiswa')">
+        <router-link to="/dokumen/upload-dokumen-mahasiswa" class="nav-link sidebar-menu-item">Upload</router-link>
+        <router-link to="/dokumen/list-template-dokumen" class="nav-link sidebar-menu-item">Template</router-link>
       </template>
       <!-- MBKM -->
       <div class="sidebar-menu">MBKM</div>
@@ -234,7 +238,6 @@ export default {
   },
   methods: {
     cekJabatan(jabatan) {
-
       return this.$store.getters.jabatan.includes(jabatan);
     },
     getBatchTopik() {
@@ -304,10 +307,8 @@ export default {
       });
     },
     async cekMBKM(id_pengguna) {
-      console.log(this.id_pengguna);
       return Axios.get(`${config.apiMahasiswaUrl}/mbkm/${id_pengguna}`)
         .then((response) => {
-          console.log(response);
           return response.data.exists;
         })
         .catch(() => {

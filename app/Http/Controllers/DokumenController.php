@@ -73,6 +73,7 @@ class DokumenController extends Controller
         // Dapatkan jenis dokumen yang dipilih
         $jenisDokumen = $request->jenisDokumen;
         $id_pengguna = $request->idPengguna;
+        
         $dokumenFolder = '';
 
         // Tentukan folder penyimpanan berdasarkan jenis dokumen
@@ -116,6 +117,7 @@ class DokumenController extends Controller
         $dokumen->id_pengguna = $id_pengguna; // ID pengguna yang sedang login
         $dokumen->id_semester = $request->id_semester ?? 1; // ID Semester yang dipilih, jika tidak ada default 1
         $dokumen->id_jenis_dokumen = $jenisDokumen; // ID Jenis Dokumen yang dipilih
+        $dokumen->is_template = 1;
         $dokumen->save();
 
         return response()->json([
@@ -154,7 +156,16 @@ class DokumenController extends Controller
 
         // Kembalikan response dengan data dokumen
         return response()->json([
-            'data' => $dokumen,
+            'data' => DokumenResource::collection($dokumen),
+        ]);
+    }
+    public function getListTemplate()
+    {
+        $dokumenTemplates = Dokumen::where('is_template', true)->get();
+
+        // Mengembalikan response JSON
+        return response()->json([
+            'data' => $dokumenTemplates
         ]);
     }
 

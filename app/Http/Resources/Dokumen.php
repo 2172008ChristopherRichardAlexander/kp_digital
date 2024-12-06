@@ -21,6 +21,7 @@ class Dokumen extends JsonResource
             'id_dokumen' => $this->id_dokumen,
             'file_dokumen' => $this->file_dokumen,
             'is_mbkm'=>$this->is_mbkm,
+            'is_template'=>$this->is_template,
             'id_pengguna' => $this->id_pengguna,
             'id_semester' => $this->id_semester,
             'id_jenis_dokumen'=> $this->id_jenis_dokumen,
