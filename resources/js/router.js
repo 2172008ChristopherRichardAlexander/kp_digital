@@ -59,6 +59,7 @@ import SyaratDanKetentuanSidang from './pages/koor_kp/sidang/SyaratDanKetentuan.
 import AddSyaratDanKetentuanSidang from './pages/koor_kp/sidang/AddSyaratDanKetentuan.vue';
 import PergantianNilaiAkhirSidangKoorKP from './pages/koor_kp/sidang/PergantianNilai.vue';
 import LaporanNilaiAkhirSidangKoorKP from './pages/koor_kp/sidang/LaporanNilai.vue';
+import KirimEmail from './pages/koor_kp/sidang/Email.vue'
 // * Koordinator KBK
 import PengaturanPengujiSidang from './pages/koor_kbk/sidang/PengaturanPenguji.vue';
 import ListPengaturanSidang from './pages/koor_kbk/sidang/Index.vue';
@@ -525,6 +526,14 @@ const router = new Router({
     {
         path: '/sidang/laporan-nilai',
         component: LaporanNilaiAkhirSidangKoorKP,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/sidang/kirim-email',
+        component: KirimEmail,
         meta: {
             requiresAuth: true,
             jenisUser: "Koordinator KP"
