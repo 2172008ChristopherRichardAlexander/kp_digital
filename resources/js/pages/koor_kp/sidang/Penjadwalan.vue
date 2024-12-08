@@ -18,34 +18,18 @@
           </div>
           <b-row v-if="sidang.topik">
             <b-col sm="2">Pembimbing</b-col>
-            <b-col
-              >: {{ sidang.topik.pembimbing }} ({{
-                sidang.topik.id_pembimbing
-              }})</b-col
-            >
-            <template v-if="sidang.topik">
+            <b-col>: {{ sidang.topik.pembimbing }} ({{ sidang.topik.id_pembimbing }})</b-col>
+            <template v-if="sidang.topik.pembimbing_lapangan">
               <b-col sm="2">Pembimbing Lapangan</b-col>
-              <b-col
-                >: {{ sidang.topik.pembimbing_lapangan }} ({{
-                  sidang.topik.id_pembimbing_lapangan
-                }})</b-col
-              >
+              <b-col>: {{ sidang.topik.pembimbing_lapangan }} ({{ sidang.topik.id_pembimbing_lapangan }})</b-col>
             </template>
           </b-row>
           <b-row v-if="sidang.penguji_sidang">
             <b-col sm="2">Penguji</b-col>
-            <b-col
-              >: {{ sidang.penguji_sidang }} ({{
-                sidang.id_penguji_sidang
-              }})</b-col
-            >
+            <b-col>: {{ sidang.penguji_sidang }} ({{ sidang.id_penguji_sidang }})</b-col>
             <template v-if="sidang.penguji_sidang_dua">
               <b-col sm="2">Penguji Dua</b-col>
-              <b-col
-                >: {{ sidang.penguji_sidang_dua }} ({{
-                  sidang.id_penguji_sidang_dua
-                }})</b-col
-              >
+              <b-col>: {{ sidang.penguji_sidang_dua }} ({{ sidang.id_penguji_sidang_dua }})</b-col>
             </template>
           </b-row>
         </div>
@@ -54,7 +38,7 @@
             <div class="col text-left">
               <h4 class="keterangan-website">Daftar Jadwal Mahasiswa</h4>
             </div>
-            <!-- // ? Filter -->
+            <!-- Filter -->
             <div class="col-3 component-filter">
               <b-form-group
                 label-size="sm"
@@ -73,13 +57,13 @@
                       class="btn-form"
                       :disabled="!filter"
                       @click="filter = ''"
-                      >Hapus</b-button
                     >
+                      Hapus
+                    </b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
             </div>
-            <!-- // ? ######################################################################## -->
           </div>
           <b-table
             sticky-header
@@ -100,33 +84,22 @@
           >
             <template v-slot:table-busy>
               <div class="text-center my-2">
-                <ring-loader class="loading-page" color="#20a506" :size="50" />
+                <!-- Jika menggunakan b-spinner -->
+                <b-spinner
+                  label="Loading..."
+                  small
+                  variant="success"
+                ></b-spinner>
                 <strong class="loading-text">Loading...</strong>
+                <!-- Jika menggunakan RingLoader -->
+                <!-- <ring-loader class="loading-page" color="#20a506" size="50" /> -->
               </div>
             </template>
             <template v-slot:empty>
               <h5 class="text-center">Tidak ada data jadwal mahasiswa</h5>
             </template>
-            <!-- // TODO: Mengganti dengan hari -->
-            <!-- <template v-slot:cell(tanggal)="data">
-              {{data}}
-              <VueCtkDateTimePicker
-                label="Tanggal"
-                class="show-form-time-item"
-                :id="'show-tanggal_jadwal_mahasiswa-'+data.item.id_jadwal_mahasiswa"
-                format="YYYY-MM-DD"
-                formatted="LL"
-                only-date
-                noClearButton
-                disabled
-                v-model="data.item.tanggal_jadwal_mahasiswa"
-                noLabel
-                inputSize="sm"
-              />
-            </template>-->
           </b-table>
           <b-row>
-            <!-- // ? Pagination -->
             <b-col>
               <b-pagination
                 v-model="currentPage"
@@ -137,11 +110,10 @@
                 class="mb-0"
               ></b-pagination>
             </b-col>
-            <!-- // ? ######################################################################## -->
             <b-col class="text-right">&nbsp;</b-col>
           </b-row>
         </div>
-        <!-- // * Menentukan Jadwal Mahasiswa -->
+        <!-- Menentukan Jadwal Mahasiswa -->
         <div class="row my-2">
           <div class="col text-left">
             <h4 class="keterangan-website">Menentukan Jadwal Mahasiswa</h4>
@@ -178,9 +150,12 @@
                   <span
                     class="feedback-validasi-false"
                     v-if="!$v.tanggal_sidang.required"
-                    >&#10006;</span
                   >
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
+                    &#10006;
+                  </span>
+                  <span class="feedback-validasi-true" v-else>
+                    &#10004;
+                  </span>
                 </b-col>
               </b-row>
             </div>
@@ -194,7 +169,7 @@
                     id="input-waktu_mulai_sidang"
                     format="hh:mm a"
                     formatted="hh:mm a"
-                    output-format="hh:mm a"
+                    outputFormat="hh:mm a"
                     minute-interval="5"
                     only-time
                     v-model.trim="$v.waktu_mulai_sidang.$model"
@@ -210,7 +185,7 @@
                     id="input-waktu_akhir_sidang"
                     format="hh:mm a"
                     formatted="hh:mm a"
-                    output-format="hh:mm a"
+                    outputFormat="hh:mm a"
                     minute-interval="5"
                     only-time
                     v-model.trim="$v.waktu_akhir_sidang.$model"
@@ -225,9 +200,12 @@
                       !$v.waktu_mulai_sidang.required ||
                       !$v.waktu_akhir_sidang.required
                     "
-                    >&#10006;</span
                   >
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
+                    &#10006;
+                  </span>
+                  <span class="feedback-validasi-true" v-else>
+                    &#10004;
+                  </span>
                 </b-col>
               </b-row>
             </div>
@@ -241,29 +219,53 @@
                     v-model="ruangan_sidang"
                     placeholder="Ruangan Sidang"
                     size="sm"
+                    required
                   ></b-form-input>
                 </b-col>
                 <b-col class="feedback-validasi">
                   <span
                     class="feedback-validasi-false"
                     v-if="!$v.ruangan_sidang.required"
-                    >&#10006;</span
                   >
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
+                    &#10006;
+                  </span>
+                  <span class="feedback-validasi-true" v-else>
+                    &#10004;
+                  </span>
                 </b-col>
               </b-row>
             </div>
+            <!-- Row Konfirmasi -->
             <div class="form-tambah-jadwal-item row-konfirmasi">
               <b-row>
                 <b-col class="input-form-submit text-right">
+                  <!-- Tombol Kirim Email -->
+                  <b-button
+                    @click.prevent="openEmailModal"
+                    :disabled="loading"
+                    class="btn-form mr-2"
+                    variant="info"
+                  >
+                    Kirim Email
+                  </b-button>
+
+                  <!-- Tombol Tentukan Jadwal -->
                   <b-button type="submit" :disabled="loading" class="btn-form">
-                    {{ loading ? "" : "Tentukan Jadwal" }}
-                    <ring-loader
+                    {{ loading ? "Tentukan..." : "Tentukan Jadwal" }}
+                    <!-- Jika menggunakan b-spinner -->
+                    <b-spinner
+                      small
+                      label="Loading..."
+                      v-if="loading"
+                      class="ml-2"
+                    ></b-spinner>
+                    <!-- Jika menggunakan RingLoader -->
+                    <!-- <ring-loader
                       class="loading-page"
                       color="white"
-                      :size="25"
+                      size="25"
                       v-if="loading"
-                    />
+                    /> -->
                   </b-button>
                 </b-col>
                 <b-col class="feedback-validasi">&nbsp;</b-col>
@@ -271,27 +273,99 @@
             </div>
           </div>
         </b-form>
+
+        <!-- Modal Kirim Email -->
+        <b-modal
+          id="emailModal"
+          ref="emailModal"
+          title="Kirim Email Sidang"
+          hide-footer
+          @hide="resetEmailData"
+        >
+          <b-form @submit.prevent="sendEmail">
+            <b-form-group label="Penerima" label-for="recipients">
+              <b-form-input
+                id="recipients"
+                v-model="emailData.recipients"
+                placeholder="Masukkan email penerima (pisahkan dengan koma)"
+                required
+              />
+              <small class="text-danger" v-if="!$v.emailData.recipients.required">
+                Email penerima diperlukan.
+              </small>
+              <small class="text-danger" v-else-if="!$v.emailData.recipients.emailList">
+                Format email tidak valid.
+              </small>
+            </b-form-group>
+            <b-form-group label="Subjek" label-for="subject">
+              <b-form-input
+                id="subject"
+                v-model="emailData.subject"
+                placeholder="Masukkan subjek email"
+                required
+              />
+              <small class="text-danger" v-if="!$v.emailData.subject.required">
+                Subjek email diperlukan.
+              </small>
+            </b-form-group>
+            <b-form-group label="Pesan" label-for="message">
+              <b-form-textarea
+                id="message"
+                v-model="emailData.message"
+                rows="4"
+                placeholder="Masukkan pesan"
+                required
+              />
+              <small class="text-danger" v-if="!$v.emailData.message.required">
+                Pesan email diperlukan.
+              </small>
+            </b-form-group>
+            <div class="text-right">
+              <b-button variant="secondary" @click="hideEmailModal">Batal</b-button>
+              <b-button type="submit" variant="primary" :disabled="loading">
+                {{ loading ? 'Mengirim...' : 'Kirim Email' }}
+                <!-- Jika menggunakan b-spinner -->
+                <b-spinner
+                  small
+                  label="Loading..."
+                  v-if="loading"
+                  class="ml-2"
+                ></b-spinner>
+                <!-- Jika menggunakan RingLoader -->
+                <!-- <ring-loader
+                  class="loading-page"
+                  color="white"
+                  size="20"
+                  v-if="loading"
+                /> -->
+              </b-button>
+            </div>
+          </b-form>
+        </b-modal>
       </div>
     </div>
   </b-container>
 </template>
 <script>
 import Axios from "axios";
-import config from "../../../config";
+import config from "../../../config"; // Pastikan config sudah sesuai dengan base URL API Anda
 import { required } from "vuelidate/lib/validators";
+// Jika masih menggunakan RingLoader, pastikan diimpor
+import { RingLoader } from 'vue-spinner/dist/vue-spinner.min.js';
+
 export default {
+  components: {
+    RingLoader, // Jika menggunakan RingLoader
+    // Jika menggunakan b-spinner, tidak perlu mengimpor komponen tambahan
+  },
   data() {
     return {
-      // * Filter
       filter: null,
-      // * Pagination
       totalRows: 1,
       currentPage: 1,
       perPage: 10,
-      // * Sorting
       sortBy: "tanggal",
       sortDesc: false,
-      // * Table
       sidang: {},
       jadwal_mahasiswa: [],
       tanggal_sidang:
@@ -323,7 +397,7 @@ export default {
       show: true,
       submit_status: null,
       ruangan_sidang: "",
-      loading: true,
+      loading: false, // Ubah default menjadi false
       isBusyPenjadwalan: true,
       id_batch: null,
       pilihan_batch: [],
@@ -334,10 +408,15 @@ export default {
       nama_pembimbing_lapangan: null,
       nama_penguji: null,
       nama_penguji_dua: null,
+
+      // Data untuk modal email
+      emailData: {
+        recipients: '',
+        subject: '',
+        message: ''
+      },
+      showEmailModal: false, // Kontrol tampilan modal
     };
-  },
-  mounted() {
-    this.getDetailSidang();
   },
   validations: {
     tanggal_sidang: {
@@ -352,6 +431,21 @@ export default {
     ruangan_sidang: {
       required,
     },
+    emailData: {
+      recipients: {
+        required,
+        // Anda dapat menambahkan validasi email jika diperlukan
+      },
+      subject: {
+        required,
+      },
+      message: {
+        required,
+      },
+    },
+  },
+  mounted() {
+    this.getDetailSidang();
   },
   methods: {
     getDetailSidang() {
@@ -368,97 +462,46 @@ export default {
         }
       )
         .then((response) => {
-          this.sidang = response.data.data[0];
-          this.id_batch = this.sidang.batch.id_batch;
-          if (this.sidang.tanggal_sidang) {
-            this.tanggal_sidang = this.sidang.tanggal_sidang;
+          if (response.data.data.length > 0) {
+            this.sidang = response.data.data[0];
+            this.id_batch = this.sidang.batch.id_batch;
+            if (this.sidang.tanggal_sidang) {
+              this.tanggal_sidang = this.sidang.tanggal_sidang;
+            }
+            if (this.sidang.waktu_mulai_sidang) {
+              this.waktu_mulai_sidang = this.sidang.waktu_mulai_sidang;
+            }
+            if (this.sidang.waktu_akhir_sidang) {
+              this.waktu_akhir_sidang = this.sidang.waktu_akhir_sidang;
+            }
+            if (this.sidang.ruangan_sidang) {
+              this.ruangan_sidang = this.sidang.ruangan_sidang;
+            }
+            this.changeDataTopik();
+          } else {
+            this.$bvToast.toast('Data sidang tidak ditemukan.', {
+              variant: 'danger',
+              solid: true,
+            });
           }
-          if (this.sidang.waktu_mulai_sidang) {
-            this.waktu_mulai_sidang = this.sidang.waktu_mulai_sidang;
-          }
-          if (this.sidang.waktu_akhir_sidang) {
-            this.waktu_akhir_sidang = this.sidang.waktu_akhir_sidang;
-          }
-          if (this.sidang.ruangan_sidang) {
-            this.ruangan_sidang = this.sidang.ruangan_sidang;
-          }
-          this.changeDataTopik();
         })
-        .catch((response) => {
+        .catch((error) => {
+          console.error(error);
+          this.$bvToast.toast('Gagal mengambil detail sidang.', {
+            variant: 'danger',
+            solid: true,
+          });
+        })
+        .finally(() => {
           this.loading = false;
         });
     },
     changeDataTopik() {
-      // Axios.get(
-      //   `${config.apiIbatsUrl}/Users/GetFiltered?input_user_nrp=` +
-      //     this.sidang.topik.id_pengaju
-      // )
-      //   .then(response => {
-      //     this.sidang.nama = response.data[0].Name;
-      //   })
-      //   .catch(response => {
-      //     this.loading = false;
-      //   });
-      // Axios.get(
-      //   `${config.apiIbatsUrl}/Users/GetFiltered?input_user_nrp=` +
-      //     this.sidang.topik.id_pembimbing
-      // )
-      //   .then(response => {
-      //     this.nama_pembimbing = response.data[0].Name;
-      //   })
-      //   .catch(response => {
-      //     this.loading = false;
-      //   });
-      // if (
-      //   this.sidang.topik.id_pembimbing !=
-      //   this.sidang.topik.id_pembimbing_lapangan
-      // ) {
-      //   Axios.get(
-      //     `${config.apiIbatsUrl}/Users/GetFiltered?input_user_nrp=` +
-      //       this.sidang.topik.id_pembimbing_lapangan
-      //   )
-      //     .then(response => {
-      //       this.nama_pembimbing_lapangan = response.data[0].Name;
-      //     })
-      //     .catch(response => {
-      //       this.loading = false;
-      //     });
-      // }
-      // Axios.get(
-      //   `${config.apiIbatsUrl}/Users/GetFiltered?input_user_nrp=` +
-      //     this.sidang.id_penguji_sidang
-      // )
-      //   .then(response => {
-      //     this.nama_penguji = response.data[0].Name;
-      //   })
-      //   .catch(response => {
-      //     this.loading = false;
-      //   });
-      // if (this.sidang.id_penguji_sidang_dua) {
-      //   Axios.get(
-      //     `${config.apiIbatsUrl}/Users/GetFiltered?input_user_nrp=` +
-      //       this.sidang.id_penguji_sidang_dua
-      //   )
-      //     .then(response => {
-      //       this.nama_penguji_dua = response.data[0].Name;
-      //     })
-      //     .catch(response => {
-      //       this.loading = false;
-      //     });
-      // }
       this.getJadwal();
     },
     getJadwal() {
       this.isBusyPenjadwalan = true;
-      var hari = [
-        "Senin",
-        "Selasa",
-        "Rabu",
-        "Kamis",
-        "Jumat",
-        "Sabtu",
-        "Minggu",
-      ];
+      const hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
       Axios.post(
         `${config.apiKoorKpUrl}/list-jadwal-batch-topik`,
         {
@@ -486,36 +529,43 @@ export default {
           this.isBusyPenjadwalan = false;
           this.loading = false;
         })
-        .catch((response) => {
-          console.log(response);
+        .catch((error) => {
+          console.log(error);
+          this.$bvToast.toast('Gagal mengambil jadwal mahasiswa.', {
+            variant: 'danger',
+            solid: true,
+          });
           this.loading = false;
         });
     },
     formatTime(waktu) {
-      var jam = Number(waktu.match(/^(\d+)/)[1]);
-      var menit = Number(waktu.match(/:(\d+)/)[1]);
-      var AMPM = waktu.match(/\s(.*)$/)[1];
-      if ((AMPM == "pagi" || AMPM == "am") && jam == 12) jam = jam - 12;
+      const jam = Number(waktu.match(/^(\d+)/)[1]);
+      const menit = Number(waktu.match(/:(\d+)/)[1]);
+      const AMPM = waktu.match(/\s(.*)$/)[1].toLowerCase();
+
+      let jam24 = jam;
+      if ((AMPM === "pagi" || AMPM === "am") && jam === 12) {
+        jam24 = jam - 12;
+      }
       if (
-        (AMPM == "siang" ||
-          AMPM == "sore" ||
-          AMPM == "malam" ||
-          AMPM == "pm") &&
+        (AMPM === "siang" ||
+          AMPM === "sore" ||
+          AMPM === "malam" ||
+          AMPM === "pm") &&
         jam < 12
       )
-        jam = jam + 12;
-      var sJam = jam.toString();
-      var sMenit = menit.toString();
-      if (jam < 10) sJam = "0" + sJam;
-      if (menit < 10) sMenit = "0" + sMenit;
-      // return sJam + ":" + sMenit + ":00";
-      return sJam + ":" + sMenit;
+        jam24 = jam + 12;
+
+      const sJam = jam24 < 10 ? `0${jam24}` : jam24.toString();
+      const sMenit = menit < 10 ? `0${menit}` : menit.toString();
+
+      return `${sJam}:${sMenit}`;
     },
     checkFormat() {
-      if (this.waktu_mulai_sidang.match(/\s(.*)$/)) {
+      if (this.waktu_mulai_sidang && this.waktu_mulai_sidang.match(/\s(.*)$/)) {
         this.waktu_mulai_sidang = this.formatTime(this.waktu_mulai_sidang);
       }
-      if (this.waktu_akhir_sidang.match(/\s(.*)$/)) {
+      if (this.waktu_akhir_sidang && this.waktu_akhir_sidang.match(/\s(.*)$/)) {
         this.waktu_akhir_sidang = this.formatTime(this.waktu_akhir_sidang);
       }
     },
@@ -525,6 +575,12 @@ export default {
       this.$v.$touch();
       if (this.$v.$invalid) {
         this.submit_status = "GAGAL";
+        this.loading = false;
+        this.$bvToast.toast('Silakan lengkapi semua field yang diperlukan dengan benar.', {
+          variant: 'danger',
+          solid: true,
+        });
+        return;
       } else {
         this.submit_status = "BERHASIL";
       }
@@ -546,16 +602,13 @@ export default {
             nilai_koor_kp: this.sidang.nilai_koor_kp,
             text_revisi: this.sidang.text_revisi,
             foto_revisi: this.sidang.foto_revisi,
-
             status_pembimbing_utama: this.sidang.status_pembimbing_utama,
             status_pembimbing_lapangan: this.sidang.status_pembimbing_lapangan,
             status_sidang: 4,
-
             id_syarat_ketentuan_sidang_mahasiswa: this.sidang
               .syarat_ketentuan_sidang_mahasiswa.id_syarat_ketentuan_sidang,
             id_syarat_ketentuan_sidang_dosen: this.sidang
               .syarat_ketentuan_sidang_dosen.id_syarat_ketentuan_sidang,
-
             id_penguji_sidang: this.sidang.id_penguji_sidang,
             id_penguji_sidang_dua: this.sidang.id_penguji_sidang_dua,
             id_topik: this.sidang.topik.id_topik,
@@ -571,71 +624,207 @@ export default {
         )
           .then(() => {
             this.loading = false;
+            this.$bvToast.toast('Jadwal berhasil ditentukan.', {
+              variant: 'success',
+              solid: true,
+            });
             this.$router.push("/sidang/penjadwalan");
           })
           .catch(() => {
             this.loading = false;
+            this.$bvToast.toast('Gagal menentukan jadwal.', {
+              variant: 'danger',
+              solid: true,
+            });
           });
       }
     },
+    // Metode untuk mengenkripsi/dekripsi ID (sesuai dengan logika Anda)
     acakAcak(isi, status) {
       isi = Array.from(String(isi));
-      var code = "";
+      let code = "";
       if (status == 0) {
         isi.forEach((element) => {
-          if (element == "0") {
-            code = code + "c";
-          } else if (element == "1") {
-            code = code + "h";
-          } else if (element == "2") {
-            code = code + "r";
-          } else if (element == "3") {
-            code = code + "i";
-          } else if (element == "4") {
-            code = code + "s";
-          } else if (element == "5") {
-            code = code + "t";
-          } else if (element == "6") {
-            code = code + "a";
-          } else if (element == "7") {
-            code = code + "n";
-          } else if (element == "8") {
-            code = code + "o";
-          } else if (element == "9") {
-            code = code + "7";
-          }
+          const mapping = {
+            "0": "c",
+            "1": "h",
+            "2": "r",
+            "3": "i",
+            "4": "s",
+            "5": "t",
+            "6": "a",
+            "7": "n",
+            "8": "o",
+            "9": "7",
+          };
+          code += mapping[element] || element;
         });
       } else if (status == 1) {
         isi.forEach((element) => {
-          if (element == "c") {
-            code = code + "0";
-          } else if (element == "h") {
-            code = code + "1";
-          } else if (element == "r") {
-            code = code + "2";
-          } else if (element == "i") {
-            code = code + "3";
-          } else if (element == "s") {
-            code = code + "4";
-          } else if (element == "t") {
-            code = code + "5";
-          } else if (element == "a") {
-            code = code + "6";
-          } else if (element == "n") {
-            code = code + "7";
-          } else if (element == "o") {
-            code = code + "8";
-          } else if (element == "7") {
-            code = code + "9";
-          }
+          const reverseMapping = {
+            "c": "0",
+            "h": "1",
+            "r": "2",
+            "i": "3",
+            "s": "4",
+            "t": "5",
+            "a": "6",
+            "n": "7",
+            "o": "8",
+            "7": "9",
+          };
+          code += reverseMapping[element] || element;
         });
       }
       return code;
     },
-    // ? Filter
     onFiltered(filteredItems) {
       this.currentPage = 1;
       this.totalRows = filteredItems.length;
+    },
+    getDayName(dateString) {
+    const date = new Date(dateString);
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    return days[date.getDay()];
+  },
+    // Metode untuk Membuka Modal Email
+    openEmailModal() {
+      // Mendapatkan nama hari dari tanggal sidang
+      const hari = this.getDayName(this.tanggal_sidang);
+
+      // Menyusun pesan email
+      this.emailData.subject = `Pemberitahuan Jadwal Sidang Anda`;
+      this.emailData.message = `
+Yth. Bapak/Ibu dan Mahasiswa,
+
+Berikut adalah detail jadwal sidang Anda:
+
+Hari: ${hari}
+Tanggal: ${this.tanggal_sidang}
+Waktu: ${this.waktu_mulai_sidang} - ${this.waktu_akhir_sidang}
+Ruangan: ${this.ruangan_sidang}
+
+Penguji:
+- ${this.sidang.penguji_sidang || 'Penguji 1'}
+- ${this.sidang.penguji_sidang_dua || 'Penguji 2'}
+
+Pembimbing:
+- ${this.sidang.topik.pembimbing || 'Pembimbing Utama'}
+- ${this.sidang.topik.pembimbing_lapangan || 'Pembimbing Lapangan'}
+
+Mahasiswa:
+- ${this.sidang.mahasiswa ? this.sidang.mahasiswa.nama : 'Nama Mahasiswa'}
+
+Mohon hadir tepat waktu.
+
+Terima kasih.
+      `;
+
+      // Menampilkan modal
+      this.showEmailModal = true;
+      this.$refs.emailModal.show();
+    },
+    // Menutup Modal Email
+    hideEmailModal() {
+      this.$refs.emailModal.hide();
+    },
+    // Mengirim Email
+    sendEmail() {
+      // Validasi data email
+      this.$v.emailData.$touch();
+      if (this.$v.emailData.$invalid) {
+        this.$bvToast.toast('Silakan lengkapi semua field email dengan benar.', {
+          variant: 'danger',
+          solid: true,
+        });
+        return;
+      }
+
+      this.loading = true;
+
+      // Siapkan payload email
+      const emailPayload = {
+        recipients: this.emailData.recipients.split(',').map(email => email.trim()),
+        subject: this.emailData.subject,
+        message: this.emailData.message,
+        // Tambahkan data tambahan jika diperlukan
+        id_sidang: this.sidang.id_sidang,
+        tanggal_sidang: this.tanggal_sidang,
+        waktu_mulai_sidang: this.waktu_mulai_sidang,
+        waktu_akhir_sidang: this.waktu_akhir_sidang,
+        ruangan_sidang: this.ruangan_sidang,
+      };
+
+      Axios.post(`${config.apiUrl}/send-email`, emailPayload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(() => {
+          this.loading = false;
+          this.$bvToast.toast('Email berhasil dikirim.', {
+            variant: 'success',
+            solid: true,
+          });
+          this.hideEmailModal();
+          this.resetEmailData();
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
+          this.$bvToast.toast('Gagal mengirim email. Silakan coba lagi.', {
+            variant: 'danger',
+            solid: true,
+          });
+        });
+    },
+    // Reset data email setelah modal ditutup
+    resetEmailData() {
+      this.emailData = {
+        recipients: '',
+        subject: '',
+        message: ''
+      };
+    },
+    getUserEmailById(id_pengguna) {
+      const user = this.users.find(user => user.id_pengguna === id_pengguna);
+      return user ? user.email : '';
+    },
+    prepareEmailRecipients() {
+      const recipients = [];
+
+      // Mengambil email pembimbing utama
+      if (this.sidang.topik.id_pembimbing) {
+        const emailPembimbing = this.getUserEmailById(this.sidang.topik.id_pembimbing);
+        if (emailPembimbing) recipients.push(emailPembimbing);
+      }
+
+      // Mengambil email pembimbing lapangan
+      if (this.sidang.topik.id_pembimbing_lapangan) {
+        const emailPembimbingLapangan = this.getUserEmailById(this.sidang.topik.id_pembimbing_lapangan);
+        if (emailPembimbingLapangan) recipients.push(emailPembimbingLapangan);
+      }
+
+      // Mengambil email penguji pertama
+      if (this.sidang.id_penguji_sidang) {
+        const emailPenguji1 = this.getUserEmailById(this.sidang.id_penguji_sidang);
+        if (emailPenguji1) recipients.push(emailPenguji1);
+      }
+
+      // Mengambil email penguji kedua (jika ada)
+      if (this.sidang.id_penguji_sidang_dua) {
+        const emailPenguji2 = this.getUserEmailById(this.sidang.id_penguji_sidang_dua);
+        if (emailPenguji2) recipients.push(emailPenguji2);
+      }
+
+      // Mengambil email mahasiswa
+      if (this.sidang.id_mahasiswa) { // Asumsikan ada field id_mahasiswa
+        const emailMahasiswa = this.getUserEmailById(this.sidang.id_mahasiswa);
+        if (emailMahasiswa) recipients.push(emailMahasiswa);
+      }
+
+      // Menghapus duplikasi email
+      return [...new Set(recipients)];
     },
   },
 };
@@ -664,18 +853,22 @@ export default {
   background-color: white;
   border-bottom: 3px solid rgb(202, 206, 147);
 }
+
 .form-tambah-jadwal-title {
   padding: 8px;
   background-color: rgb(202, 206, 147);
   color: rgb(243, 249, 215);
 }
+
 .form-tambah-jadwal-item:nth-child(odd) {
   background-color: rgb(202, 206, 147);
   color: rgb(243, 249, 215);
 }
+
 .row-konfirmasi {
   padding: 10px;
 }
+
 /* // * CSS Label Form */
 .label-form {
   min-width: 180px;
@@ -684,11 +877,13 @@ export default {
   margin: auto;
   padding-left: 30px;
 }
+
 /* // * CSS Input Date Item */
 .input-form-date-item {
   max-width: 100%;
   min-width: 100%;
 }
+
 /* // * CSS Input Time Item */
 .input-form-time-item {
   padding: 0px;
@@ -722,9 +917,11 @@ export default {
   font-size: 20px;
   padding: 0px;
 }
+
 .feedback-validasi-false {
   color: red;
 }
+
 .feedback-validasi-true {
   color: green;
 }
@@ -753,10 +950,12 @@ export default {
   background-color: rgb(20, 145, 163);
   cursor: pointer;
 }
+
 /* // ! CSS Loading Page */
 .loading-page {
   margin: auto;
 }
+
 .loading-text {
   color: rgb(32, 165, 6);
 }

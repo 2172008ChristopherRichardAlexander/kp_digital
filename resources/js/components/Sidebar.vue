@@ -112,6 +112,7 @@
         <router-link to="/sidang/pembimbing-lapangan" class="nav-link sidebar-menu-item">Nilai Pembimbing
           Lapangan</router-link>
         <router-link to="/sidang/penilaian" class="nav-link sidebar-menu-item">Nilai Koordinator KP</router-link>
+        <router-link to="/sidang/kirim-email" class="nav-link sidebar-menu-item">Kirim Email</router-link>
       </template>
       <div class="sidebar-menu">Dokumen</div>
       <template v-if="cekJabatan('Koordinator KP')">

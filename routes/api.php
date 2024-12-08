@@ -520,3 +520,6 @@ Route::get('jenis-dokumen/list','JenisDokumenController@index');
 Route::post('/dokumen/upload-template','DokumenController@uploadTemplate');
 Route::get('/dokumen/dokumen-mahasiswa','DokumenController@listDokumen');
 Route::get('/mahasiswa/dokumen/templates','DokumenController@getListTemplate');
+
+// ! API : ####### Email #######
+Route::post('/send-email/{id_sidang}','EmailController@sendEmail');
