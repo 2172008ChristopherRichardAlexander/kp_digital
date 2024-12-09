@@ -523,3 +523,4 @@ Route::get('/mahasiswa/dokumen/templates','DokumenController@getListTemplate');
 
 // ! API : ####### Email #######
 Route::post('/send-email/{id_sidang}','EmailController@sendEmail');
+Route::get('/koorkp/user/{kode_pengguna}','PenggunaController@getUserById');

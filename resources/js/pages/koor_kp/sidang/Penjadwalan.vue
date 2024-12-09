@@ -40,24 +40,12 @@
             </div>
             <!-- Filter -->
             <div class="col-3 component-filter">
-              <b-form-group
-                label-size="sm"
-                label-for="filterInput"
-                class="mb-0"
-              >
+              <b-form-group label-size="sm" label-for="filterInput" class="mb-0">
                 <b-input-group size="sm">
-                  <b-form-input
-                    v-model="filter"
-                    type="search"
-                    id="filterInput"
-                    placeholder="Ketik untuk mencari"
-                  ></b-form-input>
+                  <b-form-input v-model="filter" type="search" id="filterInput"
+                    placeholder="Ketik untuk mencari"></b-form-input>
                   <b-input-group-append>
-                    <b-button
-                      class="btn-form"
-                      :disabled="!filter"
-                      @click="filter = ''"
-                    >
+                    <b-button class="btn-form" :disabled="!filter" @click="filter = ''">
                       Hapus
                     </b-button>
                   </b-input-group-append>
@@ -65,31 +53,13 @@
               </b-form-group>
             </div>
           </div>
-          <b-table
-            sticky-header
-            class="table-penjadwalan-mahasiswa"
-            :items="jadwal_mahasiswa"
-            :fields="fields"
-            hover
-            striped
-            responsive="sm"
-            :busy="isBusyPenjadwalan"
-            show-empty
-            :current-page="currentPage"
-            :per-page="perPage"
-            :sort-by.sync="sortBy"
-            :sort-desc.sync="sortDesc"
-            :filter="filter"
-            @filtered="onFiltered"
-          >
+          <b-table sticky-header class="table-penjadwalan-mahasiswa" :items="jadwal_mahasiswa" :fields="fields" hover
+            striped responsive="sm" :busy="isBusyPenjadwalan" show-empty :current-page="currentPage" :per-page="perPage"
+            :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :filter="filter" @filtered="onFiltered">
             <template v-slot:table-busy>
               <div class="text-center my-2">
                 <!-- Jika menggunakan b-spinner -->
-                <b-spinner
-                  label="Loading..."
-                  small
-                  variant="success"
-                ></b-spinner>
+                <b-spinner label="Loading..." small variant="success"></b-spinner>
                 <strong class="loading-text">Loading...</strong>
                 <!-- Jika menggunakan RingLoader -->
                 <!-- <ring-loader class="loading-page" color="#20a506" size="50" /> -->
@@ -101,14 +71,8 @@
           </b-table>
           <b-row>
             <b-col>
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="totalRows"
-                :per-page="perPage"
-                align="fill"
-                size="sm"
-                class="mb-0"
-              ></b-pagination>
+              <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="fill" size="sm"
+                class="mb-0"></b-pagination>
             </b-col>
             <b-col class="text-right">&nbsp;</b-col>
           </b-row>
@@ -119,12 +83,7 @@
             <h4 class="keterangan-website">Menentukan Jadwal Mahasiswa</h4>
           </div>
         </div>
-        <b-form
-          @submit.prevent="onSubmit"
-          v-if="show"
-          enctype="multipart/form-data"
-          method="post"
-        >
+        <b-form @submit.prevent="onSubmit" v-if="show" enctype="multipart/form-data" method="post">
           <div class="tambah-jadwal">
             <div class="form-tambah-jadwal-title">
               <h4 class="my-2">Form Tambah Jadwal</h4>
@@ -133,24 +92,12 @@
               <b-row>
                 <b-col class="label-form">Tanggal</b-col>
                 <b-col class="input-form-data">
-                  <VueCtkDateTimePicker
-                    label="Tanggal"
-                    class="input-form-date-item"
-                    id="input-tanggal_sidang"
-                    format="DD-MM-YYYY"
-                    formatted="LL"
-                    outputFormat="YYYY-MM-DD"
-                    v-model.trim="$v.tanggal_sidang.$model"
-                    noLabel
-                    onlyDate
-                    inputSize="sm"
-                  />
+                  <VueCtkDateTimePicker label="Tanggal" class="input-form-date-item" id="input-tanggal_sidang"
+                    format="DD-MM-YYYY" formatted="LL" outputFormat="YYYY-MM-DD" v-model.trim="$v.tanggal_sidang.$model"
+                    noLabel onlyDate inputSize="sm" />
                 </b-col>
                 <b-col class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.tanggal_sidang.required"
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.tanggal_sidang.required">
                     &#10006;
                   </span>
                   <span class="feedback-validasi-true" v-else>
@@ -163,44 +110,21 @@
               <b-row>
                 <b-col class="label-form">Waktu</b-col>
                 <b-col class="input-form-time text-left">
-                  <VueCtkDateTimePicker
-                    label="Waktu Mulai"
-                    class="input-form-time-item"
-                    id="input-waktu_mulai_sidang"
-                    format="hh:mm a"
-                    formatted="hh:mm a"
-                    outputFormat="hh:mm a"
-                    minute-interval="5"
-                    only-time
-                    v-model.trim="$v.waktu_mulai_sidang.$model"
-                    noLabel
-                    inputSize="sm"
-                  />
+                  <VueCtkDateTimePicker label="Waktu Mulai" class="input-form-time-item" id="input-waktu_mulai_sidang"
+                    format="hh:mm a" formatted="hh:mm a" outputFormat="hh:mm a" minute-interval="5" only-time
+                    v-model.trim="$v.waktu_mulai_sidang.$model" noLabel inputSize="sm" />
                 </b-col>
                 <b-col class="simbol-sampai-dengan">&#9644;</b-col>
                 <b-col class="input-form-time text-right">
-                  <VueCtkDateTimePicker
-                    label="Waktu Selesai"
-                    class="input-form-time-item"
-                    id="input-waktu_akhir_sidang"
-                    format="hh:mm a"
-                    formatted="hh:mm a"
-                    outputFormat="hh:mm a"
-                    minute-interval="5"
-                    only-time
-                    v-model.trim="$v.waktu_akhir_sidang.$model"
-                    noLabel
-                    inputSize="sm"
-                  />
+                  <VueCtkDateTimePicker label="Waktu Selesai" class="input-form-time-item" id="input-waktu_akhir_sidang"
+                    format="hh:mm a" formatted="hh:mm a" outputFormat="hh:mm a" minute-interval="5" only-time
+                    v-model.trim="$v.waktu_akhir_sidang.$model" noLabel inputSize="sm" />
                 </b-col>
                 <b-col class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="
-                      !$v.waktu_mulai_sidang.required ||
-                      !$v.waktu_akhir_sidang.required
-                    "
-                  >
+                  <span class="feedback-validasi-false" v-if="
+                    !$v.waktu_mulai_sidang.required ||
+                    !$v.waktu_akhir_sidang.required
+                  ">
                     &#10006;
                   </span>
                   <span class="feedback-validasi-true" v-else>
@@ -213,20 +137,11 @@
               <b-row>
                 <b-col class="label-form">Ruang Sidang</b-col>
                 <b-col class="input-form-text">
-                  <b-form-input
-                    class="input-form-text-item"
-                    id="input-ruangan_sidang"
-                    v-model="ruangan_sidang"
-                    placeholder="Ruangan Sidang"
-                    size="sm"
-                    required
-                  ></b-form-input>
+                  <b-form-input class="input-form-text-item" id="input-ruangan_sidang" v-model="ruangan_sidang"
+                    placeholder="Ruangan Sidang" size="sm" required></b-form-input>
                 </b-col>
                 <b-col class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.ruangan_sidang.required"
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.ruangan_sidang.required">
                     &#10006;
                   </span>
                   <span class="feedback-validasi-true" v-else>
@@ -240,12 +155,7 @@
               <b-row>
                 <b-col class="input-form-submit text-right">
                   <!-- Tombol Kirim Email -->
-                  <b-button
-                    @click.prevent="openEmailModal"
-                    :disabled="loading"
-                    class="btn-form mr-2"
-                    variant="info"
-                  >
+                  <b-button @click.prevent="openEmailModal" :disabled="loading" class="btn-form mr-2" variant="info">
                     Kirim Email
                   </b-button>
 
@@ -253,12 +163,7 @@
                   <b-button type="submit" :disabled="loading" class="btn-form">
                     {{ loading ? "Tentukan..." : "Tentukan Jadwal" }}
                     <!-- Jika menggunakan b-spinner -->
-                    <b-spinner
-                      small
-                      label="Loading..."
-                      v-if="loading"
-                      class="ml-2"
-                    ></b-spinner>
+                    <b-spinner small label="Loading..." v-if="loading" class="ml-2"></b-spinner>
                     <!-- Jika menggunakan RingLoader -->
                     <!-- <ring-loader
                       class="loading-page"
@@ -275,47 +180,27 @@
         </b-form>
 
         <!-- Modal Kirim Email -->
-        <b-modal
-          id="emailModal"
-          ref="emailModal"
-          title="Kirim Email Sidang"
-          hide-footer
-          @hide="resetEmailData"
-        >
+        <b-modal id="emailModal" ref="emailModal" title="Kirim Email Sidang" hide-footer @hide="resetEmailData">
           <b-form @submit.prevent="sendEmail">
             <b-form-group label="Penerima" label-for="recipients">
-              <b-form-input
-                id="recipients"
-                v-model="emailData.recipients"
-                placeholder="Masukkan email penerima (pisahkan dengan koma)"
-                required
-              />
+              <b-form-input id="recipients" v-model="emailData.recipients"
+                placeholder="Masukkan email penerima (pisahkan dengan koma)" required />
               <small class="text-danger" v-if="!$v.emailData.recipients.required">
                 Email penerima diperlukan.
               </small>
-              <small class="text-danger" v-else-if="!$v.emailData.recipients.emailList">
+              <!-- <small class="text-danger" v-else-if="!$v.emailData.recipients.emailList">
                 Format email tidak valid.
-              </small>
+              </small> -->
             </b-form-group>
             <b-form-group label="Subjek" label-for="subject">
-              <b-form-input
-                id="subject"
-                v-model="emailData.subject"
-                placeholder="Masukkan subjek email"
-                required
-              />
+              <b-form-input id="subject" v-model="emailData.subject" placeholder="Masukkan subjek email" required />
               <small class="text-danger" v-if="!$v.emailData.subject.required">
                 Subjek email diperlukan.
               </small>
             </b-form-group>
             <b-form-group label="Pesan" label-for="message">
-              <b-form-textarea
-                id="message"
-                v-model="emailData.message"
-                rows="4"
-                placeholder="Masukkan pesan"
-                required
-              />
+              <b-form-textarea id="message" v-model="emailData.message" rows="4" placeholder="Masukkan pesan"
+                required />
               <small class="text-danger" v-if="!$v.emailData.message.required">
                 Pesan email diperlukan.
               </small>
@@ -324,20 +209,7 @@
               <b-button variant="secondary" @click="hideEmailModal">Batal</b-button>
               <b-button type="submit" variant="primary" :disabled="loading">
                 {{ loading ? 'Mengirim...' : 'Kirim Email' }}
-                <!-- Jika menggunakan b-spinner -->
-                <b-spinner
-                  small
-                  label="Loading..."
-                  v-if="loading"
-                  class="ml-2"
-                ></b-spinner>
-                <!-- Jika menggunakan RingLoader -->
-                <!-- <ring-loader
-                  class="loading-page"
-                  color="white"
-                  size="20"
-                  v-if="loading"
-                /> -->
+                <b-spinner small label="Loading..." v-if="loading" class="ml-2"></b-spinner>
               </b-button>
             </div>
           </b-form>
@@ -445,7 +317,7 @@ export default {
     },
   },
   mounted() {
-    this.getDetailSidang();
+    this.getDetailSidang();;
   },
   methods: {
     getDetailSidang() {
@@ -462,6 +334,7 @@ export default {
         }
       )
         .then((response) => {
+          console.log(response);
           if (response.data.data.length > 0) {
             this.sidang = response.data.data[0];
             this.id_batch = this.sidang.batch.id_batch;
@@ -683,18 +556,21 @@ export default {
       this.totalRows = filteredItems.length;
     },
     getDayName(dateString) {
-    const date = new Date(dateString);
-    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    return days[date.getDay()];
-  },
+      const date = new Date(dateString);
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      return days[date.getDay()];
+    },
     // Metode untuk Membuka Modal Email
     openEmailModal() {
-      // Mendapatkan nama hari dari tanggal sidang
-      const hari = this.getDayName(this.tanggal_sidang);
+  this.prepareEmailRecipients().then((recipients) => {
+    this.emailData.recipients = recipients.join(', '); // Gabungkan email dengan koma
+  });
 
-      // Menyusun pesan email
-      this.emailData.subject = `Pemberitahuan Jadwal Sidang Anda`;
-      this.emailData.message = `
+  // Menyusun pesan email
+  const hari = this.getDayName(this.tanggal_sidang);
+
+  this.emailData.subject = `Pemberitahuan Jadwal Sidang Anda`;
+  this.emailData.message = `
 Yth. Bapak/Ibu dan Mahasiswa,
 
 Berikut adalah detail jadwal sidang Anda:
@@ -713,17 +589,16 @@ Pembimbing:
 - ${this.sidang.topik.pembimbing_lapangan || 'Pembimbing Lapangan'}
 
 Mahasiswa:
-- ${this.sidang.mahasiswa ? this.sidang.mahasiswa.nama : 'Nama Mahasiswa'}
+- ${this.sidang.nama || 'Nama Mahasiswa'}
 
 Mohon hadir tepat waktu.
 
 Terima kasih.
-      `;
+  `;
 
-      // Menampilkan modal
-      this.showEmailModal = true;
-      this.$refs.emailModal.show();
-    },
+  this.showEmailModal = true;
+  this.$refs.emailModal.show();
+},
     // Menutup Modal Email
     hideEmailModal() {
       this.$refs.emailModal.hide();
@@ -744,10 +619,9 @@ Terima kasih.
 
       // Siapkan payload email
       const emailPayload = {
-        recipients: this.emailData.recipients.split(',').map(email => email.trim()),
+        recipients: this.emailData.recipients.split(',').map(email => email.trim()), // Pastikan menghilangkan spasi ekstra
         subject: this.emailData.subject,
         message: this.emailData.message,
-        // Tambahkan data tambahan jika diperlukan
         id_sidang: this.sidang.id_sidang,
         tanggal_sidang: this.tanggal_sidang,
         waktu_mulai_sidang: this.waktu_mulai_sidang,
@@ -755,12 +629,13 @@ Terima kasih.
         ruangan_sidang: this.ruangan_sidang,
       };
 
-      Axios.post(`${config.apiUrl}/send-email`, emailPayload, {
+      Axios.post(`${config.apiUrl}/send-email/${this.sidang.id_sidang}`, emailPayload, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-        .then(() => {
+        .then((res) => {
+          console.log(res);
           this.loading = false;
           this.$bvToast.toast('Email berhasil dikirim.', {
             variant: 'success',
@@ -778,6 +653,7 @@ Terima kasih.
           });
         });
     },
+
     // Reset data email setelah modal ditutup
     resetEmailData() {
       this.emailData = {
@@ -786,46 +662,58 @@ Terima kasih.
         message: ''
       };
     },
-    getUserEmailById(id_pengguna) {
-      const user = this.users.find(user => user.id_pengguna === id_pengguna);
-      return user ? user.email : '';
-    },
-    prepareEmailRecipients() {
+    async prepareEmailRecipients() {
       const recipients = [];
 
       // Mengambil email pembimbing utama
       if (this.sidang.topik.id_pembimbing) {
-        const emailPembimbing = this.getUserEmailById(this.sidang.topik.id_pembimbing);
+        const emailPembimbing = await this.getUserEmailById(this.sidang.topik.id_pembimbing);
         if (emailPembimbing) recipients.push(emailPembimbing);
       }
 
       // Mengambil email pembimbing lapangan
       if (this.sidang.topik.id_pembimbing_lapangan) {
-        const emailPembimbingLapangan = this.getUserEmailById(this.sidang.topik.id_pembimbing_lapangan);
+        const emailPembimbingLapangan = await this.getUserEmailById(this.sidang.topik.id_pembimbing_lapangan);
         if (emailPembimbingLapangan) recipients.push(emailPembimbingLapangan);
       }
 
       // Mengambil email penguji pertama
       if (this.sidang.id_penguji_sidang) {
-        const emailPenguji1 = this.getUserEmailById(this.sidang.id_penguji_sidang);
+        const emailPenguji1 = await this.getUserEmailById(this.sidang.id_penguji_sidang);
         if (emailPenguji1) recipients.push(emailPenguji1);
       }
 
       // Mengambil email penguji kedua (jika ada)
       if (this.sidang.id_penguji_sidang_dua) {
-        const emailPenguji2 = this.getUserEmailById(this.sidang.id_penguji_sidang_dua);
+        const emailPenguji2 = await this.getUserEmailById(this.sidang.id_penguji_sidang_dua);
         if (emailPenguji2) recipients.push(emailPenguji2);
       }
 
       // Mengambil email mahasiswa
-      if (this.sidang.id_mahasiswa) { // Asumsikan ada field id_mahasiswa
-        const emailMahasiswa = this.getUserEmailById(this.sidang.id_mahasiswa);
+      if (this.sidang.topik.id_pengaju) {
+        const emailMahasiswa = await this.getUserEmailById(this.sidang.topik.id_pengaju);
         if (emailMahasiswa) recipients.push(emailMahasiswa);
       }
 
-      // Menghapus duplikasi email
-      return [...new Set(recipients)];
+      // Menghapus duplikasi email dan log hasil
+      const uniqueRecipients = [...new Set(recipients)];
+      console.log("Unique email recipients:", uniqueRecipients);
+      return uniqueRecipients;
     },
+
+    async getUserEmailById(userId) {
+      try {
+        // Ganti dengan URL endpoint API yang sesuai
+        const response = await Axios.get(`${config.apiKoorKpUrl}/user/${userId}`);
+        if (response.data.data.email) {
+          return response.data.data.email;
+        }
+        return null;
+      } catch (error) {
+        console.error("Error fetching email:", error);
+        return null;
+      }
+    }
   },
 };
 </script>

@@ -193,16 +193,16 @@ export default {
         };
     },
     computed: {
-    jenisSemesterOptions() {
-        if (Array.isArray(this.jenisSemesterList)) {
-            return this.jenisSemesterList.map(item => ({
-                value: item.id_jenis_semester,
-                text: item.nama_semester,
-            }));
+        jenisSemesterOptions() {
+            if (Array.isArray(this.jenisSemesterList)) {
+                return this.jenisSemesterList.map(item => ({
+                    value: item.id_jenis_semester,
+                    text: item.nama_semester,
+                }));
+            }
+            return [];
         }
-        return [];
-    }
-},
+    },
 
     methods: {
         addMataKuliah() {
