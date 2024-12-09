@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Mail\ScheduleMail;
-use App\Models\Sidang;
+use App\Mail\SidangNotification;
+use App\Sidang;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
@@ -15,52 +15,38 @@ class EmailController extends Controller
      * @param  int  $id_sidang
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendEmail($id_sidang)
+    public function sendEmail(Request $request, $id_sidang)
     {
-        // Validasi bahwa sidang ada
-        $sidang = Sidang::with(['topik.pengaju', 'topik.pembimbing', 'topik.pembimbingLapangan', 'topik.pengujiSidang', 'topik.pengujiSidangDua'])->find($id_sidang);
+        // Validate incoming request data
+        $request->validate([
+            'recipients' => 'required|array',
+            'recipients.*' => 'email', // Ensure all recipients are valid email addresses
+            'subject' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        // Find the 'sidang' by its ID
+        $sidang = Sidang::find($id_sidang);
 
         if (!$sidang) {
             return response()->json(['message' => 'Sidang tidak ditemukan.'], 404);
         }
 
-        // Ambil email penerima dari relasi topik
-        $recipients = [];
+        // Get the list of recipients from the request
+        $recipients = $request->input('recipients');
+        $subject = $request->input('subject');
+        $message = $request->input('message');
 
-        // Pengaju
-        if ($sidang->topik->pengaju && $sidang->topik->pengaju->email) {
-            $recipients[] = $sidang->topik->pengaju->email;
-        }
-
-        // Pembimbing
-        if ($sidang->topik->pembimbing && $sidang->topik->pembimbing->email) {
-            $recipients[] = $sidang->topik->pembimbing->email;
-        }
-
-        // Pembimbing Lapangan
-        if ($sidang->topik->pembimbingLapangan && $sidang->topik->pembimbingLapangan->email) {
-            $recipients[] = $sidang->topik->pembimbingLapangan->email;
-        }
-
-        // Penguji Sidang
-        if ($sidang->topik->pengujiSidang && $sidang->topik->pengujiSidang->email) {
-            $recipients[] = $sidang->topik->pengujiSidang->email;
-        }
-
-        // Penguji Sidang Dua
-        if ($sidang->topik->pengujiSidangDua && $sidang->topik->pengujiSidangDua->email) {
-            $recipients[] = $sidang->topik->pengujiSidangDua->email;
-        }
-
-        // Pastikan ada penerima
-        if (empty($recipients)) {
-            return response()->json(['message' => 'Tidak ada penerima email yang ditemukan.'], 400);
-        }
-
+        // Create the email data payload
+        $emailData = [
+            'sidang' => $sidang,
+            'subject' => $subject,
+            'message' => $message,
+        ];
+        return Mail::to($recipients)->send(new SidangNotification($emailData));
+        // Send the email using Laravel's Mail facade
         try {
-            // Kirim email ke semua penerima
-            Mail::to($recipients)->send(new ScheduleMail($sidang));
-
+            Mail::to($recipients)->send(new SidangNotification($emailData)); // Assuming you have a 'ScheduleMail' mailable
             return response()->json(['message' => 'Email berhasil dikirim.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Gagal mengirim email.', 'error' => $e->getMessage()], 500);

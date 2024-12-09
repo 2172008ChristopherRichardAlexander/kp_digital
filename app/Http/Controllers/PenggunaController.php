@@ -115,4 +115,10 @@ class PenggunaController extends Controller
         //     return new PenggunaResource($pengguna);
         // }
     }
+
+    public function getUserById($kode_pengguna)
+    {
+        $pengguna = Pengguna::where('kode_pengguna', $kode_pengguna)->first();
+        return new PenggunaResource($pengguna);
+    }
 }
