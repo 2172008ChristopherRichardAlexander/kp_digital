@@ -5,7 +5,7 @@
             <!-- Daftar Template Dokumen -->
             <b-table :items="dokumenTemplates" :fields="fields" responsive>
                 <template v-slot:cell(download)="data">
-                    <b-button variant="primary" @click="handleDownload(data.item)" :disabled="downloading">
+                    <b-button variant="primary" @click="downloadDokumen(data.item)" :disabled="downloading">
                         <span v-if="downloading">Mengunduh...</span>
                         <span v-else>Unduh</span>
                     </b-button>
@@ -32,7 +32,7 @@ export default {
             downloading: false,
             downloadStatus: null, // Status download
             fields: [
-                { key: "id_jenis_dokumen", label: "Nama Dokumen" },
+                { key: "jenis_dokumen.nama_dokumen", label: "Nama Dokumen" },
                 { key: "download", label: "Action", sortable: false }
             ]
         };
@@ -46,7 +46,6 @@ export default {
         fetchDokumenTemplates() {
             Axios.get(`${config.apiMahasiswaUrl}/dokumen/templates`)
                 .then((response) => {
-                    console.log(response);
                     this.dokumenTemplates = response.data.data;
                 })
                 .catch((error) => {
@@ -56,24 +55,16 @@ export default {
         },
 
         // Fungsi untuk mengunduh template dokumen
-        async handleDownload(item) {
-            this.downloading = true;
-            Axios.get(`${config.apiUrl}/dokumen/download/${item.id_dokumen}`, { responseType: 'blob' })
-                .then((response) => {
-                    const url = window.URL.createObjectURL(new Blob([response.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', item.nama_dokumen); // Nama file untuk diunduh
-                    document.body.appendChild(link);
-                    link.click();
-                    this.downloading = false;
-                    this.downloadStatus = { success: true, message: "Dokumen berhasil diunduh." };
-                })
-                .catch((error) => {
-                    this.downloading = false;
-                    this.downloadStatus = { success: false, message: "Gagal mengunduh dokumen. Coba lagi." };
-                    console.error(error);
-                });
+        downloadDokumen(dokumen) {
+            if (dokumen.file_dokumen) {
+                const url = `${config.dokumenUrl}storage/${dokumen.file_dokumen}`;
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = dokumen.file_dokumen;  // Nama file yang akan didownload
+                link.click();
+            } else {
+                console.error("Dokumen tidak tersedia untuk diunduh.");
+            }
         }
     }
 };

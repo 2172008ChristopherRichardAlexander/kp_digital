@@ -16,7 +16,6 @@ class CreateDokumenTable extends Migration
         Schema::create('dokumen', function (Blueprint $table) {
             $table->increments('id_dokumen');
             $table->string('file_dokumen');
-            $table->tinyInteger('is_mbkm');
             $table->tinyInteger('is_template');
             $table->integer('id_pengguna')->unsigned();
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');

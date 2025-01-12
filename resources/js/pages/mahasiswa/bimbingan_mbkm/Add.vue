@@ -13,7 +13,6 @@
             <h4 class="keterangan-website my-2">Form Pengajuan Bimbingan</h4>
           </div>
           <div class="form-tambah-bimbingan-item">
-            <!-- Tanggal Bimbingan -->
             <div class="form-pengajuan-item">
               <b-row>
                 <b-col class="label-form">Tanggal</b-col>
@@ -39,8 +38,6 @@
                 </b-col>
               </b-row>
             </div>
-
-            <!-- Deskripsi Bimbingan -->
             <div class="form-pengajuan-item">
               <b-row>
                 <b-col class="label-form">Deskripsi</b-col>
@@ -63,54 +60,6 @@
                 </b-col>
               </b-row>
             </div>
-
-            <!-- Input File Logbook (CSV) -->
-            <div class="form-pengajuan-item">
-              <b-row>
-                <b-col class="label-form">Logbook (.csv)</b-col>
-                <b-col class="input-form-file">
-                  <b-form-file
-                    v-model="logbookFile"
-                    :state="logbookFile ? true : false"
-                    accept=".csv"
-                    placeholder="Pilih file logbook (.csv)"
-                  />
-                </b-col>
-                <b-col class="feedback-validasi">
-                  <span class="feedback-validasi-true" v-if="logbookFile">
-                    &#10004; {{ logbookFile.name }}
-                  </span>
-                  <span class="feedback-validasi-false" v-else>
-                    &#10006;
-                  </span>
-                </b-col>
-              </b-row>
-            </div>
-
-            <!-- Input File Laporan (PDF) -->
-            <div class="form-pengajuan-item">
-              <b-row>
-                <b-col class="label-form">Laporan (.pdf)</b-col>
-                <b-col class="input-form-file">
-                  <b-form-file
-                    v-model="laporanFile"
-                    :state="laporanFile ? true : false"
-                    accept=".pdf"
-                    placeholder="Pilih file laporan (.pdf)"
-                  />
-                </b-col>
-                <b-col class="feedback-validasi">
-                  <span class="feedback-validasi-true" v-if="laporanFile">
-                    &#10004; {{ laporanFile.name }}
-                  </span>
-                  <span class="feedback-validasi-false" v-else>
-                    &#10006;
-                  </span>
-                </b-col>
-              </b-row>
-            </div>
-
-            <!-- Submit Button -->
             <div class="form-pengajuan-item row-tombol-sumbit">
               <b-row>
                 <b-col class="input-form-submit text-right">
@@ -121,7 +70,7 @@
                   <b-button
                     type="submit"
                     class="btn-form"
-                    :disabled="loading || !id_pembimbing_bimbingan || !logbookFile || !laporanFile"
+                    :disabled="loading || !id_pembimbing_bimbingan"
                   >
                     {{loading?'':'Ajukan Bimbingan'}}
                     <ring-loader class="loading-page" color="white" :size="25" v-if="loading" />
@@ -135,7 +84,6 @@
     </div>
   </b-container>
 </template>
-
 <script>
 import Axios from "axios";
 import config from "../../../config";

@@ -59,7 +59,6 @@ import SyaratDanKetentuanSidang from './pages/koor_kp/sidang/SyaratDanKetentuan.
 import AddSyaratDanKetentuanSidang from './pages/koor_kp/sidang/AddSyaratDanKetentuan.vue';
 import PergantianNilaiAkhirSidangKoorKP from './pages/koor_kp/sidang/PergantianNilai.vue';
 import LaporanNilaiAkhirSidangKoorKP from './pages/koor_kp/sidang/LaporanNilai.vue';
-import KirimEmail from './pages/koor_kp/sidang/Email.vue'
 // * Koordinator KBK
 import PengaturanPengujiSidang from './pages/koor_kbk/sidang/PengaturanPenguji.vue';
 import ListPengaturanSidang from './pages/koor_kbk/sidang/Index.vue';
@@ -106,6 +105,24 @@ import JenisMbkm from './pages/koor_kp/mbkm/JenisMbkm.vue';
 
 import ListDokumen from './pages/koor_kp/dokumen/Dokumen.vue';
 import TemplateDokumen from './pages/koor_kp/dokumen/Setting.vue';
+
+
+// * Dosen
+import PersetujuanDosenMBKM from './pages/dosen/topik_mbkm/Persetujuan.vue';
+import DetailDosenMBKM from './pages/dosen/topik_mbkm/Detail.vue';
+
+import KonfirmasiBimbinganMBKM from './pages/dosen/bimbingan_mbkm/Index.vue';
+import DetailBimbinganMBKM from './pages/dosen/bimbingan_mbkm/Detail.vue';
+
+import PersetujuanSidangMBKM from './pages/dosen/sidang_mbkm/Persetujuan.vue';
+import DetailSidangBimbinganMBKM from './pages/dosen/sidang_mbkm/DetailBimbingan.vue';
+import AcaraSidangDosenMBKM from './pages/dosen/sidang_mbkm/Index.vue';
+import FileSidangDosenMBKM from './pages/dosen/sidang_mbkm/File.vue';
+import ListRevisiDosenMBKM from './pages/dosen/sidang_mbkm/IndexRevisi.vue';
+import DetailRevisiDosenMBKM from './pages/dosen/sidang_mbkm/Revisi.vue';
+import ListPembimbingLapanganMBKM from './pages/dosen/sidang_mbkm/IndexPembimbingLapangan.vue';
+import NilaiPembimbingLapanganMBKM from './pages/dosen/sidang_mbkm/NilaiPembimbingLapangan.vue';
+import PergantianNilaiAkhirSidangDosenMBKM from './pages/dosen/sidang_mbkm/PergantianNilai.vue';
 
 Vue.use(Router)
 const router = new Router({
@@ -532,19 +549,11 @@ const router = new Router({
         }
     },
     {
-        path: '/sidang/kirim-email',
-        component: KirimEmail,
-        meta: {
-            requiresAuth: true,
-            jenisUser: "Koordinator KP"
-        }
-    },
-    {
         path: '/dokumen/list-dokumen-mahasiswa',
         component: ListDokumen,
         meta: {
             requiresAuth: true,
-            jenisUser: "Koordinator KP"
+            jenisUser: "Dosen"
         }
     },
     {
@@ -794,6 +803,112 @@ const router = new Router({
             jenisUser: "Koordinator KP"
         }
     },
+
+    //////////////// DOSEN /////////////
+    {
+        path: '/mbkm-topik/persetujuan',
+        component: PersetujuanDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-topik/persetujuan/:id',
+        component: DetailDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-bimbingan/konfirmasi',
+        component: KonfirmasiBimbinganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-bimbingan/detail/:id',
+        component: DetailBimbinganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/persetujuan',
+        component: PersetujuanSidangMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/list-revisi',
+        component: ListRevisiDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/bimbingan/:id',
+        component: DetailSidangBimbinganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/pembimbing-lapangan',
+        component: ListPembimbingLapanganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/mbkm-sidang/pembimbing-lapangan/:id',
+        component: NilaiPembimbingLapanganMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Koordinator KP"
+        }
+    },
+    {
+        path: '/mbkm-sidang/list-revisi/:id',
+        component: DetailRevisiDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/acara',
+        component: AcaraSidangDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/acara/:id',
+        component: FileSidangDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/pergantian-nilai-akhir-sidang',
+        component: PergantianNilaiAkhirSidangDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
     {
         path: '/*',
         name: 'credit',
@@ -820,7 +935,7 @@ router.beforeEach((to, from, next) => {
 
                         })
                         .catch(response => {
-                            console.log(response);
+                            
                         });
                 } else {
                     if (store.getters.jabatan.includes(to.meta.jenisUser)) {

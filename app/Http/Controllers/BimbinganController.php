@@ -131,7 +131,13 @@ class BimbinganController extends Controller
     // TODO: Belum Berdasarkan Batch
     public function listBimbingan(Request $request)
     {
-        $matchThese = ['bimbingan.id_pembimbing_bimbingan' => $request->input('id_pembimbing_bimbingan'), 'bimbingan.status_bimbingan' => $request->input('status_bimbingan'), 'topik.id_batch' => $request->input('id_batch')];
+        $matchThese = ['bimbingan.id_pembimbing_bimbingan' => $request->input('id_pembimbing_bimbingan'), 'bimbingan.status_bimbingan' => $request->input('status_bimbingan'), 'topik.id_batch' => $request->input('id_batch'), 'topik.is_mbkm' => 0];
+        $kumpulan_bimbingan = BimbinganResource::collection(Bimbingan::select('bimbingan.*')->join('topik', 'topik.id_topik', '=', 'bimbingan.id_topik')->where($matchThese)->orderBy('bimbingan.id_bimbingan', 'desc')->get());
+        return $kumpulan_bimbingan;
+    }
+    public function listBimbinganMBKM(Request $request)
+    {
+        $matchThese = ['bimbingan.id_pembimbing_bimbingan' => $request->input('id_pembimbing_bimbingan'), 'bimbingan.status_bimbingan' => $request->input('status_bimbingan'), 'topik.id_batch' => $request->input('id_batch'), 'topik.is_mbkm' => 1];
         $kumpulan_bimbingan = BimbinganResource::collection(Bimbingan::select('bimbingan.*')->join('topik', 'topik.id_topik', '=', 'bimbingan.id_topik')->where($matchThese)->orderBy('bimbingan.id_bimbingan', 'desc')->get());
         return $kumpulan_bimbingan;
     }

@@ -9,11 +9,20 @@
       </div>
       <!-- // ! Sidang Mahasiswa -->
       <div v-if="loading_page">
-        <ring-loader class="loading-page" color="#bada55" :loading="loading_page" :size="150" />
+        <ring-loader
+          class="loading-page"
+          color="#bada55"
+          :loading="loading_page"
+          :size="150"
+        />
       </div>
       <div class="sidang-mahasiswa" v-else>
         <template v-if="sidang_topik.length != 0">
-          <DetailPengajuan :topik="topik" :sidang="sidang_topik" :batch="batch" />
+          <DetailPengajuan
+            :topik="topik"
+            :sidang="sidang_topik"
+            :batch="batch"
+          />
         </template>
         <template v-else>
           <!-- // ! Pengajuan Sidang -->
@@ -33,15 +42,25 @@
                       syarat_ketentuan_mahasiswa.judul_syarat_ketentuan_sidang
                     }}
                   </h5>
-                  <div class="surat-pernyataan-isi" v-html="syarat_ketentuan_mahasiswa.deskripsi_syarat_ketentuan_sidang
-                    "></div>
+                  <div
+                    class="surat-pernyataan-isi"
+                    v-html="
+                      syarat_ketentuan_mahasiswa.deskripsi_syarat_ketentuan_sidang
+                    "
+                  ></div>
                   <div class="check-persetujuan-surat-pernyataan">
-                    <b-form-checkbox id="checkbox-persetujuan-surat-pernyataan" v-model="menyetujui_syarat"
-                      name="checkbox-persetujuan-surat-pernyataan" value="accepted" unchecked-value="not_accepted"
-                      :disabled="menyetujui_syarat == 'accepted'">Saya menyetujui
+                    <b-form-checkbox
+                      id="checkbox-persetujuan-surat-pernyataan"
+                      v-model="menyetujui_syarat"
+                      name="checkbox-persetujuan-surat-pernyataan"
+                      value="accepted"
+                      unchecked-value="not_accepted"
+                      :disabled="menyetujui_syarat == 'accepted'"
+                      >Saya menyetujui
                       {{
                         syarat_ketentuan_mahasiswa.judul_syarat_ketentuan_sidang
-                      }}</b-form-checkbox>
+                      }}</b-form-checkbox
+                    >
                   </div>
                 </div>
               </div>
@@ -58,39 +77,67 @@
                     <h4 class="keterangan-website">Daftar Jadwal</h4>
                   </div>
                   <div class="col text-right">
-                    <router-link :to="`/sidang/jadwal-mahasiswa/${this.$route.params.id}`" class="btn btn-form"
-                      v-if="batch && batch.status_batch == 1">Tambah Jadwal</router-link>
-                    <b-button class="btn-form" disabled v-else>Tambah Jadwal</b-button>
+                    <router-link
+                      :to="`/sidang/jadwal-mahasiswa/${this.$route.params.id}`"
+                      class="btn btn-form"
+                      v-if="batch && batch.status_batch == 1"
+                      >Tambah Jadwal</router-link
+                    >
+                    <b-button class="btn-form" disabled v-else
+                      >Tambah Jadwal</b-button
+                    >
                   </div>
                 </div>
 
                 <!-- // ? Table Jadwal Mahasiswa  -->
-                <b-table sticky-header class="tabel-jadwal-mahasiswa" no-border-collapse :items="jadwal"
-                  :fields="fields" hover striped responsive="sm" :busy="isBusyJadwal" show-empty>
+                <b-table
+                  sticky-header
+                  class="tabel-jadwal-mahasiswa"
+                  no-border-collapse
+                  :items="jadwal"
+                  :fields="fields"
+                  hover
+                  striped
+                  responsive="sm"
+                  :busy="isBusyJadwal"
+                  show-empty
+                >
                   <template v-slot:table-busy>
                     <div class="text-center my-2">
-                      <ring-loader class="loading-page" color="#20a506" :size="50" />
+                      <ring-loader
+                        class="loading-page"
+                        color="#20a506"
+                        :size="50"
+                      />
                       <strong class="loading-text">Loading...</strong>
                     </div>
                   </template>
                   <template v-slot:empty>
                     <h6 class="text-center">Tidak ada data jadwal</h6>
                   </template>
-                  <template v-slot:cell(jadwal)="data">{{ data.item.hari_jadwal_mahasiswa }},
+                  <template v-slot:cell(jadwal)="data"
+                    >{{ data.item.hari_jadwal_mahasiswa }},
                     {{ data.item.waktu_mulai_jadwal_mahasiswa.substr(0, 5) }} -
                     {{
                       data.item.waktu_selesai_jadwal_mahasiswa.substr(0, 5)
-                    }}</template>
+                    }}</template
+                  >
                   <template v-slot:cell(aksi)="row">
                     <!-- // TODO: Delete,Update Jadwal -->
-                    <router-link :to="`/sidang/update-jadwal-mahasiswa/${acakAcak(
-                      row.item.id_jadwal_mahasiswa,
-                      0
-                    )}`" class="btn-form">
+                    <router-link
+                      :to="`/sidang/update-jadwal-mahasiswa/${acakAcak(
+                        row.item.id_jadwal_mahasiswa,
+                        0
+                      )}`"
+                      class="btn-form"
+                    >
                       <i class="fa fa-pencil i-icon icon-update"></i>
                     </router-link>
 
-                    <b-button @click="info(row.item, row.index, $event.target)" class="btn-form-table">
+                    <b-button
+                      @click="info(row.item, row.index, $event.target)"
+                      class="btn-form-table"
+                    >
                       <i class="fa fa-remove i-icon icon-remove"></i>
                     </b-button>
                   </template>
@@ -112,18 +159,35 @@
                     <h4 class="keterangan-website">Daftar Bimbingan</h4>
                   </div>
                   <div class="col text-right">
-                    <router-link :to="`/bimbingan/${this.$route.params.id}`"
-                      class="btn btn-form">Bimbingan</router-link>
+                    <router-link
+                      :to="`/bimbingan/${this.$route.params.id}`"
+                      class="btn btn-form"
+                      >Bimbingan</router-link
+                    >
                   </div>
                 </div>
 
                 <!-- // ? Table Bimbingan Mahasiswa  -->
-                <b-table sticky-header class="table-histori-bimbingan" ref="tabelHistory" no-border-collapse hover
-                  striped :items="bimbingan" :fields="fields_bimbingan" responsive="sm" :busy="isBusyHistory"
-                  show-empty>
+                <b-table
+                  sticky-header
+                  class="table-histori-bimbingan"
+                  ref="tabelHistory"
+                  no-border-collapse
+                  hover
+                  striped
+                  :items="bimbingan"
+                  :fields="fields_bimbingan"
+                  responsive="sm"
+                  :busy="isBusyHistory"
+                  show-empty
+                >
                   <template v-slot:table-busy>
                     <div class="text-center my-2">
-                      <ring-loader class="loading-page" color="#20a506" :size="50" />
+                      <ring-loader
+                        class="loading-page"
+                        color="#20a506"
+                        :size="50"
+                      />
                       <strong class="loading-text">Loading...</strong>
                     </div>
                   </template>
@@ -146,7 +210,7 @@
             </div>
           </div>
           <!-- // ! Tombol Ajukan -->
-          <!-- <div class="pengajuan-sidang-item">
+          <div class="pengajuan-sidang-item">
             <div class="keterangan-pengajuan-sidang feedback-validasi-false">
               <p>
                 <span v-if="!$v.jumlah_bimbingan.minValue">
@@ -158,24 +222,49 @@
                   <br />
                 </span>
 
-                <span v-if="!batch || batch.status_batch == 0">*Batch Pengajuan Sidang Belum di Buka</span>
+                <span v-if="!batch || batch.status_batch == 0"
+                  >*Batch Pengajuan Sidang Belum di Buka</span
+                >
               </p>
             </div>
-
-            <b-btn class="btn-form" :disabled="!status_pengajuan" @click="ajukanSidang">
+            <!-- <b-btn
+                class="btn-form"
+                disabled
+                v-if="!$v.jumlah_bimbingan.minValue || menyetujui_syarat == 'not_accepted'"
+            >Ajukan</b-btn>-->
+            <b-btn
+              class="btn-form"
+              :disabled="!status_pengajuan"
+              @click="ajukanSidang"
+            >
               {{ loading ? "" : "Ajukan" }}
-              <ring-loader class="loading-page" color="white" :size="25" v-if="loading" />
+              <ring-loader
+                class="loading-page"
+                color="white"
+                :size="25"
+                v-if="loading"
+              />
             </b-btn>
-          </div> -->
+            <!-- <b-td class="feedback-validasi">
+      <span class="feedback-validasi-false" v-if="!$v.jumlah_bimbingan.minValue">&#10006;</span>
+      <span class="feedback-validasi-true" v-else>&#10004;</span>
+            </b-td>-->
+          </div>
           <!-- // * Modal -->
-          <b-modal :id="infoModal.id" centered scrollable
-            @ok="hapusJadwalMahasiswa(infoModal.content.id_jadwal_mahasiswa)" @cancel="resetInfoModal"
-            title="Hapus Jadwal Berhalangan">
+          <b-modal
+            :id="infoModal.id"
+            centered
+            scrollable
+            @ok="hapusJadwalMahasiswa(infoModal.content.id_jadwal_mahasiswa)"
+            @cancel="resetInfoModal"
+            title="Hapus Jadwal Berhalangan"
+          >
             <b-table-simple borderless v-if="infoModal.content">
               <b-tbody>
                 <b-tr>
                   <b-td class="label-form">Jadwal</b-td>
-                  <b-td class="text-form">{{ infoModal.content.hari_jadwal_mahasiswa }},
+                  <b-td class="text-form"
+                    >{{ infoModal.content.hari_jadwal_mahasiswa }},
                     {{
                       infoModal.content.waktu_mulai_jadwal_mahasiswa.substr(
                         0,
@@ -188,7 +277,8 @@
                         0,
                         5
                       )
-                    }}</b-td>
+                    }}</b-td
+                  >
                 </b-tr>
                 <b-tr>
                   <b-td class="label-form">Keterangan</b-td>
@@ -201,94 +291,15 @@
             <!-- // * Footer -->
             <template v-slot:modal-footer="{ ok, cancel }">
               <!-- Emulate built in modal footer ok and cancel button actions -->
-              <b-button size="sm" class="btn-modal" @click="cancel()">Batal</b-button>
-              <b-button size="sm" class="btn-modal" @click="ok()">Hapus</b-button>
+              <b-button size="sm" class="btn-modal" @click="cancel()"
+                >Batal</b-button
+              >
+              <b-button size="sm" class="btn-modal" @click="ok()"
+                >Hapus</b-button
+              >
             </template>
           </b-modal>
         </template>
-        <div class="sidang-mahasiswa-item pengajuan-sidang">
-          <div class="row">
-            <div class="col">
-              <h4 class="keterangan-website">Unggah Laporan dan Logbook</h4>
-
-              <!-- Input File Laporan (PDF) -->
-              <div class="form-pengajuan-item">
-                <b-row>
-                  <b-col class="label-form">Laporan (PDF)</b-col>
-                  <b-col class="input-form-file">
-                    <b-form-file
-                      v-model="laporanFile"
-                      :state="laporanFile ? true : false"
-                      accept=".pdf"
-                      placeholder="Pilih file laporan (.pdf)"
-                    />
-                  </b-col>
-                  <b-col class="feedback-validasi">
-                    <span class="feedback-validasi-true" v-if="laporanFile">
-                      &#10004; {{ laporanFile.name }}
-                    </span>
-                    <span class="feedback-validasi-false" v-else>
-                      &#10006; 
-                    </span>
-                  </b-col>
-                </b-row>
-              </div>
-
-              <!-- Input File Logbook (CSV) -->
-              <div class="form-pengajuan-item">
-                <b-row>
-                  <b-col class="label-form">Logbook (CSV)</b-col>
-                  <b-col class="input-form-file">
-                    <b-form-file
-                      v-model="logbookFile"
-                      :state="logbookFile ? true : false"
-                      accept=".csv"
-                      placeholder="Pilih file logbook (.csv)"
-                    />
-                  </b-col>
-                  <b-col class="feedback-validasi">
-                    <span class="feedback-validasi-true" v-if="logbookFile">
-                      &#10004; {{ logbookFile.name }}
-                    </span>
-                    <span class="feedback-validasi-false" v-else>
-                      &#10006; 
-                    </span>
-                  </b-col>
-                </b-row>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tombol Ajukan -->
-        <div class="pengajuan-sidang-item">
-          <div class="keterangan-pengajuan-sidang feedback-validasi-false">
-            <p>
-              <span v-if="menyetujui_syarat == 'not_accepted'">
-                *Pernyataan Mahasiswa harus di setujui
-              </span>
-              <span v-if="!laporanFile">
-                *Laporan belum diupload
-              </span>
-              <span v-if="!logbookFile">
-                *Logbook belum diupload
-              </span>
-            </p>
-          </div>
-          <b-btn
-            class="btn-form"
-            :disabled="!laporanFile || !logbookFile || menyetujui_syarat == 'not_accepted'"
-            @click="ajukanSidang"
-          >
-            {{ loading ? "" : "Ajukan" }}
-            <ring-loader
-              class="loading-page"
-              color="white"
-              :size="25"
-              v-if="loading"
-            />
-          </b-btn>
-        </div>
       </div>
     </div>
   </b-container>
@@ -842,12 +853,10 @@ export default {
   padding: 0px 80px;
   text-align: justify;
 }
-
 .surat-pernyataan-title {
   padding-top: 10px;
   font-weight: bold;
 }
-
 .check-persetujuan-surat-pernyataan {
   padding-bottom: 15px;
 }
@@ -910,12 +919,10 @@ export default {
 .i-icon {
   font-size: 15px;
 }
-
 .icon-remove {
   color: red;
   font-size: 21px;
 }
-
 .icon-update {
   color: white;
 }
@@ -931,11 +938,9 @@ export default {
   max-width: 20vw;
   font-size: 20px;
 }
-
 .feedback-validasi-false {
   color: red;
 }
-
 .feedback-validasi-true {
   color: green;
 }
@@ -944,7 +949,6 @@ export default {
 .loading-page {
   margin: auto;
 }
-
 .loading-text {
   color: rgb(32, 165, 6);
 }

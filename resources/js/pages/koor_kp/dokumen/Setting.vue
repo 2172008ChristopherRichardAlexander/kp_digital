@@ -2,7 +2,6 @@
     <b-container>
         <h3 class="my-4">Unggah Dokumen Laporan atau Logbook</h3>
         <div class="upload-dokumen-section">
-
             <!-- Formulir Unggah Dokumen -->
             <b-form @submit.prevent="handleUpload">
                 <!-- Pilihan Jenis Dokumen -->
@@ -36,6 +35,7 @@
                 <p v-if="uploadStatus.success" class="text-success">{{ uploadStatus.message }}</p>
                 <p v-if="!uploadStatus.success" class="text-danger">{{ uploadStatus.message }}</p>
             </div>
+
         </div>
     </b-container>
 </template>
@@ -52,7 +52,10 @@ export default {
             dokumenFile: null,
             uploading: false,
             uploadStatus: null, // Status upload
-            jenisDokumenList: [] // Daftar jenis dokumen dari API
+            jenisDokumenList: [], // Daftar jenis dokumen dari API
+            showModal: false, // Untuk menampilkan modal
+            newJenisDokumen: '', // Untuk input nama jenis dokumen baru
+            addingJenisDokumen: false // Status menambahkan jenis dokumen
         };
     },
     computed: {
@@ -109,6 +112,33 @@ export default {
                     this.uploadStatus = { success: false, message: "Gagal mengunggah dokumen. Coba lagi." };
                     console.error(error);
                 });
+        },
+
+        // Fungsi untuk menambah jenis dokumen baru
+        addJenisDokumen() {
+            if (!this.newJenisDokumen) return;
+
+            this.addingJenisDokumen = true;
+
+            Axios.post(`${config.apiUrl}/jenis-dokumen`, { nama_dokumen: this.newJenisDokumen })
+                .then((response) => {
+                    this.addingJenisDokumen = false;
+                    this.showModal = false;
+                    this.newJenisDokumen = '';
+                    this.fetchJenisDokumen(); // Refresh daftar jenis dokumen
+                    this.uploadStatus = { success: true, message: "Jenis dokumen berhasil ditambahkan." };
+                })
+                .catch((error) => {
+                    this.addingJenisDokumen = false;
+                    console.error("Error adding jenis dokumen:", error);
+                    this.uploadStatus = { success: false, message: "Gagal menambahkan jenis dokumen. Coba lagi." };
+                });
+        },
+
+        // Clear modal input ketika modal ditutup
+        clearModal() {
+            this.newJenisDokumen = '';
+            this.uploadStatus = null;
         }
     }
 };

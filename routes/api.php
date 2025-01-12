@@ -77,6 +77,7 @@ Route::put('mahasiswa/bimbingan', 'BimbinganController@store');
 // ? PENGGUNA : ####### Dosen #######
 // List Bimbingan Berdasarkan Pembimbing dan Batch
 Route::post('dosen/bimbingan', 'BimbinganController@listBimbingan');
+Route::post('dosen/bimbingan-mbkm', 'BimbinganController@listBimbinganMBKM');
 // Update Status Bimbingan
 Route::put('dosen/bimbingan', 'BimbinganController@konfirmasiBimbingan');
 Route::put('dosen/bimbingan/list', 'BimbinganController@konfirmasiListBimbingan');
@@ -317,6 +318,8 @@ Route::post('dosen/sidang/revisi/update', 'SidangController@updateRevisiSidang')
 // ! List Topik Bedasarkan Role,Status Topik, Status Persetujuan Dosen, Batch
 Route::post('topik/list-topik', "TopikController@listTopik");
 
+Route::post('topik/list-topik-mbkm', "TopikController@listTopikMBKM");
+
 // ? PENGGUNA : ####### MAHASISWA #######
 // ! List Topik
 Route::get('mahasiswa/topik', 'TopikController@index');
@@ -340,10 +343,14 @@ Route::post('mahasiswa/topik/sidang', 'TopikController@getTopikSidang');
 Route::get('dosen/topik', 'TopikController@listTopikPersetujuan');
 // List Topik Permintaan Persetujuan
 Route::post('dosen/topik-permintaan-persetujuan', 'TopikController@listTopikPermintaanPersetujuan');
+// List Topik Permintaan Persetujuan MBKM
+Route::post('dosen/topik-permintaan-persetujuan-mbkm', 'TopikController@listTopikPermintaanPersetujuanMBKM');
 // List Topik History Permintaan Persetujuan
 Route::post('dosen/topik-history-permintaan-persetujuan', 'TopikController@listTopikHistoryPermintaanPersetujuan');
 // List Mahasiswa Bimbingan
 Route::post('dosen/topik/mahasiswa-bimbingan', 'TopikController@listMahasiswaBimbingan');
+// List Mahasiswa Bimbingan MBKM
+Route::post('dosen/topik/mahasiswa-bimbingan-mbkm', 'TopikController@listMahasiswaBimbinganMBKM');
 // Detail Single Topik
 Route::get('dosen/topik/{slug}', 'TopikController@show');
 Route::get('dosen/id-topik/{id_topik}', 'TopikController@showFromId');
@@ -489,18 +496,21 @@ Route::get('mbkm/list', 'MBKMController@index');
 Route::get('mbkm/list/{id_semester}', 'MBKMController@getAllByIdSemester');
 Route::get('mbkm/list/konversi/{id_mbkm}', 'MBKMController@getByIdMBKM');
 Route::put('mbkm/{id}', 'MBKMController@update');
-Route::get('mahasiswa/mbkm/{id}', 'MBKMController@getAllByIdUser');
+Route::get('mahasiswa/mbkm/{id}/{id_semester}', 'MBKMController@getExistByIdUser');
+Route::get('mahasiswa/mbkm-status/{id}/{id_semester}', 'MBKMController@getAllByIdUser');
 
 // ! API : ####### Mata kuliah #######
 Route::get('mahasiswa/matakuliah', 'MatakuliahController@index');
 Route::post('matakuliah', 'MatakuliahController@store');
 Route::put('matakuliah', 'MatakuliahController@store');
-Route::delete('matakuliah/{mataKuliah}', 'MatakuliahController@destoy');
+Route::delete('matakuliah/{mataKuliah}', 'MatakuliahController@destroy');
 
 // ! API : ####### KonversiSKS #######
+Route::get('mahasiswa/konversi-sks', 'KonversiSKSController@getKonversiSks');
 Route::post('mahasiswa/konversi-sks', 'KonversiSKSController@store');
 Route::put('/konversi-sks', 'KonversiSKSController@store');
 Route::get('konversi-sks/{id_pengguna}', 'KonversiSKSController@getAllByIdPengguna');
+Route::get('konversi-sks/{id_pengguna}/{id_semester}', 'KonversiSKSController@getAllByIdPenggunaSemester');
 Route::put('konversi-sks/{id_pengguna}', 'KonversiSKSController@update');
 Route::delete('konversi-sks/{id_pengguna}/{id_matakuliah_detail}', 'KonversiSKSController@deleteKonversiSKS');
 
@@ -520,6 +530,9 @@ Route::get('jenis-dokumen/list','JenisDokumenController@index');
 Route::post('/dokumen/upload-template','DokumenController@uploadTemplate');
 Route::get('/dokumen/dokumen-mahasiswa','DokumenController@listDokumen');
 Route::get('/mahasiswa/dokumen/templates','DokumenController@getListTemplate');
+Route::post('/mahasiswa/dokumen/upload-dokumen','DokumenController@store');
+Route::get('/dokumen/download/{id}','DokumenController@download');
+Route::get('storage/{filename}','DokumenController@preview');
 
 // ! API : ####### Email #######
 Route::post('/send-email/{id_sidang}','EmailController@sendEmail');

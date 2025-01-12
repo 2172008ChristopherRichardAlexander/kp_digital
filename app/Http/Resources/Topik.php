@@ -41,6 +41,7 @@ class Topik extends JsonResource
             'lampiran_gambar' => $this->lampiran_gambar,
             'status_persetujuan_dosen' => $this->status_persetujuan_dosen,
             'status_topik' => $this->status_topik,
+            'is_mbkm' => $this->is_mbkm,
             'batch' => Batch::collection(BatchModel::where('id_batch', $this->id_batch)->get())[0],
             'kbk' => Kbk::collection(KbkModel::where('id_kbk', $this->id_kbk)->get())[0],
             'id_pengaju' => $this->id_pengaju,

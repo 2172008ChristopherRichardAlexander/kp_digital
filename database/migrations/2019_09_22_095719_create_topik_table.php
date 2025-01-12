@@ -31,6 +31,7 @@ class CreateTopikTable extends Migration
             $table->text('lampiran_gambar')->nullable();
             $table->tinyInteger('status_persetujuan_dosen')->nullable();
             $table->tinyInteger('status_topik');
+            $table->tinyInteger('is_mbkm');
             $table->integer('id_batch')->unsigned();
             $table->foreign('id_batch')->references('id_batch')->on('batch');
             $table->integer('id_kbk')->unsigned();

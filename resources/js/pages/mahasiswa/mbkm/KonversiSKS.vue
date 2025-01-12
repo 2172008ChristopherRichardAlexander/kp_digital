@@ -2,55 +2,79 @@
   <div id="konversi-sks" class="container">
     <h2 class="title">Form Konversi SKS</h2>
 
-    <!-- Bagian Form Semester -->
-    <div v-for="(semester, index) in semesters" :key="index" class="semester-group">
-      <div class="semester-header" @click="toggleSemester(index)">
-        SEMESTER {{ index + 1 }}
+    <!-- Jika data belum diambil, tampilkan form semester -->
+    <div v-if="!dataFetched">
+      <div v-for="(semester, index) in semesters" :key="index" class="semester-group">
+        <div class="semester-header" @click="toggleSemester(index)">
+          SEMESTER {{ index + 1 }}
+        </div>
+        <div v-if="semester.open" class="semester-content">
+          <div v-for="(course, idx) in semester.courses" :key="idx" class="form-check">
+            <input type="checkbox" :id="'course-' + index + '-' + idx" v-model="course.selected"
+              class="form-check-input" />
+            <label :for="'course-' + index + '-' + idx" class="form-check-label">
+              {{ course.name }} ({{ course.code }}) {{ course.sks }} SKS
+            </label>
+          </div>
+        </div>
       </div>
-      <div v-if="semester.open" class="semester-content">
-        <!-- Menampilkan kursus yang dimiliki setiap semester -->
-        <div v-for="(course, idx) in semester.courses" :key="idx" class="form-check">
-          <input type="checkbox" :id="'course-' + index + '-' + idx" v-model="course.selected"
-            class="form-check-input" />
-          <label :for="'course-' + index + '-' + idx" class="form-check-label">
-            {{ course.name }} ({{ course.code }}) {{ course.sks }} SKS
-          </label>
+      <div class="table-section">
+        <h3>{{ authUser.Name }}</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>ID Mata Kuliah</th>
+              <th>Nama Mata Kuliah</th>
+              <th>Jumlah SKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in selectedCourses" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.code }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.sks }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="total-section">
+          Total SKS = {{ totalSKS }} / 20
+          <button class="btn btn-primary" :disabled="totalSKS !== 20" @click="submitCourses">Ajukan</button>
         </div>
       </div>
     </div>
 
-    <!-- Bagian Tabel -->
-    <div class="table-section">
-      <h3>{{ authUser.Name }}</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>ID Mata Kuliah</th>
-            <th>Nama Mata Kuliah</th>
-            <th>Jumlah SKS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in selectedCourses" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ item.code }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.sks }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="total-section">
-        Total SKS = {{ totalSKS }} / 20
-        <button class="btn btn-primary" :disabled="totalSKS !== 20" @click="submitCourses">Ajukan</button>
+    <!-- Jika data sudah diambil, tampilkan hanya tabel konversi SKS -->
+    <div v-else>
+      <div class="table-section">
+        <h3>{{ authUser.Name }}</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>ID Mata Kuliah</th>
+              <th>Nama Mata Kuliah</th>
+              <th>Jumlah SKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in selectedCourses" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.code }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.sks }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import Axios from "axios";
 import config from "../../../config";
+
 export default {
   data() {
     return {
@@ -65,6 +89,8 @@ export default {
         { open: false, courses: [] },
         { open: false, courses: [] },
       ],
+      dataFetched: false,
+      konversiSKS: [],
     };
   },
   computed: {
@@ -79,7 +105,6 @@ export default {
     totalSKS() {
       return this.selectedCourses.reduce((total, course) => total + course.sks, 0);
     },
-
   },
   methods: {
     toggleSemester(index) {
@@ -88,54 +113,91 @@ export default {
     async getSemesterId() {
       Axios.get(`${config.apiUrl}/semester/aktif`).then((res) => {
         this.id_semester = res.data.id_semester;
+        this.fetchKonversiSKS(this.authUser.Id, this.id_semester);  // Ambil data konversi SKS setelah semester didapat
       });
     },
-    fetchCourses() {
+    async fetchCourses() {
       Axios.get(`${config.apiMahasiswaUrl}/matakuliah`).then((res) => {
         const courses = res.data.data; // Ambil data kursus dari API
-        // Memasukkan kursus ke semester yang sesuai berdasarkan id_jenis_semester
         courses.forEach(course => {
-          const semesterIndex = course.id_jenis_semester.id_jenis_semester - 1; // Menyesuaikan dengan indeks array (id_jenis_semester 1 -> semester 0)
-          // Pastikan semesterIndex valid dan array courses ada
+          const semesterIndex = course.id_jenis_semester.id_jenis_semester - 1;
           if (this.semesters[semesterIndex]) {
-            // Menambahkan kursus ke semester yang sesuai
             this.semesters[semesterIndex].courses.push({
-              code: course.id_matakuliah,      // ID Mata Kuliah
-              name: course.nama_matakul,       // Nama Mata Kuliah
-              sks: course.jumlah_sks,         // Jumlah SKS
-              selected: false,                // Status default untuk checkbox (belum dipilih)
+              code: course.id_matakuliah,
+              name: course.nama_matakul,
+              sks: course.jumlah_sks,
+              selected: false,
             });
-          } else {
-            console.error(`Semester with id_jenis_semester: ${course.id_jenis_semester} not found.`);
           }
         });
       }).catch((error) => {
         console.error('Error fetching courses:', error);
       });
     },
+    fetchKonversiSKS(id_pengguna, id_semester) {
+      Axios.get(`${config.apiUrl}/konversi-sks/${id_pengguna}/${id_semester}`)
+        .then((res) => {
+          const konversiData = res.data.data;
+
+          // Cek apakah konversiData benar-benar ada dan tidak kosong
+          if (Array.isArray(konversiData) && konversiData.length > 0) {
+            this.markSelectedCourses(konversiData);
+            this.dataFetched = true;
+          } else {
+            // Jika konversiData kosong atau null
+            this.dataFetched = false;
+            console.log('Tidak ada data konversi SKS yang ditemukan.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching konversi SKS:', error);
+          this.dataFetched = false; // Jika terjadi error, pastikan dataFetched false
+        });
+    },
+
+    markSelectedCourses(konversiData) {
+      konversiData.forEach(konversi => {
+        this.semesters.forEach(semester => {
+          semester.courses.forEach(course => {
+            if (course.code === konversi.id_matakuliah) {
+              course.selected = true;
+            }
+          });
+        });
+      });
+    },
+    reloadPage() {
+      // Memuat ulang halaman
+      window.location.reload();
+    },
     async submitCourses() {
       const selectedCoursesData = this.selectedCourses.map(course => {
         return {
-          id_matakuliah: course.code,         // ID Mata Kuliah
-          id_pengguna: this.authUser.Id,      // ID Pengguna dari store (pastikan ini tersedia)
-          id_semester: this.id_semester, // ID Semester yang sesuai
+          id_matakuliah: course.code,
+          id_pengguna: this.authUser.Id,
+          id_semester: this.id_semester,
         };
       });
-      // Kirim data terpilih ke API menggunakan Axios
+
       Axios.post(`${config.apiMahasiswaUrl}/konversi-sks`, selectedCoursesData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
         .then(response => {
-          alert("Data berhasil diajukan!");
-          console.log(response.data);  // Lihat respon dari server
+          this.reloadPage();
+          this.$bvToast.toast(
+            "Konversi SKS berhasil diajukan",
+            {
+              variant: "success",
+              solid: true,
+            }
+          );
         })
         .catch(error => {
           console.error('Error submitting courses:', error);
         });
     },
-
   },
   mounted() {
     this.getSemesterId();

@@ -305,14 +305,14 @@ export default {
     },
     emailData: {
       recipients: {
-        required,
+        
         // Anda dapat menambahkan validasi email jika diperlukan
       },
       subject: {
-        required,
+
       },
       message: {
-        required,
+
       },
     },
   },
@@ -334,7 +334,6 @@ export default {
         }
       )
         .then((response) => {
-          console.log(response);
           if (response.data.data.length > 0) {
             this.sidang = response.data.data[0];
             this.id_batch = this.sidang.batch.id_batch;
@@ -403,7 +402,6 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          console.log(error);
           this.$bvToast.toast('Gagal mengambil jadwal mahasiswa.', {
             variant: 'danger',
             solid: true,
@@ -562,43 +560,46 @@ export default {
     },
     // Metode untuk Membuka Modal Email
     openEmailModal() {
-  this.prepareEmailRecipients().then((recipients) => {
-    this.emailData.recipients = recipients.join(', '); // Gabungkan email dengan koma
-  });
+      this.prepareEmailRecipients()
+        .then((recipients) => {
+          this.emailData.recipients = recipients.join(', '); // Gabungkan email dengan koma
+          const hari = this.getDayName(this.tanggal_sidang);
 
-  // Menyusun pesan email
-  const hari = this.getDayName(this.tanggal_sidang);
+          // Menyusun subjek dan pesan email
+          this.emailData.subject = `Pemberitahuan Jadwal Sidang Anda`;
+          this.emailData.message = `
+        Yth. Bapak/Ibu dan Mahasiswa,
 
-  this.emailData.subject = `Pemberitahuan Jadwal Sidang Anda`;
-  this.emailData.message = `
-Yth. Bapak/Ibu dan Mahasiswa,
+        Berikut adalah detail jadwal sidang Anda:
 
-Berikut adalah detail jadwal sidang Anda:
+        Hari: ${hari}
+        Tanggal: ${this.tanggal_sidang}
+        Waktu: ${this.waktu_mulai_sidang} - ${this.waktu_akhir_sidang}
+        Ruangan: ${this.ruangan_sidang}
 
-Hari: ${hari}
-Tanggal: ${this.tanggal_sidang}
-Waktu: ${this.waktu_mulai_sidang} - ${this.waktu_akhir_sidang}
-Ruangan: ${this.ruangan_sidang}
+        Penguji:
+        - ${this.sidang.penguji_sidang || 'Penguji 1 tidak ada'}
+        - ${this.sidang.penguji_sidang_dua || 'Penguji 2 tidak ada'}
 
-Penguji:
-- ${this.sidang.penguji_sidang || 'Penguji 1'}
-- ${this.sidang.penguji_sidang_dua || 'Penguji 2'}
+        Pembimbing:
+        - ${this.sidang.topik.pembimbing || 'Pembimbing Utama tidak ada'}
+        - ${this.sidang.topik.pembimbing_lapangan || 'Pembimbing Lapangan tidak ada'}
 
-Pembimbing:
-- ${this.sidang.topik.pembimbing || 'Pembimbing Utama'}
-- ${this.sidang.topik.pembimbing_lapangan || 'Pembimbing Lapangan'}
+        Mahasiswa:
+        - ${this.sidang.nama || 'Nama Mahasiswa tidak diketahui'}
 
-Mahasiswa:
-- ${this.sidang.nama || 'Nama Mahasiswa'}
+        Mohon hadir tepat waktu.
 
-Mohon hadir tepat waktu.
+        Terima kasih.
+      `;
 
-Terima kasih.
-  `;
-
-  this.showEmailModal = true;
-  this.$refs.emailModal.show();
-},
+          this.showEmailModal = true;
+          this.$refs.emailModal.show();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     // Menutup Modal Email
     hideEmailModal() {
       this.$refs.emailModal.hide();
@@ -635,7 +636,6 @@ Terima kasih.
         },
       })
         .then((res) => {
-          console.log(res);
           this.loading = false;
           this.$bvToast.toast('Email berhasil dikirim.', {
             variant: 'success',
@@ -665,19 +665,19 @@ Terima kasih.
     async prepareEmailRecipients() {
       const recipients = [];
 
-      // Mengambil email pembimbing utama
+      // Mengambil email pembimbing utama (jika ada)
       if (this.sidang.topik.id_pembimbing) {
         const emailPembimbing = await this.getUserEmailById(this.sidang.topik.id_pembimbing);
         if (emailPembimbing) recipients.push(emailPembimbing);
       }
 
-      // Mengambil email pembimbing lapangan
+      // Mengambil email pembimbing lapangan (jika ada)
       if (this.sidang.topik.id_pembimbing_lapangan) {
         const emailPembimbingLapangan = await this.getUserEmailById(this.sidang.topik.id_pembimbing_lapangan);
         if (emailPembimbingLapangan) recipients.push(emailPembimbingLapangan);
       }
 
-      // Mengambil email penguji pertama
+      // Mengambil email penguji pertama (jika ada)
       if (this.sidang.id_penguji_sidang) {
         const emailPenguji1 = await this.getUserEmailById(this.sidang.id_penguji_sidang);
         if (emailPenguji1) recipients.push(emailPenguji1);
@@ -689,17 +689,26 @@ Terima kasih.
         if (emailPenguji2) recipients.push(emailPenguji2);
       }
 
-      // Mengambil email mahasiswa
+      // Mengambil email mahasiswa (jika ada)
       if (this.sidang.topik.id_pengaju) {
         const emailMahasiswa = await this.getUserEmailById(this.sidang.topik.id_pengaju);
         if (emailMahasiswa) recipients.push(emailMahasiswa);
       }
 
-      // Menghapus duplikasi email dan log hasil
+      // Menghapus duplikasi email
       const uniqueRecipients = [...new Set(recipients)];
-      console.log("Unique email recipients:", uniqueRecipients);
+
+      if (uniqueRecipients.length === 0) {
+        this.$bvToast.toast('Tidak ada email yang valid untuk dikirim.', {
+          variant: 'warning',
+          solid: true,
+        });
+        throw new Error('No valid recipients found');
+      }
+
       return uniqueRecipients;
     },
+
 
     async getUserEmailById(userId) {
       try {
