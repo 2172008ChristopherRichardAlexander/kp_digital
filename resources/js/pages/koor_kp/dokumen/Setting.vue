@@ -94,6 +94,7 @@ export default {
             const formData = new FormData();
             const user = await this.authUser();
             formData.append("idPengguna", user.Id);
+            formData.append("kode_pengguna", user.UserId);
             formData.append("jenisDokumen", this.jenisDokumen);
             formData.append("dokumen", this.dokumenFile);
             Axios.post(`${config.apiUrl}/dokumen/upload-template`, formData, {

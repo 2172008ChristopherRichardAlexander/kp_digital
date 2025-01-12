@@ -37,6 +37,7 @@ class DokumenController extends Controller
         $jenisDokumen = $request->jenisDokumen;
         $id_pengguna = $request->idPengguna;
         $id_semester = $request->id_semester;
+        $kode_pengguna = $request->kode_pengguna;
         $dokumenFolder = '';
 
         // Tentukan folder penyimpanan berdasarkan jenis dokumen
@@ -84,6 +85,7 @@ class DokumenController extends Controller
         $dokumen = new Dokumen();
         $dokumen->file_dokumen = $filePath;
         $dokumen->id_pengguna = $id_pengguna; // ID pengguna yang sedang login
+        $dokumen->kode_pengguna = $kode_pengguna; // Kode pengguna
         $dokumen->id_semester = $request->id_semester; // ID Semester yang dipilih
         $dokumen->id_jenis_dokumen = $jenisDokumen; // ID Jenis Dokumen yang dipilih
         $dokumen->is_template = 0;
@@ -141,7 +143,7 @@ class DokumenController extends Controller
         // Dapatkan jenis dokumen yang dipilih
         $jenisDokumen = $request->jenisDokumen;
         $id_pengguna = $request->idPengguna;
-
+        $kode_pengguna = $request->kode_pengguna;
         $dokumenFolder = '';
 
         // Tentukan folder penyimpanan berdasarkan jenis dokumen
@@ -188,6 +190,7 @@ class DokumenController extends Controller
         $dokumen = new Dokumen();
         $dokumen->file_dokumen = $filePath;
         $dokumen->id_pengguna = $id_pengguna; // ID pengguna yang sedang login
+        $dokumen->kode_pengguna = $kode_pengguna; // Kode pengguna
         $dokumen->id_semester = $request->id_semester ?? 1; // ID Semester yang dipilih
         $dokumen->id_jenis_dokumen = $jenisDokumen; // ID Jenis Dokumen yang dipilih
         $dokumen->is_template = 1;

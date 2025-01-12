@@ -75,7 +75,7 @@ import PergantianNilaiAkhirSidangDosen from './pages/dosen/sidang/PergantianNila
 
 // ? MBKM
 // * Mahasiswa
-import PendaftaranMBKM from './pages/mahasiswa/mbkm/daftar.vue';
+import PendaftaranMBKM from './pages/mahasiswa/mbkm/Daftar.vue';
 import KonversiSKS from './pages/mahasiswa/mbkm/KonversiSKS.vue';
 import Logbook from './pages/mahasiswa/mbkm/Logbook.vue';
 
@@ -123,6 +123,7 @@ import DetailRevisiDosenMBKM from './pages/dosen/sidang_mbkm/Revisi.vue';
 import ListPembimbingLapanganMBKM from './pages/dosen/sidang_mbkm/IndexPembimbingLapangan.vue';
 import NilaiPembimbingLapanganMBKM from './pages/dosen/sidang_mbkm/NilaiPembimbingLapangan.vue';
 import PergantianNilaiAkhirSidangDosenMBKM from './pages/dosen/sidang_mbkm/PergantianNilai.vue';
+import BerkasMahasiswaMBKM from './pages/dosen/sidang_mbkm/Berkas.vue';
 
 Vue.use(Router)
 const router = new Router({
@@ -904,6 +905,14 @@ const router = new Router({
     {
         path: '/mbkm-sidang/pergantian-nilai-akhir-sidang',
         component: PergantianNilaiAkhirSidangDosenMBKM,
+        meta: {
+            requiresAuth: true,
+            jenisUser: "Dosen"
+        }
+    },
+    {
+        path: '/mbkm-sidang/berkas-mahasiswa',
+        component: BerkasMahasiswaMBKM,
         meta: {
             requiresAuth: true,
             jenisUser: "Dosen"

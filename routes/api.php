@@ -323,6 +323,7 @@ Route::post('topik/list-topik-mbkm', "TopikController@listTopikMBKM");
 // ? PENGGUNA : ####### MAHASISWA #######
 // ! List Topik
 Route::get('mahasiswa/topik', 'TopikController@index');
+Route::get('dosen/topik/dokumen-mahasiswa/{id_pengguna}', 'TopikController@getDokumenByPembimbingPenguji');
 // *  List Hisori Topik Berdasarkan Mahasiswa
 Route::post('mahasiswa/histori-topik', 'TopikController@listHistoriMahasiswa');
 // * Detail Single Topik

@@ -19,6 +19,7 @@ class CreateDokumenTable extends Migration
             $table->tinyInteger('is_template');
             $table->integer('id_pengguna')->unsigned();
             $table->foreign('id_pengguna')->references('id_pengguna')->on('pengguna');
+            $table->integer('kode_pengguna')->unsigned();
             $table->integer('id_semester')->unsigned();
             $table->foreign('id_semester')->references('id_semester')->on('semester');
             $table->integer('id_jenis_dokumen')->unsigned();
