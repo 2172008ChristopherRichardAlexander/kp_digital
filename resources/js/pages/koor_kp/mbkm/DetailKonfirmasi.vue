@@ -183,7 +183,10 @@ export default {
                     status: 1,
                 });
 
-                alert("Data konversi SKS berhasil diperbarui dan status MBKM telah diperbarui!");
+                this.$bvToast.toast('Konversi SKS disetujui!', {
+                        variant: 'success',
+                        solid: true,
+                    });
                 this.$router.push(`/mbkm/konfirmasi`);
             } catch (error) {
                 console.error("Error submitting courses:", error);

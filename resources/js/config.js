@@ -19,7 +19,9 @@ export default {
     apiTuUrl: 'http://127.0.0.1:8000/api/tu',
     apiIbatsUrl: 'https://kp2.it.maranatha.edu/api',
     apiUrl: 'http://127.0.0.1:8000/api',
+    dokumenUrl: 'http://127.0.0.1:8000/',
     photoProfilePath: 'https://kp2.it.maranatha.edu/',
+
 
     // apiKp2:https://kp2.it.maranatha.edu
     // apiLocal:'http://127.0.0.1:8000'

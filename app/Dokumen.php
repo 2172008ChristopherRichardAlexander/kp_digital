@@ -6,14 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dokumen extends Model
 {
-
     protected $table = 'dokumen';
     protected $primaryKey = 'id_dokumen';
     public $timestamps = false;
 
     protected $fillable = [
         'file_dokumen',
-        'is_mbkm',
         'is_template',
         'id_pengguna',
         'id_semester',
@@ -30,7 +28,7 @@ class Dokumen extends Model
         return $this->belongsTo(Semester::class, 'id_semester');
     }
 
-    public function jenisDokumen()
+    public function jenis_dokumen()
     {
         return $this->belongsTo(JenisDokumen::class, 'id_jenis_dokumen');
     }

@@ -11,6 +11,7 @@
                     <b-form-select v-model="id_semester" size="sm" @change="getListDokumen">
                         <template v-slot:first>
                             <option :value="null" disabled>-- Semester --</option>
+                            <option value="all">-- All Semester --</option> <!-- All option -->
                         </template>
                         <option v-for="pilihan in pilihan_semester" :key="pilihan.id_semester"
                             :value="pilihan.id_semester">
@@ -23,6 +24,7 @@
                     <b-form-select v-model="id_jenis_dokumen" size="sm" @change="getListDokumen">
                         <template v-slot:first>
                             <option :value="null" disabled>-- Jenis Dokumen --</option>
+                            <option value="all">-- All Jenis Dokumen --</option> <!-- All option -->
                         </template>
                         <option v-for="jenis in pilihan_jenis_dokumen" :key="jenis.id_jenis_dokumen"
                             :value="jenis.id_jenis_dokumen">
@@ -30,15 +32,10 @@
                         </option>
                     </b-form-select>
                 </div>
-                <!-- Filter berdasarkan status MBKM -->
-                <div class="col-3 pilihan-status">
-                    <b-form-select v-model="is_mbkm" size="sm" @change="getListDokumen">
-                        <template v-slot:first>
-                            <option :value="null" disabled>-- Status KP --</option>
-                        </template>
-                        <option :value="1">MBKM</option>
-                        <option :value="0">Reguler</option>
-                    </b-form-select>
+                <div class="col-3 pilihan-jenis-dokumen">
+                    <b-button variant="primary" @click="downloadAllDokumen" class="my-1">
+                        Download Semua
+                    </b-button>
                 </div>
             </div>
 
@@ -68,7 +65,10 @@
                     </template>
                     <template v-slot:cell(action)="data">
                         <b-button size="sm" variant="success" @click="downloadDokumen(data.item)">
-                            Download
+                            <i class="material-icons">download</i>
+                        </b-button>
+                        <b-button size="sm" variant="primary" @click="previewDokumen(data.item)">
+                            <i class="material-icons">preview</i>
                         </b-button>
                     </template>
                 </b-table>
@@ -91,9 +91,13 @@
                 </b-row>
             </div>
         </div>
+        <b-modal id="preview-modal" title="Preview Dokumen" v-model="showPreview" size="lg">
+            <template v-slot:default>
+                <iframe :src="previewUrl" width="100%" height="1200px"></iframe>
+            </template>
+        </b-modal>
     </b-container>
 </template>
-
 <script>
 import Axios from "axios";
 import config from "../../../config";
@@ -101,7 +105,9 @@ import config from "../../../config";
 export default {
     data() {
         return {
-            // Filter
+            // Default filter values set to 'all' (showing all documents by default)
+            id_semester: 'all',
+            id_jenis_dokumen: 'all',
             filter: null,
             // Pagination
             totalRows: 1,
@@ -115,35 +121,50 @@ export default {
             kumpulan_dokumen: [],
             fields: [
                 { key: "no", label: "No", sortable: true },
-                { key: "id_pengguna", label: "Nama", sortable: true },
-                { key: "is_mbkm", label: "Status KP", sortable: true },
-                { key: "id_jenis_dokumen", label: "Jenis Dokumen", sortable: true },
+                { key: "mahasiswa.nama_pengguna", label: "Nama", sortable: true },
+                { key: "jenis_dokumen.nama_dokumen", label: "Jenis Dokumen", sortable: true },
                 { key: "action", label: "Action" }
             ],
             // Filter Options
-            id_semester: null,
-            id_jenis_dokumen: null,
-            is_mbkm: null,
             pilihan_semester: [],
             pilihan_jenis_dokumen: [],
+            showPreview: false,
+            previewUrl: "",
         };
     },
     mounted() {
         this.getListSemester();
         this.getListJenisDokumen();
+        this.getListDokumen();
+        this.$nextTick(() => {
+            const modal = document.querySelector('#preview-modal .modal-dialog');
+            modal.style.maxWidth = '90%';
+            modal.style.height = '80vh';
+        });
     },
     methods: {
+        showPreviewModal(url) {
+            this.previewUrl = url;
+            this.showPreview = true;
+        },
+        previewDokumen(dokumen) {
+            if (dokumen.file_dokumen) {
+                const previewUrl = `${config.dokumenUrl}storage/${dokumen.file_dokumen}`;
+                console.log(previewUrl);
+                this.showPreviewModal(previewUrl);
+            } else {
+                console.error("Dokumen tidak tersedia untuk dipreview.");
+            }
+        },
         // Mendapatkan data dokumen berdasarkan filter
         getListDokumen() {
             let params = {};
-            if (this.id_semester) params.id_semester = this.id_semester;
-            if (this.id_jenis_dokumen) params.id_jenis_dokumen = this.id_jenis_dokumen;
-            if (this.is_mbkm !== null) params.is_mbkm = this.is_mbkm;
+            if (this.id_semester && this.id_semester !== 'all') params.id_semester = this.id_semester;
+            if (this.id_jenis_dokumen && this.id_jenis_dokumen !== 'all') params.id_jenis_dokumen = this.id_jenis_dokumen;
 
-            Axios.get(`${config.apiUrl}/dokumen/dokumen-mahasiswa`, {params})
+            Axios.get(`${config.apiUrl}/dokumen/dokumen-mahasiswa`, { params })
                 .then((response) => {
-                    console.log(response);
-                    if (response.data.data.length === 0) {
+                    if (response.data.length === 0) {
                         this.kumpulan_dokumen = [];
                     } else {
                         this.kumpulan_dokumen = response.data.data;
@@ -176,16 +197,36 @@ export default {
         },
         // Fungsi untuk mengunduh dokumen
         downloadDokumen(dokumen) {
-            // Periksa apakah dokumen memiliki URL untuk diunduh
             if (dokumen.file_dokumen) {
-                // Menggunakan link download langsung dari file_dokumen
-                const url = `${config.apiUrl}/dokumen/download/${dokumen.file_dokumen}`;
+                const url = `${config.dokumenUrl}storage/${dokumen.file_dokumen}`;
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = dokumen.file_dokumen;  // Nama file yang akan didownload
                 link.click();
             } else {
                 console.error("Dokumen tidak tersedia untuk diunduh.");
+            }
+        },
+        downloadAllDokumen() {
+            // Menyaring dokumen yang sesuai dengan filter
+            const dokumenToDownload = this.kumpulan_dokumen.filter(dokumen => {
+                const filterSemesterMatch = this.id_semester === 'all' || dokumen.id_semester === this.id_semester;
+                const filterJenisDokumenMatch = this.id_jenis_dokumen === 'all' || dokumen.id_jenis_dokumen === this.id_jenis_dokumen;
+                return filterSemesterMatch && filterJenisDokumenMatch;
+            });
+
+            // Mengunduh dokumen yang telah disaring
+            if (dokumenToDownload.length > 0) {
+                dokumenToDownload.forEach(dokumen => {
+                    const url = `${config.dokumenUrl}storage/${dokumen.file_dokumen}`;
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = dokumen.file_dokumen;  // Nama file yang akan didownload
+                    link.click();
+                });
+                console.log(`${dokumenToDownload.length} dokumen berhasil diunduh.`);
+            } else {
+                console.error("Tidak ada dokumen yang sesuai dengan filter.");
             }
         },
         // Filter callback
@@ -206,16 +247,9 @@ export default {
                 this.getListDokumen();
             }
         },
-        is_mbkm(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                this.getListDokumen();
-            }
-        }
     }
 };
 </script>
-
-
 <style scoped>
 /* Styling untuk tabel dokumen */
 .dokumen-table {
@@ -280,5 +314,15 @@ export default {
 
 .loading-text {
     color: rgb(32, 165, 6);
+}
+
+.modal-dialog {
+    max-width: 90% !important;
+    /* Mengatur lebar modal menjadi 90% dari lebar layar */
+}
+
+.modal-content {
+    height: 80vh;
+    /* Mengatur tinggi modal menjadi 80% dari tinggi layar */
 }
 </style>

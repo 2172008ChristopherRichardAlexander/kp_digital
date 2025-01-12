@@ -12,7 +12,7 @@ class Topik extends Model
     protected $fillable = [
         'judul_topik', 'slug_topik', 'latar_belakang', 'rumusan_masalah', 'tujuan_pembahasan', 'ruang_lingkup',
         'sumber_data', 'sistematika_penyajian', 'transkrip_nilai', 'dkbs', 'tanggal_pengajuan_topik',
-        'form_persetujuan_instansi', 'lampiran_gambar', 'status_persetujuan_dosen', 'status_topik', 'id_batch', 'id_kbk',
+        'form_persetujuan_instansi', 'lampiran_gambar', 'status_persetujuan_dosen', 'status_topik','is_mbkm', 'id_batch', 'id_kbk',
         'id_pengaju', 'id_pembimbing', 'id_pembimbing_lapangan', 'id_penguji_sidang', 'id_penguji_sidang_dua'
     ];
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\MBKM;
 use App\Http\Requests;
 use App\Http\Resources\MBKM as MBKMResource;
@@ -34,13 +34,30 @@ class MBKMController extends Controller
         return $kumpulan_mbkm;
     }
 
-    public function getAllByIdUser($id)
+    public function getExistByIdUser($id, $id_semester)
     {
-        $exists = MBKM::where('id_pengguna', $id)->exists();
+        $exists = MBKM::where('id_pengguna', $id)->where('id_semester',$id_semester)->exists();
         // Mengembalikan response JSON dengan status 'exists'
         return response()->json([
             'exists' => $exists
         ]);
+    }
+
+    public function getAllByIdUser($id, $id_semester)
+    {
+        $exists = MBKM::where('id_pengguna', $id)->where('id_semester',$id_semester)->first();
+        // Mengembalikan response JSON dengan status 'exists'
+        if ($exists) {
+            return response()->json([
+                'status' => 'exists',
+                'data' => new MBKMResource($exists),
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 'none',
+                'message' => 'Tidak ada pendaftaran MBKM yang ditemukan.',
+            ], 404);
+        }
     }
 
     public function getByIdMBKM($id_mbkm)
@@ -58,21 +75,44 @@ class MBKMController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'namaInstansi' => 'required|string|max:255',
+            'nama_instansi' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'jenisMbkm' => 'required|integer',
+            'jenis_mbkm_id' => 'required|integer',
             'idPengguna'=> 'required|integer',
-            'idSemester'=> 'required|integer',
+            'id_semester'=> 'required|integer',
         ]);
 
         // Create a new MBKM record
         $mbkm = new MBKM;
-        $mbkm->nama_instansi = $request->namaInstansi;
+        $mbkm->nama_instansi = $request->nama_instansi;
         $mbkm->deskripsi = $request->deskripsi;
-        $mbkm->id_jenis_mbkm = $request->jenisMbkm;
+        $mbkm->id_jenis_mbkm = $request->jenis_mbkm_id;
         $mbkm->id_pengguna = $request->idPengguna;
-        $mbkm->id_semester = $request->idSemester;
+        $mbkm->id_semester = $request->id_semester;
+        $mbkm->status = 0;
         $mbkm->save();
+        return 'success';
+    }
+
+    public function checkExistingMBKM(Request $request)
+    {
+        $user = Auth::user();
+        $semesterId = $request->query('semester_id');
+
+        $existingMBKM = MBKM::where('id_pengguna', $user->id)
+                            ->where('id_semester', $semesterId)
+                            ->first();
+
+        if ($existingMBKM) {
+            return response()->json([
+                'exists' => true,
+                'status' => $existingMBKM->status
+            ]);
+        }
+
+        return response()->json([
+            'exists' => false
+        ]);
     }
 
     /**

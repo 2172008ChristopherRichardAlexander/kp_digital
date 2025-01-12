@@ -29,6 +29,16 @@ class KonversiSKSController extends Controller
         }
         return $kumpulan_konversi;
     }
+
+    public function getAllByIdPenggunaSemester($id_pengguna, $id_semester)
+    {
+        if ($id_pengguna != null) {
+            // Ambil data MBKM yang berhubungan dengan semester tertentu
+            $kumpulan_konversi = KonversiSKSResource::collection(KonversiSKS::where('id_pengguna', $id_pengguna)->where('id_semester',$id_semester)->get());
+        }
+        return $kumpulan_konversi;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -148,5 +158,20 @@ class KonversiSKSController extends Controller
         $konversiSKS->delete();
 
         return response()->json(['message' => 'Konversi SKS berhasil dihapus.'], 200);
+    }
+
+    public function getKonversiSks(Request $request)
+    {
+        // Mengambil parameter id_pengguna dan id_semester dari request
+        $id_pengguna = $request->input('id_pengguna');
+        $id_semester = $request->input('id_semester');
+        return $request;
+        // Menarik data dari tabel konver_sks berdasarkan kondisi pengguna dan semester
+        $konversiSks = KonversiSKS::where('id_pengguna', $id_pengguna)
+                                 ->where('id_semester', $id_semester)
+                                 ->get();
+
+        // Mengembalikan data konversi dalam format JSON
+        return KonversiSKSResource::collection($konversiSks);
     }
 }

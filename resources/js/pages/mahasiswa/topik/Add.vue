@@ -681,6 +681,7 @@ export default {
   },
   data() {
     return {
+      is_mbkm: 0,
       judul_topik: "",
       latar_belakang: "",
       rumusan_masalah: "",
@@ -867,6 +868,7 @@ export default {
         formData.append("sistematika_penyajian", this.sistematika_penyajian);
         formData.append("transkrip_nilai", this.transkrip_nilai);
         formData.append("dkbs", this.dkbs);
+        formData.append("is_mbkm", this.is_mbkm);
         formData.append(
           "tanggal_pengajuan_topik",
           this.tanggal_pengajuan_topik

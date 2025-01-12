@@ -12,7 +12,7 @@
             <template v-slot:first>
               <option :value="null" disabled>-- Semester --</option>
             </template>
-            <option v-for="pilihan in pilihan_semester" :key="pilihan.id_semester + 'a'" :value="pilihan.id_semester">
+            <option v-for="pilihan in pilihan_semester" :key="pilihan.id_semester" :value="pilihan.id_semester">
               {{ pilihan.nama_semester }}
             </option>
           </b-form-select>
@@ -153,6 +153,11 @@ export default {
       Axios.get(`${config.apiUrl}/semester/list`)
         .then((response) => {
           this.pilihan_semester = response.data.data;
+          const activeSemester = this.pilihan_semester.find(semester => semester.status_semester === 1);
+          if (activeSemester) {
+            this.id_semester = activeSemester.id_semester;
+            this.getListMbkm();
+          }
         })
         .catch((response) => {
           this.isBusySemester = false;

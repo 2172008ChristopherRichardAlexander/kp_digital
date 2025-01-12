@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col">
             <h3 class="keterangan-website my-2">
-              Pengajuan Topik Kerja Praktek
+              Pengajuan Topik Kerja Praktek MBKM
             </h3>
           </div>
         </div>
@@ -31,7 +31,7 @@
               <b-tr class="form-pengajuan-title">
                 <b-th class="space-kosong">&nbsp;</b-th>
                 <b-th colspan="3">
-                  <h4 class="my-2">Form Pengajuan Topik</h4>
+                  <h4 class="my-2">Form Pengajuan Topik MBKM</h4>
                 </b-th>
               </b-tr>
             </b-thead>
@@ -587,44 +587,6 @@
                       ></file-select>
                     </b-col>
                   </b-row>
-                  <!-- <b-table-simple>
-                    <b-tbody>
-                      <b-tr>
-                        <b-td style="padding:0px; margin:0px;">
-                          <b-form-input
-                            type="text"
-                            class="input-form-file-item-text"
-                            v-if="lampiran_gambar"
-                            :value="lampiran_gambar.name"
-                            disabled
-                            size="sm"
-                          />
-                          <b-form-input
-                            type="text"
-                            class="input-form-file-item-text"
-                            v-else
-                            placeholder="Lampiran Gambar (Opsional)"
-                            disabled
-                            size="sm"
-                          />
-                        </b-td>
-                        <b-td class="btn-file-input">
-                          <file-select
-                            class="input-form-file-item-button"
-                            v-model="lampiran_gambar"
-                          ></file-select>
-                        </b-td>
-                      </b-tr>
-                    </b-tbody>
-                  </b-table-simple>-->
-                  <!-- <b-form-file
-                    class="d-none"
-                    type="file"
-                    accept="image/*"
-                    @change="addFile('lampiran_gambar', $event)"
-                    placeholder="Lampiran Gambar"
-                    size="sm"
-                  ></b-form-file>-->
                 </b-td>
                 <b-td class="feedback-validasi">&nbsp;</b-td>
               </b-tr>
@@ -694,6 +656,7 @@ export default {
       lampiran_gambar: null,
       status_persetujuan_dosen: 3,
       status_topik: 3,
+      is_mbkm: 1,
       batch: {},
       id_batch: null,
       id_kbk: null,
@@ -867,6 +830,7 @@ export default {
         formData.append("sistematika_penyajian", this.sistematika_penyajian);
         formData.append("transkrip_nilai", this.transkrip_nilai);
         formData.append("dkbs", this.dkbs);
+        formData.append("is_mbkm", this.is_mbkm);
         formData.append(
           "tanggal_pengajuan_topik",
           this.tanggal_pengajuan_topik

@@ -129,6 +129,7 @@ class TopikController extends Controller
         $topik->tanggal_pengajuan_topik = $request->input('tanggal_pengajuan_topik');
         $topik->status_persetujuan_dosen = $request->input('status_persetujuan_dosen');
         $topik->status_topik = $request->input('status_topik');
+        $topik->is_mbkm = $request->input('is_mbkm');
         $topik->id_batch = $request->input('id_batch');
         $topik->id_kbk = $request->input('id_kbk');
         $topik->id_pengaju = $request->input('id_pengaju');
@@ -420,7 +421,7 @@ class TopikController extends Controller
     {
         // Menunggu persetujuan dosen
         $status_persetujuan_dosen = 2;
-        $matchThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'status_persetujuan_dosen' => $status_persetujuan_dosen, 'id_batch' => $request->input('id_batch')];
+        $matchThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'status_persetujuan_dosen' => $status_persetujuan_dosen, 'id_batch' => $request->input('id_batch'), 'is_mbkm' =>0];
         // $kumpulan_topik = TopikResource::collection(Topik::where($matchThese)->get());
         $kumpulan_topik = Topik::where($matchThese)->get();
         if (sizeof($kumpulan_topik) != 0) {
@@ -440,6 +441,30 @@ class TopikController extends Controller
         return ['message' => 'kosong'];
     }
 
+    public function listTopikPermintaanPersetujuanMBKM(Request $request)
+    {
+        // Menunggu persetujuan dosen
+        $status_persetujuan_dosen = 2;
+        $matchThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'status_persetujuan_dosen' => $status_persetujuan_dosen, 'id_batch' => $request->input('id_batch'), 'is_mbkm' => $request->input('is_mbkm')];
+        // $kumpulan_topik = TopikResource::collection(Topik::where($matchThese)->get());
+        $kumpulan_topik = Topik::where($matchThese)->get();
+        if (sizeof($kumpulan_topik) != 0) {
+            foreach ($kumpulan_topik as $topik) {
+                $pengguna = Pengguna::where('kode_pengguna', $topik->id_pengaju)->first();
+                $data[] = [
+                    'id_topik' => $topik->id_topik,
+                    'slug_topik' => $topik->slug_topik,
+                    'nrp' => $topik->id_pengaju,
+                    'judul_topik' => $topik->judul_topik,
+                    'nama' => $pengguna != null ? $pengguna->nama_pengguna : $topik->id_pengaju,
+                    'status_topik' => $topik->status_topik
+                ];
+            }
+            return $data;
+        }
+        return ['message' => 'kosong'];
+    }
+    
     // ? List Topik History Permintaan Persetujuan
     public function listTopikHistoryPermintaanPersetujuan(Request $request)
     {
@@ -466,7 +491,28 @@ class TopikController extends Controller
     public function listMahasiswaBimbingan(Request $request)
     {
         // ! Role Pembimbing antara "id_pembimbing" dan "id_pemnbimbing_lapangan"
-        $matchThese = [$request->input('role_pembimbing') => $request->input('id_pembimbing'), 'id_batch' => $request->input('id_batch')];
+        $matchThese = [$request->input('role_pembimbing') => $request->input('id_pembimbing'), 'id_batch' => $request->input('id_batch'), 'is_mbkm' => 0];
+        $kumpulan_topik = Topik::where($matchThese)->orderBy('id_pengaju')->get();
+        if (sizeof($kumpulan_topik) != 0) {
+            foreach ($kumpulan_topik as $topik) {
+                $pengguna = Pengguna::where('kode_pengguna', $topik->id_pengaju)->first();
+                $data[] = [
+                    'id_topik' => $topik->id_topik,
+                    'slug_topik' => $topik->slug_topik,
+                    'nrp' => $topik->id_pengaju,
+                    'judul_topik' => $topik->judul_topik,
+                    'nama' => $pengguna != null ? $pengguna->nama_pengguna : $topik->id_pengaju,
+                ];
+            }
+            return $data;
+        }
+        return ['message' => 'kosong'];
+    }
+
+    public function listMahasiswaBimbinganMBKM(Request $request)
+    {
+        // ! Role Pembimbing antara "id_pembimbing" dan "id_pemnbimbing_lapangan"
+        $matchThese = [$request->input('role_pembimbing') => $request->input('id_pembimbing'), 'id_batch' => $request->input('id_batch'), 'is_mbkm' => 1];
         $kumpulan_topik = Topik::where($matchThese)->orderBy('id_pengaju')->get();
         if (sizeof($kumpulan_topik) != 0) {
             foreach ($kumpulan_topik as $topik) {
@@ -598,6 +644,28 @@ class TopikController extends Controller
         return ['message' => 'kosong'];
     }
 
+    public function listTopikMBKM(Request $request)
+    {
+        // TODO: Belum Di Uji Coba
+        $status_topik = explode(",", $request->input('status_topik'));
+        $status_persetujuan_dosen = explode(",", $request->input('status_persetujuan_dosen'));
+        $matchThese = ['id_batch' => $request->input('id_batch'), 'is_mbkm' => 1];
+        // ! Jika terdapat Role Pengguna
+        if ($request->input('role_pengguna')) {
+            // * Menghapus Whitespaces (Space, Tab, line), membuat semua menjadi huruf kecil
+            $role = strtolower(preg_replace('/\s+/', '', $request->input('role_pengguna')));
+            if ($role == "dosen")
+                $matchThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'id_batch' => $request->input('id_batch')];
+            elseif ($role == "koorkbk")
+                $matchThese = ['id_batch' => $request->input('id_batch'), 'id_kbk' => $request->input('id_kbk')];
+        }
+
+        $kumpulan_topik = TopikResource::collection(Topik::where($matchThese)->whereIn('status_persetujuan_dosen', $status_persetujuan_dosen)->whereIn('status_topik', $status_topik)->get());
+        if (sizeof($kumpulan_topik) != 0) {
+            return $kumpulan_topik;
+        }
+        return ['message' => 'kosong'];
+    }
 
     public function updateStatusPersetujuanKoorKp(Request $request)
     {

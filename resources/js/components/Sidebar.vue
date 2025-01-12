@@ -35,69 +35,75 @@
           Pembimbing</router-link>
         <router-link to="/sidang/pengaturan-penguji" class="nav-link sidebar-menu-item">Pengaturan Penguji</router-link>
       </template>
-      <div class="sidebar-menu">Topik</div>
-      <!-- // ? Mahasiswa -->
-      <template v-if="cekJabatan('Mahasiswa')">
-        <router-link to="/topik/pengajuan" class="nav-link sidebar-menu-item">Pengajuan</router-link>
-        <router-link to="/topik/histori" class="nav-link sidebar-menu-item">Histori</router-link>
-      </template>
-      <!-- // ? Dosen -->
-      <template v-if="cekJabatan('Dosen')">
-        <router-link to="/topik/persetujuan" class="nav-link sidebar-menu-item">Persetujuan Topik</router-link>
-      </template>
-
-      <!-- // * ####### BIMBINGAN ####### -->
-      <div class="sidebar-menu">Bimbingan</div>
-      <!-- // ? Mahasiswa -->
-      <template v-if="cekJabatan('Mahasiswa') && (topik || topik_sidang)">
-        <template v-if="topik">
-          <router-link :to="{ path: '/bimbingan/ajukan/' + topik.slug_topik }"
-            class="nav-link sidebar-menu-item">Pengajuan</router-link>
-          <router-link :to="{ path: '/bimbingan/' + topik.slug_topik }"
-            class="nav-link sidebar-menu-item">Histori</router-link>
+      <template v-if="!isKonversiSKSAvailable">
+        <div class="sidebar-menu">Topik</div>
+        <template v-if="cekJabatan('Mahasiswa')">
+          <router-link to="/topik/pengajuan" class="nav-link sidebar-menu-item">Pengajuan</router-link>
+          <router-link to="/topik/histori" class="nav-link sidebar-menu-item">Histori</router-link>
         </template>
-        <template v-else-if="topik_sidang">
-          <router-link :to="{ path: '/bimbingan/ajukan/' + topik_sidang.slug_topik }"
-            class="nav-link sidebar-menu-item">Pengajuan</router-link>
-          <router-link :to="{ path: '/bimbingan/' + topik_sidang.slug_topik }"
-            class="nav-link sidebar-menu-item">Histori</router-link>
+        <template v-if="cekJabatan('Dosen')">
+          <router-link to="/topik/persetujuan" class="nav-link sidebar-menu-item">Persetujuan Topik</router-link>
         </template>
       </template>
-      <template v-if="cekJabatan('Mahasiswa') && !topik && !topik_sidang">
-        <div class="nav-link sidebar-menu-item-disabled">Pengajuan</div>
-        <div class="nav-link sidebar-menu-item-disabled">Histori</div>
-      </template>
-      <!-- // ? Dosen -->
-      <template v-if="cekJabatan('Dosen')">
-        <router-link to="/bimbingan/konfirmasi" class="nav-link sidebar-menu-item">Proses Bimbingan</router-link>
+
+      <!-- Hanya tampilkan kategori Bimbingan jika mahasiswa belum terdaftar di MBKM -->
+      <template v-if="!isKonversiSKSAvailable">
+        <div class="sidebar-menu">Bimbingan</div>
+        <template v-if="cekJabatan('Mahasiswa') && (topik || topik_sidang)">
+          <template v-if="topik">
+            <router-link :to="{ path: '/bimbingan/ajukan/' + topik.slug_topik }"
+              class="nav-link sidebar-menu-item">Pengajuan</router-link>
+            <router-link :to="{ path: '/bimbingan/' + topik.slug_topik }"
+              class="nav-link sidebar-menu-item">Histori</router-link>
+          </template>
+          <template v-else-if="topik_sidang">
+            <router-link :to="{ path: '/bimbingan/ajukan/' + topik_sidang.slug_topik }"
+              class="nav-link sidebar-menu-item">Pengajuan</router-link>
+            <router-link :to="{ path: '/bimbingan/' + topik_sidang.slug_topik }"
+              class="nav-link sidebar-menu-item">Histori</router-link>
+          </template>
+        </template>
+        <template v-if="cekJabatan('Mahasiswa') && !topik && !topik_sidang">
+          <div class="nav-link sidebar-menu-item-disabled">Pengajuan</div>
+          <div class="nav-link sidebar-menu-item-disabled">Histori</div>
+        </template>
+        <template v-if="cekJabatan('Dosen')">
+          <router-link to="/bimbingan/konfirmasi" class="nav-link sidebar-menu-item">Proses Bimbingan</router-link>
+        </template>
       </template>
 
-      <!-- // * ####### Sidang ####### -->
-      <div class="sidebar-menu">Sidang</div>
-      <!-- // ? Mahasiswa -->
-      <template v-if="cekJabatan('Mahasiswa')">
-        <div class="sidebar-menu-item" v-if="loading_topik_sidang">
-          <ring-loader class="loading-page" color="white" :size="25" v-if="loading_topik_sidang" />
-        </div>
-        <template v-else>
+      <!-- Hanya tampilkan kategori Sidang jika mahasiswa belum terdaftar di MBKM -->
+      <template v-if="!isKonversiSKSAvailable">
+        <div class="sidebar-menu">Sidang</div>
+        <template v-if="cekJabatan('Mahasiswa')">
+          <router-link to="/sidang" class="nav-link sidebar-menu-item">Histori</router-link>
           <router-link :to="{ path: '/sidang/' + topik_sidang.slug_topik }" class="nav-link sidebar-menu-item"
             v-if="id_batch_sidang && topik_sidang">Pengajuan</router-link>
           <div class="sidebar-menu-item-disabled" v-else>Pengajuan</div>
         </template>
-        <router-link to="/sidang" class="nav-link sidebar-menu-item">Histori</router-link>
+        <template v-if="cekJabatan('Tata Usaha')">
+          <router-link to="/penjadwalan/sidang" class="nav-link sidebar-menu-item">Jadwal Sidang</router-link>
+        </template>
+        <template v-if="cekJabatan('Dosen')">
+          <router-link to="/sidang/persetujuan" class="nav-link sidebar-menu-item">Pengajuan Sidang</router-link>
+          <router-link to="/sidang/acara" class="nav-link sidebar-menu-item">Berita Acara Sidang</router-link>
+          <router-link to="/sidang/list-revisi" class="nav-link sidebar-menu-item">Revisi Sidang</router-link>
+          <router-link to="/sidang/pergantian-nilai-akhir-sidang" class="nav-link sidebar-menu-item"
+            v-if="!cekJabatan('Koordinator KP')">Pengajuan Ganti Nilai</router-link>
+        </template>
       </template>
       <!-- // ? TU -->
       <template v-if="cekJabatan('Tata Usaha')">
         <router-link to="/penjadwalan/sidang" class="nav-link sidebar-menu-item">Jadwal Sidang</router-link>
       </template>
       <!-- // ? Dosen -->
-      <template v-if="cekJabatan('Dosen')">
+      <!-- <template v-if="cekJabatan('Dosen')">
         <router-link to="/sidang/persetujuan" class="nav-link sidebar-menu-item">Pengajuan Sidang</router-link>
         <router-link to="/sidang/acara" class="nav-link sidebar-menu-item">Berita Acara Sidang</router-link>
         <router-link to="/sidang/list-revisi" class="nav-link sidebar-menu-item">Revisi Sidang</router-link>
         <router-link to="/sidang/pergantian-nilai-akhir-sidang" class="nav-link sidebar-menu-item"
           v-if="!cekJabatan('Koordinator KP')">Pengajuan Ganti Nilai</router-link>
-      </template>
+      </template> -->
       <!-- // ? Koor KP -->
       <template v-if="cekJabatan('Koordinator KP')">
         <div class="sidebar-menu">Koordinator KP</div>
@@ -112,19 +118,19 @@
         <router-link to="/sidang/pembimbing-lapangan" class="nav-link sidebar-menu-item">Nilai Pembimbing
           Lapangan</router-link>
         <router-link to="/sidang/penilaian" class="nav-link sidebar-menu-item">Nilai Koordinator KP</router-link>
-        <router-link to="/sidang/kirim-email" class="nav-link sidebar-menu-item">Kirim Email</router-link>
       </template>
       <div class="sidebar-menu">Dokumen</div>
-      <template v-if="cekJabatan('Koordinator KP')">
+      <template v-if="cekJabatan('Dosen') || cekJabatan('Koordinator KP')">
         <router-link to="/dokumen/list-dokumen-mahasiswa" class="nav-link sidebar-menu-item">List Dokumen</router-link>
-        <router-link to="/dokumen/template-dokumen" class="nav-link sidebar-menu-item">Setting</router-link>
+        <router-link v-if="cekJabatan('Koordinator KP')" to="/dokumen/template-dokumen"
+          class="nav-link sidebar-menu-item">Setting</router-link>
       </template>
       <template v-if="cekJabatan('Mahasiswa')">
         <router-link to="/dokumen/upload-dokumen-mahasiswa" class="nav-link sidebar-menu-item">Upload</router-link>
         <router-link to="/dokumen/list-template-dokumen" class="nav-link sidebar-menu-item">Template</router-link>
       </template>
       <!-- MBKM -->
-      <div class="sidebar-menu">MBKM</div>
+      <div v-if="cekJabatan('Koordinator KP') || cekJabatan('Mahasiswa')" class="sidebar-menu">MBKM</div>
       <template v-if="cekJabatan('Mahasiswa')">
         <router-link to="/mbkm/pendaftaran" class="nav-link sidebar-menu-item">Daftar MBKM</router-link>
         <template v-if="cekJabatan('Mahasiswa')">
@@ -137,7 +143,7 @@
           </template>
         </template>
       </template>
-      <template v-if="cekJabatan('Dosen') || cekJabatan('Koordinator KP')">
+      <template v-if="cekJabatan('Koordinator KP')">
         <router-link to="/mbkm/konfirmasi" class="nav-link sidebar-menu-item">Konfirmasi MBKM</router-link>
         <router-link to="/mbkm/jenis-mbkm" class="nav-link sidebar-menu-item">Jenis MBKM</router-link>
         <router-link to="/mbkm/mata-kuliah" class="nav-link sidebar-menu-item">Mata Kuliah</router-link>
@@ -149,7 +155,7 @@
       </template>
       <!-- // ? Dosen -->
       <template v-if="cekJabatan('Dosen')">
-        <router-link to="/topik-mbkm/persetujuan" class="nav-link sidebar-menu-item">Persetujuan Topik</router-link>
+        <router-link to="/mbkm-topik/persetujuan" class="nav-link sidebar-menu-item">Persetujuan Topik</router-link>
       </template>
       <div class="sidebar-menu">Bimbingan MBKM</div>
       <!-- // ? Mahasiswa -->
@@ -173,7 +179,7 @@
       </template>
       <!-- // ? Dosen -->
       <template v-if="cekJabatan('Dosen')">
-        <router-link to="/bimbingan-mbkm/konfirmasi" class="nav-link sidebar-menu-item">Proses Bimbingan</router-link>
+        <router-link to="/mbkm-bimbingan/konfirmasi" class="nav-link sidebar-menu-item">Proses Bimbingan</router-link>
       </template>
       <div class="sidebar-menu">Sidang MBKM</div>
       <!-- // ? Mahasiswa -->
@@ -194,10 +200,10 @@
       </template>
       <!-- // ? Dosen -->
       <template v-if="cekJabatan('Dosen')">
-        <router-link to="/sidang-mbkm/persetujuan" class="nav-link sidebar-menu-item">Pengajuan Sidang</router-link>
-        <router-link to="/sidang-mbkm/acara" class="nav-link sidebar-menu-item">Berita Acara Sidang</router-link>
-        <router-link to="/sidang-mbkm/list-revisi" class="nav-link sidebar-menu-item">Revisi Sidang</router-link>
-        <router-link to="/sidang-mbkm/pergantian-nilai-akhir-sidang" class="nav-link sidebar-menu-item"
+        <router-link to="/mbkm-sidang/persetujuan" class="nav-link sidebar-menu-item">Pengajuan Sidang</router-link>
+        <router-link to="/mbkm-sidang/acara" class="nav-link sidebar-menu-item">Berita Acara Sidang</router-link>
+        <router-link to="/mbkm-sidang/list-revisi" class="nav-link sidebar-menu-item">Revisi Sidang</router-link>
+        <router-link to="/mbkm-sidang/pergantian-nilai-akhir-sidang" class="nav-link sidebar-menu-item"
           v-if="!cekJabatan('Koordinator KP')">Pengajuan Ganti Nilai</router-link>
       </template>
     </b-nav>
@@ -213,6 +219,7 @@ export default {
       active: false,
       id_batch: null,
       topik: null,
+      id_semester: null,
       placement: "right",
       id_pengguna: this.$store.getters.pengguna.UserId,
       kode: this.$store.getters.pengguna.Id,
@@ -233,13 +240,34 @@ export default {
     });
     this.getBatchTopik();
     this.getTopikSidang();
+    this.getSemesterId();
     this.cekMBKM(this.kode).then((exists) => {
       this.isKonversiSKSAvailable = exists;
     });
   },
   methods: {
+    async getSemesterId() {
+      try {
+        const res = await Axios.get(`${config.apiUrl}/semester/aktif`);
+        this.id_semester = res.data.id_semester;
+      } catch (error) {
+        console.error("Error fetching semester ID:", error);
+        this.submissionStatus = "error";
+        this.statusMessage = "Terjadi kesalahan saat mengambil data semester.";
+      }
+    },
     cekJabatan(jabatan) {
       return this.$store.getters.jabatan.includes(jabatan);
+    },
+    async cekMBKM(id_pengguna) {
+      await this.getSemesterId();
+      return Axios.get(`${config.apiMahasiswaUrl}/mbkm/${id_pengguna}/${this.id_semester}`)
+        .then((response) => {
+          return response.data.exists; // Menyimpan status apakah terdaftar di MBKM
+        })
+        .catch(() => {
+          return false; // Jika terjadi error atau tidak terdaftar
+        });
     },
     getBatchTopik() {
       let id_pengguna = this.$store.getters.pengguna.UserId;
@@ -306,15 +334,6 @@ export default {
         }
         this.loading_topik_sidang = false;
       });
-    },
-    async cekMBKM(id_pengguna) {
-      return Axios.get(`${config.apiMahasiswaUrl}/mbkm/${id_pengguna}`)
-        .then((response) => {
-          return response.data.exists;
-        })
-        .catch(() => {
-          return false;
-        });
     },
   },
 };

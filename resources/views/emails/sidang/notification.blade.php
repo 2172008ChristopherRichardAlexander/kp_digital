@@ -4,19 +4,14 @@
 
 <head>
 
-    <title>ItsolutionStuff.com</title>
+    <title>kp2.it.maranatha.edu</title>
 
 </head>
-
 <body>
 
     <h1>{{ $sidang['subject'] }}</h1>
 
     <p>{{ $sidang['message'] }}</p>
-
-   
-
-    <p>Thank you</p>
 
 </body>
 
