@@ -23,6 +23,7 @@ class Dokumen extends JsonResource
             'file_dokumen' => $this->file_dokumen,
             'is_template'=>$this->is_template,
             'id_pengguna' => $this->id_pengguna,
+            'kode_pengguna'=>$this->kode_pengguna,
             'id_semester' => $this->id_semester,
             'id_jenis_dokumen'=> $this->id_jenis_dokumen,
             'mahasiswa' => new Pengguna(PenggunaModel::where('id_pengguna', $this->id_pengguna)->first()),

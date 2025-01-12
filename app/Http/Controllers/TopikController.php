@@ -12,6 +12,8 @@ use App\Topik;
 use App\Http\Requests;
 use App\Http\Resources\Topik as TopikResource;
 use App\Pengguna;
+use App\Dokumen;
+use App\Http\Resources\Dokumen as DokumenResource;
 // use App\Http\Resources\JenisSidang as JenisSidangResource;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -812,5 +814,36 @@ class TopikController extends Controller
     {
         $updateThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'id_pembimbing_lapangan' => $request->input('id_pembimbing_lapangan'), 'id_penguji_sidang' => $request->input('id_penguji_sidang'), 'id_penguji_sidang_dua' => $request->input('id_penguji_sidang_dua')];
         Topik::where('id_topik', $request->input('id_topik'))->update($updateThese);
+    }
+
+    public function getDokumenByPembimbingPenguji($id_pengguna)
+    {   
+        // Ambil pengguna berdasarkan id (bisa pembimbing atau penguji)
+        $pengguna = Pengguna::where('kode_pengguna', $id_pengguna)->get();
+        
+        if (!$pengguna) {
+            return response()->json(['message' => 'Pengguna tidak ditemukan'], 404);
+        }
+
+        // Ambil topik yang terkait dengan pengguna (sebagai pembimbing atau penguji)
+        $topiks = Topik::where(function($query) use ($id_pengguna) {
+                        $query->where('id_pembimbing', $id_pengguna)
+                              ->orWhere('id_penguji_sidang', $id_pengguna)
+                              ->orWhere('id_penguji_sidang_dua', $id_pengguna);
+                    })
+                    ->get();
+
+        // Jika tidak ada topik yang terkait
+        if ($topiks->isEmpty()) {
+            return response()->json(['message' => 'Tidak ada topik terkait dengan pengguna ini'], 404);
+        }
+        $newTopiks = TopikResource::collection($topiks)->first();
+        $id_pengguna_mahasiswa = $topiks->pluck('id_pengaju')->unique();
+        // Ambil dokumen yang terkait dengan mahasiswa yang terdaftar pada topik-topik tersebut
+        $dokumen = Dokumen::whereIn('kode_pengguna', $id_pengguna_mahasiswa)
+                          ->get();
+
+        return DokumenResource::collection($dokumen);
+
     }
 }

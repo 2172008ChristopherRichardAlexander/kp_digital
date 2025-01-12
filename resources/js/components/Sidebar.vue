@@ -205,6 +205,7 @@
         <router-link to="/mbkm-sidang/list-revisi" class="nav-link sidebar-menu-item">Revisi Sidang</router-link>
         <router-link to="/mbkm-sidang/pergantian-nilai-akhir-sidang" class="nav-link sidebar-menu-item"
           v-if="!cekJabatan('Koordinator KP')">Pengajuan Ganti Nilai</router-link>
+        <router-link to="/mbkm-sidang/berkas-mahasiswa" class="nav-link sidebar-menu-item">Berkas Mahasiswa</router-link>
       </template>
     </b-nav>
   </aside>

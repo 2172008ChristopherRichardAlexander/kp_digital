@@ -1,12 +1,7 @@
 <template>
   <b-container class="halaman-website">
     <div v-if="loading_page">
-      <ring-loader
-        class="loading-page"
-        color="#bada55"
-        :loading="loading_page"
-        :size="150"
-      />
+      <ring-loader class="loading-page" color="#bada55" :loading="loading_page" :size="150" />
     </div>
     <div v-else>
       <div v-if="!topik">
@@ -20,12 +15,7 @@
         </div>
 
         <!-- Form Pengajuan Topik -->
-        <b-form
-          @submit.prevent="onSubmit"
-          v-if="show"
-          enctype="multipart/form-data"
-          method="post"
-        >
+        <b-form @submit.prevent="onSubmit" v-if="show" enctype="multipart/form-data" method="post">
           <b-table-simple borderless responsive class="form-pengajuan">
             <b-thead>
               <b-tr class="form-pengajuan-title">
@@ -41,20 +31,11 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Judul Topik</b-td>
                 <b-td class="input-form-text">
-                  <b-form-input
-                    class="input-form-text-item"
-                    id="input-judul_topik"
-                    v-model.trim="$v.judul_topik.$model"
-                    placeholder="Judul Topik"
-                    size="sm"
-                  ></b-form-input>
+                  <b-form-input class="input-form-text-item" id="input-judul_topik" v-model.trim="$v.judul_topik.$model"
+                    placeholder="Judul Topik" size="sm"></b-form-input>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.judul_topik.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.judul_topik.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -63,21 +44,12 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Latar Belakang</b-td>
                 <b-td class="input-form-textarea">
-                  <b-form-textarea
-                    class="input-form-textarea-item"
-                    id="input-latar_belakang"
-                    v-model.trim="$v.latar_belakang.$model"
-                    placeholder="Latar Belakang"
-                    rows="5"
-                    max-rows="5"
-                  ></b-form-textarea>
+                  <b-form-textarea class="input-form-textarea-item" id="input-latar_belakang"
+                    v-model.trim="$v.latar_belakang.$model" placeholder="Latar Belakang" rows="5"
+                    max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.latar_belakang.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.latar_belakang.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -86,22 +58,12 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Rumusan Masalah</b-td>
                 <b-td class="input-form-textarea">
-                  <b-form-textarea
-                    class="input-form-textarea-item"
-                    id="input-rumusan_masalah"
-                    rumusan_masalah
-                    v-model.trim="$v.rumusan_masalah.$model"
-                    placeholder="Rumusan Masalah"
-                    rows="5"
-                    max-rows="5"
-                  ></b-form-textarea>
+                  <b-form-textarea class="input-form-textarea-item" id="input-rumusan_masalah" rumusan_masalah
+                    v-model.trim="$v.rumusan_masalah.$model" placeholder="Rumusan Masalah" rows="5"
+                    max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.rumusan_masalah.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.rumusan_masalah.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -110,21 +72,12 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Tujuan Pembahasan</b-td>
                 <b-td class="input-form-textarea">
-                  <b-form-textarea
-                    class="input-form-textarea-item"
-                    id="input-tujuan_pembahasan"
-                    placeholder="Tujuan Pembahasan"
-                    v-model.trim="$v.tujuan_pembahasan.$model"
-                    rows="5"
-                    max-rows="5"
-                  ></b-form-textarea>
+                  <b-form-textarea class="input-form-textarea-item" id="input-tujuan_pembahasan"
+                    placeholder="Tujuan Pembahasan" v-model.trim="$v.tujuan_pembahasan.$model" rows="5"
+                    max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.tujuan_pembahasan.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.tujuan_pembahasan.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -133,21 +86,12 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Ruang Lingkup</b-td>
                 <b-td class="input-form-textarea">
-                  <b-form-textarea
-                    class="input-form-textarea-item"
-                    id="input-ruang_lingkup"
-                    v-model.trim="$v.ruang_lingkup.$model"
-                    placeholder="Ruang Lingkup"
-                    rows="5"
-                    max-rows="5"
-                  ></b-form-textarea>
+                  <b-form-textarea class="input-form-textarea-item" id="input-ruang_lingkup"
+                    v-model.trim="$v.ruang_lingkup.$model" placeholder="Ruang Lingkup" rows="5"
+                    max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.ruang_lingkup.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.ruang_lingkup.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -156,21 +100,12 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Sumber Data</b-td>
                 <b-td class="input-form-textarea">
-                  <b-form-textarea
-                    class="input-form-textarea-item"
-                    id="input-sumber_data"
-                    v-model.trim="$v.sumber_data.$model"
-                    placeholder="Sumber Data"
-                    rows="5"
-                    max-rows="5"
-                  ></b-form-textarea>
+                  <b-form-textarea class="input-form-textarea-item" id="input-sumber_data"
+                    v-model.trim="$v.sumber_data.$model" placeholder="Sumber Data" rows="5"
+                    max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.sumber_data.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.sumber_data.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -179,21 +114,12 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">Sistematika Penyajian</b-td>
                 <b-td class="input-form-textarea">
-                  <b-form-textarea
-                    class="input-form-textarea-item"
-                    id="input-sistematika_penyajian"
-                    placeholder="Sistematika Penyajian"
-                    v-model.trim="$v.sistematika_penyajian.$model"
-                    rows="5"
-                    max-rows="5"
-                  ></b-form-textarea>
+                  <b-form-textarea class="input-form-textarea-item" id="input-sistematika_penyajian"
+                    placeholder="Sistematika Penyajian" v-model.trim="$v.sistematika_penyajian.$model" rows="5"
+                    max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.sistematika_penyajian.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.sistematika_penyajian.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -203,410 +129,50 @@
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">KBK</b-td>
                 <b-td class="input-form-select-box">
-                  <b-form-select
-                    class="input-form-select-box-item"
-                    v-model.trim="$v.id_kbk.$model"
-                    size="sm"
-                  >
+                  <b-form-select class="input-form-select-box-item" v-model.trim="$v.id_kbk.$model" size="sm">
                     <template v-slot:first>
                       <option :value="null" disabled>Pilih KBK</option>
                     </template>
                     <template v-if="kumpulan_kbk">
-                      <option
-                        :value="kbk.id_kbk"
-                        v-for="kbk in kumpulan_kbk"
-                        :key="kbk.id_kbk"
-                      >
+                      <option :value="kbk.id_kbk" v-for="kbk in kumpulan_kbk" :key="kbk.id_kbk">
                         {{ kbk.nama_kbk }}
                       </option>
                     </template>
                   </b-form-select>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.id_kbk.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.id_kbk.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
-
+              <!-- MBKM -->
               <b-tr class="form-pengajuan-item">
                 <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Sumber Topik</b-td>
-                <b-td
-                  class="input-form-radio-button"
-                  style="padding: 10px 0px 0px 0px; margin: 0px"
-                >
-                  <b-table-simple
-                    borderless
-                    responsive
-                    style="width: 100%; padding: 0px; margin: 0px"
-                  >
-                    <b-tbody>
-                      <b-tr>
-                        <b-td class="row" style="padding: 0px; margin: 0px">
-                          <div class="col" style="max-width: 150px">
-                            <b-button-group size="sm">
-                              <b-button
-                                class="btn-radio"
-                                v-if="sumber_topik == 'dosen'"
-                                >Dosen</b-button
-                              >
-                              <b-button
-                                class="btn-radio-disable"
-                                @click="ubahSumberTopik('dosen')"
-                                v-else
-                                >Dosen</b-button
-                              >
-                              <b-button
-                                class="btn-radio"
-                                v-if="sumber_topik == 'instansi'"
-                                >Instansi</b-button
-                              >
-                              <b-button
-                                class="btn-radio-disable"
-                                @click="ubahSumberTopik('instansi')"
-                                v-else
-                                >Instansi</b-button
-                              >
-                            </b-button-group>
-                          </div>
-
-                          <div class="col">
-                            <div
-                              v-if="sumber_topik === 'dosen'"
-                              class="input-form-select-box"
-                            >
-                              <b-form-select
-                                class="input-form-select-box-item"
-                                v-model.trim="$v.id_pembimbing.$model"
-                                size="sm"
-                              >
-                                <template v-slot:first>
-                                  <option :value="null" disabled>
-                                    Pilih Dosen
-                                  </option>
-                                </template>
-                                <template v-if="kumpulan_dosen">
-                                  <option
-                                    :value="dosen.UserId"
-                                    v-for="dosen in kumpulan_dosen"
-                                    :key="dosen.UserId"
-                                  >
-                                    {{ dosen.Name }}
-                                  </option>
-                                </template>
-                              </b-form-select>
-                            </div>
-
-                            <div
-                              v-else-if="sumber_topik === 'instansi'"
-                              class="input-form-file"
-                              style="padding-bottom: 0px"
-                            >
-                              <b-row class="baris-input-file">
-                                <b-col lg="10" class="kolom-input-file">
-                                  <b-form-input
-                                    type="text"
-                                    class="input-form-file-item-text"
-                                    v-if="form_persetujuan_instansi"
-                                    :value="form_persetujuan_instansi.name"
-                                    disabled
-                                    size="sm"
-                                  />
-                                  <b-form-input
-                                    type="text"
-                                    class="input-form-file-item-text"
-                                    v-else
-                                    placeholder="Form Persetujuan Instansi"
-                                    disabled
-                                    size="sm"
-                                  />
-                                </b-col>
-                                <b-col class="btn-kolom-input-file">
-                                  <file-select
-                                    class="input-form-file-item-button"
-                                    v-model="form_persetujuan_instansi"
-                                  ></file-select>
-                                </b-col>
-                              </b-row>
-
-                              <!-- <b-table-simple>
-                                <b-tbody>
-                                  <b-tr>
-                                    <b-td style="padding:0px; margin:0px;">
-                                      <b-form-input
-                                        type="text"
-                                        class="input-form-file-item-text"
-                                        v-if="form_persetujuan_instansi"
-                                        :value="form_persetujuan_instansi.name"
-                                        disabled
-                                        size="sm"
-                                      />
-                                      <b-form-input
-                                        type="text"
-                                        class="input-form-file-item-text"
-                                        v-else
-                                        placeholder="Form Persetujuan Instansi"
-                                        disabled
-                                        size="sm"
-                                      />
-                                    </b-td>
-                                    <b-td
-                                      style="padding: 0px;margin: 0px;min-width: 39px;max-width: 39px;"
-                                    >
-                                      <file-select
-                                        class="input-form-file-item-button"
-                                        v-model="form_persetujuan_instansi"
-                                      ></file-select>
-                                    </b-td>
-                                  </b-tr>
-                                </b-tbody>
-                              </b-table-simple>-->
-                              <b-form-file
-                                class="d-none"
-                                type="file"
-                                accept="image/*"
-                                @change="
-                                  addFile('form_persetujuan_instansi', $event)
-                                "
-                                placeholder="Form Persetujuan Instansi"
-                                size="sm"
-                              ></b-form-file>
-                            </div>
-                          </div>
-                        </b-td>
-                      </b-tr>
-                    </b-tbody>
-                  </b-table-simple>
-                </b-td>
-                <b-td class="feedback-validasi" v-if="sumber_topik === 'dosen'">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.id_pembimbing.required"
-                    >&#10006;</span
-                  >
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-                <b-td
-                  class="feedback-validasi"
-                  v-else-if="sumber_topik === 'instansi'"
-                >
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.form_persetujuan_instansi.required"
-                    >&#10006;</span
-                  >
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <!--// ? File -->
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">DKBS</b-td>
-                <b-td class="input-form-file">
-                  <b-row class="baris-input-file">
-                    <b-col lg="10" class="kolom-input-file">
-                      <b-form-input
-                        type="text"
-                        class="input-form-file-item-text"
-                        v-if="dkbs"
-                        :value="dkbs.name"
-                        disabled
-                        size="sm"
-                      />
-                      <b-form-input
-                        type="text"
-                        class="input-form-file-item-text"
-                        v-else
-                        placeholder="DKBS"
-                        disabled
-                        size="sm"
-                      />
-                    </b-col>
-                    <b-col class="btn-kolom-input-file">
-                      <file-select
-                        class="input-form-file-item-button"
-                        v-model="dkbs"
-                      ></file-select>
-                    </b-col>
-                  </b-row>
-                  <!-- <b-table-simple>
-                    <b-tbody>
-                      <b-tr>
-                        <b-td style="padding:0px; margin:0px;">
-                          <b-form-input
-                            type="text"
-                            class="input-form-file-item-text"
-                            v-if="dkbs"
-                            :value="dkbs.name"
-                            disabled
-                            size="sm"
-                          />
-                          <b-form-input
-                            type="text"
-                            class="input-form-file-item-text"
-                            v-else
-                            placeholder="DKBS"
-                            disabled
-                            size="sm"
-                          />
-                        </b-td>
-                        <b-td class="btn-file-input">
-                          <file-select class="input-form-file-item-button" v-model="dkbs"></file-select>
-                        </b-td>
-                      </b-tr>
-                    </b-tbody>
-                  </b-table-simple>-->
-                  <b-form-file
-                    class="d-none"
-                    type="file"
-                    accept="image/*"
-                    @change="addFile('dkbs', $event)"
-                    placeholder="DKBS"
-                    size="sm"
-                  ></b-form-file>
+                <b-td class="label-form">Jenis MBKM</b-td>
+                <b-td class="input-form-select-box">
+                  <b-form-select class="input-form-select-box-item" v-model="$v.id_jenis_mbkm.$model" size="sm">
+                    <!-- Opsi Default -->
+                    <option :value="null" disabled>Pilih Jenis MBKM</option>
+                    <!-- Opsi dari jenisMBKM -->
+                    <option v-for="mbkm in jenisMBKM" :key="mbkm.id_jenis_mbkm" :value="mbkm.id_jenis_mbkm">
+                      {{ mbkm.nama_mbkm }}
+                    </option>
+                  </b-form-select>
                 </b-td>
                 <b-td class="feedback-validasi">
-                  <span class="feedback-validasi-false" v-if="!$v.dkbs.required"
-                    >&#10006;</span
-                  >
+                  <span class="feedback-validasi-false" v-if="!$v.id_jenis_mbkm.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
 
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Transkrip Nilai</b-td>
-                <b-td class="input-form-file">
-                  <b-row class="baris-input-file">
-                    <b-col lg="10" class="kolom-input-file">
-                      <b-form-input
-                        type="text"
-                        class="input-form-file-item-text"
-                        v-if="transkrip_nilai"
-                        :value="transkrip_nilai.name"
-                        disabled
-                        size="sm"
-                      />
-                      <b-form-input
-                        type="text"
-                        class="input-form-file-item-text"
-                        v-else
-                        placeholder="Form Transkrip Nilai"
-                        disabled
-                        size="sm"
-                      />
-                    </b-col>
-                    <b-col class="btn-kolom-input-file">
-                      <file-select
-                        class="input-form-file-item-button"
-                        v-model="transkrip_nilai"
-                      ></file-select>
-                    </b-col>
-                  </b-row>
-                  <!-- <b-table-simple>
-                    <b-tbody>
-                      <b-tr>
-                        <b-td style="padding:0px; margin:0px;">
-                          <b-form-input
-                            type="text"
-                            class="input-form-file-item-text"
-                            v-if="transkrip_nilai"
-                            :value="transkrip_nilai.name"
-                            disabled
-                            size="sm"
-                          />
-                          <b-form-input
-                            type="text"
-                            class="input-form-file-item-text"
-                            v-else
-                            placeholder="Form Transkrip Nilai"
-                            disabled
-                            size="sm"
-                          />
-                        </b-td>
-                        <b-td class="btn-file-input">
-                          <file-select
-                            class="input-form-file-item-button"
-                            v-model="transkrip_nilai"
-                          ></file-select>
-                        </b-td>
-                      </b-tr>
-                    </b-tbody>
-                  </b-table-simple>-->
-                  <b-form-file
-                    class="d-none"
-                    type="file"
-                    accept="image/*"
-                    @change="addFile('transkrip_nilai', $event)"
-                    placeholder="Transkrip Nilai"
-                    size="sm"
-                  ></b-form-file>
-                </b-td>
-                <b-td class="feedback-validasi">
-                  <span
-                    class="feedback-validasi-false"
-                    v-if="!$v.transkrip_nilai.required"
-                    >&#10006;</span
-                  >
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Lampiran Gambar</b-td>
-                <b-td class="input-form-file">
-                  <b-row class="baris-input-file">
-                    <b-col lg="10" class="kolom-input-file">
-                      <b-form-input
-                        type="text"
-                        class="input-form-file-item-text"
-                        v-if="lampiran_gambar"
-                        :value="lampiran_gambar.name"
-                        disabled
-                        size="sm"
-                      />
-                      <b-form-input
-                        type="text"
-                        class="input-form-file-item-text"
-                        v-else
-                        placeholder="Lampiran Gambar (Opsional)"
-                        disabled
-                        size="sm"
-                      />
-                    </b-col>
-                    <b-col class="btn-kolom-input-file">
-                      <file-select
-                        class="input-form-file-item-button"
-                        v-model="lampiran_gambar"
-                      ></file-select>
-                    </b-col>
-                  </b-row>
-                </b-td>
-                <b-td class="feedback-validasi">&nbsp;</b-td>
-              </b-tr>
               <!-- // ? Button Pengajuan -->
               <b-tr class="form-pengajuan-item">
                 <b-td class="space-kosong">&nbsp;</b-td>
                 <b-td class="label-form">&nbsp;</b-td>
                 <b-td class="input-form-submit text-right">
-                  <b-button
-                    type="submit"
-                    class="btn-form"
-                    :disabled="loading || batch.status_batch != 1"
-                  >
+                  <b-button type="submit" class="btn-form" :disabled="loading || batch.status_batch != 1">
                     {{ loading ? "" : "Ajukan Topik" }}
-                    <ring-loader
-                      class="loading-page"
-                      color="white"
-                      :size="25"
-                      v-if="loading"
-                    />
+                    <ring-loader class="loading-page" color="white" :size="25" v-if="loading" />
                   </b-button>
                 </b-td>
                 <b-td class="feedback-validasi">&nbsp;</b-td>
@@ -643,6 +209,8 @@ export default {
   },
   data() {
     return {
+      id_jenis_mbkm: null,
+      jenisMBKM: [],
       judul_topik: "",
       latar_belakang: "",
       rumusan_masalah: "",
@@ -679,6 +247,9 @@ export default {
     };
   },
   validations: {
+    id_jenis_mbkm: {
+      required: (value) => !!value
+    },
     judul_topik: {
       required,
     },
@@ -721,11 +292,43 @@ export default {
     },
   },
   mounted() {
+    this.getAllJenisMBKM();
     this.getAllDosen();
     this.getKbk();
     this.getBatchTopik();
   },
   methods: {
+    /**
+     * Mengambil ID semester aktif.
+     */
+    async getSemesterId() {
+      try {
+        const res = await Axios.get(`${config.apiUrl}/semester/aktif`);
+        this.id_semester = res.data.id_semester;
+      } catch (error) {
+        console.error("Error fetching semester ID:", error);
+        this.submissionStatus = "error";
+        this.statusMessage = "Terjadi kesalahan saat mengambil data semester.";
+      }
+    },
+    /**
+   * Mengambil semua opsi Jenis MBKM.
+   */
+    async getAllJenisMBKM() {
+      try {
+        const res = await Axios.get(`${config.apiMahasiswaUrl}/jenis-mbkm`);
+        if (res.data && Array.isArray(res.data.data)) {
+          this.jenisMBKM = res.data.data.map((item) => ({
+            id_jenis_mbkm: item.id_jenis_mbkm,
+            nama_mbkm: item.nama_mbkm,
+          }));
+        } else {
+          console.error("Data jenis MBKM tidak valid", res.data);
+        }
+      } catch (err) {
+        console.error("Terjadi kesalahan saat mengambil data jenis MBKM", err);
+      }
+    },
     getTopik() {
       const formData = new FormData();
       formData.append("id_batch", this.id_batch);
@@ -882,19 +485,23 @@ export default {
   margin-left: 0px;
   padding-left: 0px;
 }
+
 .form-pengajuan {
   background-color: white;
   border-bottom: 3px solid rgb(202, 206, 147);
 }
+
 .form-pengajuan-title {
   background-color: rgb(202, 206, 147);
   /* color: rgb(243, 249, 215); */
   color: rgb(255, 255, 255);
 }
+
 .form-pengajuan-item:nth-child(even) {
   background-color: rgb(202, 206, 147);
   color: rgb(255, 255, 255);
 }
+
 .space-kosong {
   min-width: 1vw;
 }
@@ -920,9 +527,11 @@ export default {
   text-align: left;
   font-size: 20px;
 }
+
 .feedback-validasi-false {
   color: red;
 }
+
 .feedback-validasi-true {
   color: green;
 }
@@ -955,6 +564,7 @@ export default {
 input[type="text"].input-form-file {
   background-color: rgb(228, 243, 188);
 }
+
 .input-form-file-item-text {
   max-width: 100%;
   min-width: 100%;
@@ -996,6 +606,7 @@ input[type="text"].input-form-file {
   border: none;
   text-align: center;
 }
+
 .btn-radio-disable:hover {
   color: rgb(0, 0, 0);
   background-color: rgb(212, 216, 219);

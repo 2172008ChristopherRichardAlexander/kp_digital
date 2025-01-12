@@ -14,6 +14,7 @@ class Dokumen extends Model
         'file_dokumen',
         'is_template',
         'id_pengguna',
+        'kode_pengguna',
         'id_semester',
         'id_jenis_dokumen',
     ];
