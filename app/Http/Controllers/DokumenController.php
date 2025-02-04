@@ -233,7 +233,6 @@ class DokumenController extends Controller
     {
         $dokumenTemplates = Dokumen::where('is_template', true)->get();
         return DokumenResource::collection($dokumenTemplates);
-        // Mengembalikan response JSON
     }
     public function download($id)
     {
@@ -275,4 +274,10 @@ class DokumenController extends Controller
         return response()->json(['message' => 'File tidak ditemukan'], Response::HTTP_NOT_FOUND);
     }
     
+    public function getDokumenByIdAndSemester($id, $semester)
+    {
+        // Cek apakah file ada di storage
+        $dokumenMahasiswa = Dokumen::where('id_pengguna', $id)->where('id_semester', $semester)->get();
+        return DokumenResource::collection($dokumenMahasiswa);
+    }
 }

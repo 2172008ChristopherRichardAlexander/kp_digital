@@ -6,13 +6,35 @@
                 <div class="col">
                     <h3 class="keterangan-website my-2">Berkas Mahasiswa</h3>
                 </div>
+                <div class="col-3 pilihan-semester">
+                    <b-form-select v-model="id_semester" size="sm" @change="getListDokumen">
+                        <template v-slot:first>
+                            <option :value="null" disabled>-- Semester --</option>
+                            <option value="all">-- All Semester --</option> <!-- All option -->
+                        </template>
+                        <option v-for="pilihan in pilihan_semester" :key="pilihan.id_semester"
+                            :value="pilihan.id_semester">
+                            {{ pilihan.nama_semester }}
+                        </option>
+                    </b-form-select>
+                </div>
+                <div class="col-3" style="margin: auto">
+                    <b-form-group label-size="sm" label-for="filterInput" class="mb-0">
+                        <b-input-group size="sm">
+                            <b-form-input v-model="filter" type="search" id="filterInput"
+                                placeholder="Ketik untuk mencari"></b-form-input>
+                            <b-input-group-append>
+                                <b-button class="btn-form" :disabled="!filter" @click="filter = ''">Hapus</b-button>
+                            </b-input-group-append>
+                        </b-input-group>
+                    </b-form-group>
+                </div>
                 <div class="col-3 pilihan-jenis-dokumen">
                     <b-button variant="primary" @click="downloadAllDokumen" class="my-1">
                         Download Semua
                     </b-button>
                 </div>
             </div>
-
             <div class="dokumen-table">
                 <b-table sticky-header class="tabel-dokumen" ref="tableDokumen" no-border-collapse
                     :items="kumpulan_dokumen" :fields="fields" hover striped responsive="sm" :current-page="currentPage"
@@ -106,15 +128,11 @@ export default {
             previewUrl: "",
         };
     },
+
     mounted() {
         this.getListSemester();
         this.getListJenisDokumen();
         this.getListDokumen();
-        this.$nextTick(() => {
-            const modal = document.querySelector('#preview-modal .modal-dialog');
-            modal.style.maxWidth = '90%';
-            modal.style.height = '80vh';
-        });
         this.authUser();
     },
     methods: {
@@ -128,7 +146,6 @@ export default {
         previewDokumen(dokumen) {
             if (dokumen.file_dokumen) {
                 const previewUrl = `${config.dokumenUrl}storage/${dokumen.file_dokumen}`;
-                console.log(previewUrl);
                 this.showPreviewModal(previewUrl);
             } else {
                 console.error("Dokumen tidak tersedia untuk dipreview.");
@@ -139,7 +156,6 @@ export default {
             const user = await this.authUser();
             let params = {};
             if (this.id_semester && this.id_semester !== 'all') params.id_semester = this.id_semester;
-            if (this.id_jenis_dokumen && this.id_jenis_dokumen !== 'all') params.id_jenis_dokumen = this.id_jenis_dokumen;
 
             Axios.get(`${config.apiDosenUrl}/topik/dokumen-mahasiswa/${user.UserId}`, { params })
                 .then((response) => {

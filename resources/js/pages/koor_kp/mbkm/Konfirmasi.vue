@@ -135,7 +135,6 @@ export default {
     getListMbkm() {
       if (this.id_semester) {
         Axios.get(`${config.apiUrl}/mbkm/list/${this.id_semester}`).then((response) => {
-          console.log(response);
           if (response.data.data.length === 0) {
             this.kumpulan_mbkm = [];
           } else {

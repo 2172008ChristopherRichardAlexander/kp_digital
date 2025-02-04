@@ -423,7 +423,7 @@ class TopikController extends Controller
     {
         // Menunggu persetujuan dosen
         $status_persetujuan_dosen = 2;
-        $matchThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'status_persetujuan_dosen' => $status_persetujuan_dosen, 'id_batch' => $request->input('id_batch'), 'is_mbkm' =>0];
+        $matchThese = ['id_pembimbing' => $request->input('id_pembimbing'), 'status_persetujuan_dosen' => $status_persetujuan_dosen, 'id_batch' => $request->input('id_batch'), 'is_mbkm' => 0];
         // $kumpulan_topik = TopikResource::collection(Topik::where($matchThese)->get());
         $kumpulan_topik = Topik::where($matchThese)->get();
         if (sizeof($kumpulan_topik) != 0) {
@@ -466,7 +466,7 @@ class TopikController extends Controller
         }
         return ['message' => 'kosong'];
     }
-    
+
     // ? List Topik History Permintaan Persetujuan
     public function listTopikHistoryPermintaanPersetujuan(Request $request)
     {
@@ -816,34 +816,53 @@ class TopikController extends Controller
         Topik::where('id_topik', $request->input('id_topik'))->update($updateThese);
     }
 
-    public function getDokumenByPembimbingPenguji($id_pengguna)
-    {   
+    public function getDokumenByPembimbingPenguji($id_pengguna, Request $request)
+    {
+        $idSemester = $request->query('id_semester');
         // Ambil pengguna berdasarkan id (bisa pembimbing atau penguji)
         $pengguna = Pengguna::where('kode_pengguna', $id_pengguna)->get();
-        
+
         if (!$pengguna) {
             return response()->json(['message' => 'Pengguna tidak ditemukan'], 404);
         }
 
         // Ambil topik yang terkait dengan pengguna (sebagai pembimbing atau penguji)
-        $topiks = Topik::where(function($query) use ($id_pengguna) {
-                        $query->where('id_pembimbing', $id_pengguna)
-                              ->orWhere('id_penguji_sidang', $id_pengguna)
-                              ->orWhere('id_penguji_sidang_dua', $id_pengguna);
-                    })
-                    ->get();
+
+        $topiks = Topik::where(function ($query) use ($id_pengguna) {
+            $query->where('id_pembimbing', $id_pengguna)
+                ->orWhere('id_penguji_sidang', $id_pengguna)
+                ->orWhere('id_penguji_sidang_dua', $id_pengguna);
+        })->get();
 
         // Jika tidak ada topik yang terkait
         if ($topiks->isEmpty()) {
             return response()->json(['message' => 'Tidak ada topik terkait dengan pengguna ini'], 404);
         }
-        $newTopiks = TopikResource::collection($topiks)->first();
         $id_pengguna_mahasiswa = $topiks->pluck('id_pengaju')->unique();
         // Ambil dokumen yang terkait dengan mahasiswa yang terdaftar pada topik-topik tersebut
-        $dokumen = Dokumen::whereIn('kode_pengguna', $id_pengguna_mahasiswa)
-                          ->get();
+        if($idSemester) {
+            $dokumen = Dokumen::whereIn('kode_pengguna', $id_pengguna_mahasiswa)->where('id_semester', $idSemester)->get();
+        }else{
+            $dokumen = Dokumen::whereIn('kode_pengguna', $id_pengguna_mahasiswa)->get();
+        }
 
         return DokumenResource::collection($dokumen);
+
+    }
+
+    public function updateStatusKonversiSKS(Request $request)
+    {
+        Topik::where('id_pengaju', $request->input('id_pengaju'))->where('id_batch', $request->input('id_batch'))->update(['status_topik' => 3]);
+    }
+
+    public function updateStatusPersetujuanMBKM(Request $request)
+    {
+        Topik::where('id_pengaju', $request->input('id_pengaju'))
+            ->where('id_batch', $request->input('id_batch'))
+            ->update([
+                'status_topik' => 5,
+                'status_persetujuan_dosen' => 1
+            ]);
 
     }
 }
