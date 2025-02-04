@@ -44,7 +44,7 @@
             </table>
             <div class="action-buttons">
                 <button class="btn btn-secondary" @click="goBack">Kembali</button>
-                <button class="btn btn-primary" :disabled="totalSKS !== 20" @click="submitCourses">Ajukan</button>
+                <button class="btn btn-primary" :disabled="totalSKS !== 20" @click="submitCourses">Konfirmasi</button>
             </div>
         </div>
     </div>
@@ -57,6 +57,8 @@ import config from "../../../config";
 export default {
     data() {
         return {
+            kode_pengguna:null,
+            id_batch: null,
             id_pengguna: null,
             id_mbkm: null,
             nama_mahasiswa: null,
@@ -96,20 +98,26 @@ export default {
                 this.id_semester = res.data.id_semester;
             });
         },
+        async getSemesterIds() {
+            Axios.get(`${config.apiUrl}/semester/aktif`).then((res) => {
+                this.id_semester = res.data.id_semester;
+                this.fetchKonversiSKS(this.id_pengguna, this.id_semester);  // Ambil data konversi SKS setelah semester didapat
+            });
+        },
         fetchMBKM() {
             Axios.get(`${config.apiUrl}/mbkm/list/konversi/${this.id_mbkm}`)
                 .then((res) => {
+                    this.kode_pengguna = res.data.data.mahasiswa.kode_pengguna
                     this.nama_mahasiswa = res.data.data.mahasiswa.nama_pengguna;
                     this.deskripsi = res.data.data.deskripsi;
                     this.id_pengguna = res.data.data.mahasiswa.id_pengguna;
-                    this.fetchKonversiSKS(this.id_pengguna);
                 })
                 .catch((error) => {
                     console.error('Error fetching MBKM:', error);
                 });
         },
-        fetchKonversiSKS(id_pengguna) {
-            Axios.get(`${config.apiUrl}/konversi-sks/${id_pengguna}`)
+        fetchKonversiSKS(id_pengguna, id_semester) {
+            Axios.get(`${config.apiUrl}/konversi-sks/${id_pengguna}/${id_semester}`)
                 .then((res) => {
                     const konversiData = res.data.data;
                     this.markSelectedCourses(konversiData);
@@ -149,6 +157,37 @@ export default {
                 console.error('Error fetching courses:', error);
             });
         },
+        getBatchTopik() {
+            this.loading_page = true;
+            const formData = new FormData();
+            formData.append("jenis_batch", 1);
+            Axios.post(`${config.apiUrl}/batch/pengajuan`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+                .then((response) => {
+                    this.batch = response.data;
+                    if (!this.batch) {
+                        if (this.$store.getters.batchTopik) {
+                            this.id_batch = this.$store.getters.batchTopik.id_batch;
+                            this.batch = this.$store.getters.batchTopik;
+                            this.getTopik();
+                        } else {
+                            this.$store.dispatch("batchTopik").then((response) => {
+                                this.id_batch = this.$store.getters.batchTopik.id_batch;
+                                this.batch = this.$store.getters.batchTopik;
+                                this.getTopik();
+                            });
+                        }
+                    } else {
+                        this.id_batch = this.batch.id_batch;
+                        this.getTopik();
+                    }
+                })
+                .catch((response) => {
+                });
+        },
         async submitCourses() {
             const selectedCoursesData = this.selectedCourses.map((course) => ({
                 id_matakuliah: course.code,
@@ -176,17 +215,23 @@ export default {
                     `${config.apiUrl}/konversi-sks/${this.id_pengguna}`,
                     { selectedCourses: selectedCoursesData }
                 );
-                console.log(response);
 
                 // Setelah konversi SKS berhasil, update status MBKM menjadi 1
                 await Axios.put(`${config.apiUrl}/mbkm/${this.id_pengguna}`, {
                     status: 1,
                 });
-
+                const detail = new FormData();
+                detail.append("id_pengaju", this.kode_pengguna);
+                detail.append("id_batch", this.id_batch);
+                const hasil = await Axios.post(`${config.apiUrl}/update-status-topik-mbkm`, detail, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
                 this.$bvToast.toast('Konversi SKS disetujui!', {
-                        variant: 'success',
-                        solid: true,
-                    });
+                    variant: 'success',
+                    solid: true,
+                });
                 this.$router.push(`/mbkm/konfirmasi`);
             } catch (error) {
                 console.error("Error submitting courses:", error);
@@ -199,8 +244,10 @@ export default {
     mounted() {
         this.id_mbkm = this.$route.params.id;
         this.getSemesterId();
+        this.getSemesterIds();
         this.fetchCourses();
         this.fetchMBKM();
+        this.getBatchTopik();
     },
 };
 </script>
@@ -275,7 +322,8 @@ export default {
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    width: 15%; /* Membuat tombol memiliki lebar yang sama */
+    width: 15%;
+    /* Membuat tombol memiliki lebar yang sama */
 }
 
 .btn-primary {

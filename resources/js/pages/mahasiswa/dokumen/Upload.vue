@@ -1,61 +1,85 @@
 <template>
     <b-container>
-        <h3 class="my-4">Unggah Dokumen Laporan atau Logbook</h3>
+        <h3 class="my-4">Unggah Dokumen</h3>
         <div class="upload-dokumen-section">
+            <!-- Tombol Upload Dokumen Baru -->
+            <b-button variant="primary" class="mb-3" @click="showUploadModal = true">
+                Unggah Dokumen Baru
+            </b-button>
 
-            <!-- Formulir Unggah Dokumen -->
-            <b-form @submit.prevent="handleUpload" enctype="multipart/form-data">
-                <!-- Pilihan Jenis Dokumen -->
-                <b-form-group label="Jenis Dokumen" label-for="jenisDokumen">
-                    <b-form-select v-model="jenisDokumen" id="jenisDokumen" required>
-                        <option disabled value="">Pilih Jenis Dokumen</option>
-                        <option v-for="jenis in jenisDokumenList" :key="jenis.id_jenis_dokumen"
-                            :value="jenis.id_jenis_dokumen">
-                            {{ jenis.nama_dokumen }}
-                        </option>
-                    </b-form-select>
-                </b-form-group>
+            <!-- Tabel Daftar Dokumen -->
+            <b-table :items="dokumenList" :fields="fields" responsive="sm" bordered striped>
+                <template #cell(actions)="row">
+                    <b-button size="sm" variant="success" @click="previewDokumen(row.item)">
+                        Lihat Dokumen
+                    </b-button>
+                </template>
+            </b-table>
 
-                <!-- Pilihan File Dokumen -->
-                <b-form-group label="Unggah Dokumen" label-for="dokumenFile">
-                    <b-form-file id="dokumenFile" v-model="dokumenFile" :state="fileState" accept=".pdf, .xlsx"
-                        required>
-                        <template v-slot:hint>
-                            Format file yang didukung: .docx, .pdf, .xlsx
-                        </template>
-                    </b-form-file>
-                </b-form-group>
+            <!-- Modal Unggah Dokumen Baru -->
+            <b-modal v-model="showUploadModal" title="Unggah Dokumen Baru" @hide="clearUploadModal">
+                <b-form @submit.prevent="handleUpload">
+                    <!-- Pilihan Jenis Dokumen -->
+                    <b-form-group label="Jenis Dokumen" label-for="jenisDokumen">
+                        <b-form-select v-model="jenisDokumen" id="jenisDokumen" required>
+                            <option disabled value="">Pilih Jenis Dokumen</option>
+                            <option v-for="jenis in jenisDokumenList" :key="jenis.id_jenis_dokumen"
+                                :value="jenis.id_jenis_dokumen">
+                                {{ jenis.nama_dokumen }}
+                            </option>
+                        </b-form-select>
+                    </b-form-group>
 
-                <!-- Tombol Upload -->
-                <b-button type="submit" variant="primary" :disabled="uploading">
-                    <span v-if="uploading">Mengunggah...</span>
-                    <span v-else>Unggah Dokumen</span>
-                </b-button>
-            </b-form>
+                    <!-- Pilihan File Dokumen -->
+                    <b-form-group label="Unggah Dokumen" label-for="dokumenFile">
+                        <b-form-file id="dokumenFile" v-model="dokumenFile" :state="fileState"
+                            accept=".docx, .pdf, .xlsx" required>
+                            <template v-slot:hint>Format file yang didukung: .docx, .pdf, .xlsx</template>
+                        </b-form-file>
+                    </b-form-group>
 
-            <!-- Feedback Status Upload -->
-            <div v-if="uploadStatus" class="mt-3">
-                <p v-if="uploadStatus.success" class="text-success">{{ uploadStatus.message }}</p>
-                <p v-if="!uploadStatus.success" class="text-danger">{{ uploadStatus.message }}</p>
-            </div>
+                    <!-- Tombol Upload -->
+                    <b-button type="submit" variant="primary" :disabled="uploading">
+                        <span v-if="uploading">Mengunggah...</span>
+                        <span v-else>Unggah Dokumen</span>
+                    </b-button>
+                </b-form>
+
+                <!-- Feedback Status Upload -->
+                <div v-if="uploadStatus" class="mt-3">
+                    <p v-if="uploadStatus.success" class="text-success">{{ uploadStatus.message }}</p>
+                    <p v-if="!uploadStatus.success" class="text-danger">{{ uploadStatus.message }}</p>
+                </div>
+            </b-modal>
         </div>
+        <b-modal id="preview-modal" title="Preview Dokumen" v-model="showPreview" size="lg">
+            <template v-slot:default>
+                <iframe :src="previewUrl" width="100%" height="1200px"></iframe>
+            </template>
+        </b-modal>
     </b-container>
 </template>
 
 <script>
 import Axios from "axios";
-import config from "../../../config"; // Pastikan path ke config API benar
+import config from "../../../config";
 
 export default {
     data() {
         return {
-            // Data untuk memilih jenis dokumen (laporan/logbook)
             id_semester: null,
             jenisDokumen: '',
+            showPreview: false,
             dokumenFile: null,
             uploading: false,
-            uploadStatus: null, // Status upload
-            jenisDokumenList: [] // Daftar jenis dokumen dari API
+            uploadStatus: null,
+            jenisDokumenList: [],
+            dokumenList: [],
+            fields: [
+                { key: 'jenis_dokumen.nama_dokumen', label: 'Nama Dokumen' },
+                { key: 'actions', label: 'Aksi', class: 'text-center' }
+            ],
+            showUploadModal: false
         };
     },
     computed: {
@@ -64,20 +88,14 @@ export default {
         }
     },
     mounted() {
-        // Mengambil daftar jenis dokumen dari API saat komponen dimuat
         this.fetchJenisDokumen();
-        // Mengambil semester aktif
+        this.fetchDokumenList();
         this.getSemesterId();
-
     },
     methods: {
         async authUser() {
-
-            // Fungsi untuk mengambil data pengguna dari Vuex Store atau metode autentikasi lainnya
-            // Pastikan Anda telah mengatur Vuex Store dengan getter 'pengguna'
             return this.$store.getters.pengguna;
         },
-        // Fungsi untuk mengambil daftar jenis dokumen
         fetchJenisDokumen() {
             Axios.get(`${config.apiUrl}/jenis-dokumen/list`)
                 .then((response) => {
@@ -88,8 +106,17 @@ export default {
                     this.jenisDokumenList = [];
                 });
         },
+        async fetchDokumenList() {
+            try {
+                const user = await this.authUser();
+                const semester = await this.getSemesterId();
+                const response = await Axios.get(`${config.apiMahasiswaUrl}/dokumen/${user.Id}/${semester}`);
+                this.dokumenList = response.data.data;
 
-        // Fungsi untuk mengunggah dokumen
+            } catch (error) {
+                console.error("Error fetching dokumen list:", error);
+            }
+        },
         async handleUpload() {
             if (!this.dokumenFile || !this.jenisDokumen) {
                 this.uploadStatus = { success: false, message: "Pilih jenis dokumen dan file terlebih dahulu." };
@@ -113,6 +140,7 @@ export default {
                     this.uploadStatus = { success: true, message: "Dokumen berhasil diunggah." };
                     this.dokumenFile = null; // Reset file input setelah upload berhasil
                     this.jenisDokumen = ''; // Reset jenis dokumen setelah upload
+                    this.fetchDokumenList(); // Refresh daftar dokumen setelah upload
                 })
                 .catch(error => {
                     this.uploading = false;
@@ -122,16 +150,38 @@ export default {
                 });
         },
         async getSemesterId() {
-            Axios.get(`${config.apiUrl}/semester/aktif`).then((res) => {
-                this.id_semester = res.data.id_semester;
-            });
+            try {
+                const response = await Axios.get(`${config.apiUrl}/semester/aktif`);
+                this.id_semester = response.data.id_semester;
+                return this.id_semester; // Mengembalikan id_semester setelah didapatkan
+            } catch (error) {
+                console.error("Error fetching semester aktif:", error);
+                this.id_semester = null;
+                return null; // Kembalikan null jika terjadi kesalahan
+            }
+        },
+        showPreviewModal(url) {
+            this.previewUrl = url;
+            this.showPreview = true;
+        },
+        previewDokumen(dokumen) {
+            if (dokumen.file_dokumen) {
+                const previewUrl = `${config.dokumenUrl}storage/${dokumen.file_dokumen}`;
+                this.showPreviewModal(previewUrl);
+            } else {
+                console.error("Dokumen tidak tersedia untuk dipreview.");
+            }
+        },
+        clearUploadModal() {
+            this.jenisDokumen = '';
+            this.dokumenFile = null;
+            this.uploadStatus = null;
         }
     }
 };
 </script>
 
 <style scoped>
-/* Styling untuk halaman unggah dokumen laporan/logbook */
 .upload-dokumen-section {
     padding: 30px;
     background-color: #f9f9f9;

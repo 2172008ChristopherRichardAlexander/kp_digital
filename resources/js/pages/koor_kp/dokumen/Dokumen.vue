@@ -4,14 +4,14 @@
             <!-- Title Keterangan Halaman -->
             <div class="row">
                 <div class="col">
-                    <h3 class="keterangan-website my-2">Dokumen MBKM</h3>
+                    <h3 class="keterangan-website my-2">Dokumen</h3>
                 </div>
                 <!-- Pilih Semester -->
                 <div class="col-3 pilihan-semester">
                     <b-form-select v-model="id_semester" size="sm" @change="getListDokumen">
                         <template v-slot:first>
                             <option :value="null" disabled>-- Semester --</option>
-                            <option value="all">-- All Semester --</option> <!-- All option -->
+                            <option value="all">-- All Semester --</option>
                         </template>
                         <option v-for="pilihan in pilihan_semester" :key="pilihan.id_semester"
                             :value="pilihan.id_semester">
@@ -19,12 +19,13 @@
                         </option>
                     </b-form-select>
                 </div>
+
                 <!-- Filter berdasarkan Jenis Dokumen -->
                 <div class="col-3 pilihan-jenis-dokumen">
                     <b-form-select v-model="id_jenis_dokumen" size="sm" @change="getListDokumen">
                         <template v-slot:first>
                             <option :value="null" disabled>-- Jenis Dokumen --</option>
-                            <option value="all">-- All Jenis Dokumen --</option> <!-- All option -->
+                            <option value="all">-- All Jenis Dokumen --</option>
                         </template>
                         <option v-for="jenis in pilihan_jenis_dokumen" :key="jenis.id_jenis_dokumen"
                             :value="jenis.id_jenis_dokumen">
@@ -32,9 +33,20 @@
                         </option>
                     </b-form-select>
                 </div>
-                <div class="col-3 pilihan-jenis-dokumen">
+                <div class="col-3" style="margin: auto">
+                    <b-form-group label-size="sm" label-for="filterInput" class="mb-0">
+                        <b-input-group size="sm">
+                            <b-form-input v-model="filter" type="search" id="filterInput"
+                                placeholder="Ketik untuk mencari"></b-form-input>
+                            <b-input-group-append>
+                                <b-button class="btn-form" :disabled="!filter" @click="filter = ''">Hapus</b-button>
+                            </b-input-group-append>
+                        </b-input-group>
+                    </b-form-group>
+                </div>
+                <div class="col-1 pilihan-jenis-dokumen">
                     <b-button variant="primary" @click="downloadAllDokumen" class="my-1">
-                        Download Semua
+                        Download
                     </b-button>
                 </div>
             </div>

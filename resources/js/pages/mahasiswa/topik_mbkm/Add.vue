@@ -29,10 +29,10 @@
               <!--// ? Text -->
               <b-tr class="form-pengajuan-item">
                 <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Judul Topik</b-td>
+                <b-td class="label-form">Nama Instansi</b-td>
                 <b-td class="input-form-text">
                   <b-form-input class="input-form-text-item" id="input-judul_topik" v-model.trim="$v.judul_topik.$model"
-                    placeholder="Judul Topik" size="sm"></b-form-input>
+                    placeholder="Nama Instansi" size="sm"></b-form-input>
                 </b-td>
                 <b-td class="feedback-validasi">
                   <span class="feedback-validasi-false" v-if="!$v.judul_topik.required">&#10006;</span>
@@ -42,84 +42,14 @@
               <!--// ? Textarea -->
               <b-tr class="form-pengajuan-item">
                 <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Latar Belakang</b-td>
+                <b-td class="label-form">Deskripsi Pekerjaan</b-td>
                 <b-td class="input-form-textarea">
                   <b-form-textarea class="input-form-textarea-item" id="input-latar_belakang"
-                    v-model.trim="$v.latar_belakang.$model" placeholder="Latar Belakang" rows="5"
+                    v-model.trim="$v.latar_belakang.$model" placeholder="Deskripsi Pekerjaan" rows="5"
                     max-rows="5"></b-form-textarea>
                 </b-td>
                 <b-td class="feedback-validasi">
                   <span class="feedback-validasi-false" v-if="!$v.latar_belakang.required">&#10006;</span>
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Rumusan Masalah</b-td>
-                <b-td class="input-form-textarea">
-                  <b-form-textarea class="input-form-textarea-item" id="input-rumusan_masalah" rumusan_masalah
-                    v-model.trim="$v.rumusan_masalah.$model" placeholder="Rumusan Masalah" rows="5"
-                    max-rows="5"></b-form-textarea>
-                </b-td>
-                <b-td class="feedback-validasi">
-                  <span class="feedback-validasi-false" v-if="!$v.rumusan_masalah.required">&#10006;</span>
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Tujuan Pembahasan</b-td>
-                <b-td class="input-form-textarea">
-                  <b-form-textarea class="input-form-textarea-item" id="input-tujuan_pembahasan"
-                    placeholder="Tujuan Pembahasan" v-model.trim="$v.tujuan_pembahasan.$model" rows="5"
-                    max-rows="5"></b-form-textarea>
-                </b-td>
-                <b-td class="feedback-validasi">
-                  <span class="feedback-validasi-false" v-if="!$v.tujuan_pembahasan.required">&#10006;</span>
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Ruang Lingkup</b-td>
-                <b-td class="input-form-textarea">
-                  <b-form-textarea class="input-form-textarea-item" id="input-ruang_lingkup"
-                    v-model.trim="$v.ruang_lingkup.$model" placeholder="Ruang Lingkup" rows="5"
-                    max-rows="5"></b-form-textarea>
-                </b-td>
-                <b-td class="feedback-validasi">
-                  <span class="feedback-validasi-false" v-if="!$v.ruang_lingkup.required">&#10006;</span>
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Sumber Data</b-td>
-                <b-td class="input-form-textarea">
-                  <b-form-textarea class="input-form-textarea-item" id="input-sumber_data"
-                    v-model.trim="$v.sumber_data.$model" placeholder="Sumber Data" rows="5"
-                    max-rows="5"></b-form-textarea>
-                </b-td>
-                <b-td class="feedback-validasi">
-                  <span class="feedback-validasi-false" v-if="!$v.sumber_data.required">&#10006;</span>
-                  <span class="feedback-validasi-true" v-else>&#10004;</span>
-                </b-td>
-              </b-tr>
-
-              <b-tr class="form-pengajuan-item">
-                <b-td class="space-kosong">&nbsp;</b-td>
-                <b-td class="label-form">Sistematika Penyajian</b-td>
-                <b-td class="input-form-textarea">
-                  <b-form-textarea class="input-form-textarea-item" id="input-sistematika_penyajian"
-                    placeholder="Sistematika Penyajian" v-model.trim="$v.sistematika_penyajian.$model" rows="5"
-                    max-rows="5"></b-form-textarea>
-                </b-td>
-                <b-td class="feedback-validasi">
-                  <span class="feedback-validasi-false" v-if="!$v.sistematika_penyajian.required">&#10006;</span>
                   <span class="feedback-validasi-true" v-else>&#10004;</span>
                 </b-td>
               </b-tr>
@@ -213,23 +143,24 @@ export default {
       jenisMBKM: [],
       judul_topik: "",
       latar_belakang: "",
-      rumusan_masalah: "",
-      tujuan_pembahasan: "",
-      ruang_lingkup: "",
-      sumber_data: "",
-      sistematika_penyajian: "",
+      rumusan_masalah: "MBKM",
+      tujuan_pembahasan: "MBKM",
+      ruang_lingkup: "MBKM",
+      sumber_data: "MBKM",
+      sistematika_penyajian: "MBKM",
       transkrip_nilai: null,
       dkbs: null,
       form_persetujuan_instansi: null,
       lampiran_gambar: null,
       status_persetujuan_dosen: 3,
-      status_topik: 3,
+      status_topik: 13,
       is_mbkm: 1,
       batch: {},
       id_batch: null,
       id_kbk: null,
       id_pengaju: this.$store.getters.pengguna.UserId,
-      id_pembimbing: null,
+      id_pengguna: this.$store.getters.pengguna.Id,
+      id_pembimbing: 0,
       kumpulan_kbk: {},
       sumber_topik: "dosen",
       kumpulan_dosen: {},
@@ -256,39 +187,8 @@ export default {
     latar_belakang: {
       required,
     },
-    rumusan_masalah: {
-      required,
-    },
-    tujuan_pembahasan: {
-      required,
-    },
-    ruang_lingkup: {
-      required,
-    },
-    sumber_data: {
-      required,
-    },
-    sistematika_penyajian: {
-      required,
-    },
     id_kbk: {
       required,
-    },
-    dkbs: {
-      required,
-    },
-    transkrip_nilai: {
-      required,
-    },
-    id_pembimbing: {
-      required: requiredIf(function () {
-        return this.sumber_topik === "dosen";
-      }),
-    },
-    form_persetujuan_instansi: {
-      required: requiredIf(function () {
-        return this.sumber_topik === "instansi";
-      }),
     },
   },
   mounted() {
@@ -296,6 +196,7 @@ export default {
     this.getAllDosen();
     this.getKbk();
     this.getBatchTopik();
+    this.getSemesterId();
   },
   methods: {
     /**
@@ -405,7 +306,7 @@ export default {
     checkForm() {
       if (this.sumber_topik === "dosen") {
         this.status_persetujuan_dosen = 2;
-        this.status_topik = 3;
+        this.status_topik = 13;
       } else if (this.sumber_topik === "instansi") {
         this.status_persetujuan_dosen = 4;
         this.status_topik = 2;
@@ -455,6 +356,7 @@ export default {
           "status_persetujuan_dosen",
           this.status_persetujuan_dosen
         );
+        console.log(this.status_topik);
         formData.append("status_topik", this.status_topik);
         formData.append("id_batch", this.id_batch);
         formData.append("id_kbk", this.id_kbk);
@@ -466,13 +368,26 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
+          .catch((response) => {
+            this.loading = false;
+          });
+        const formMBKM = new FormData();
+        formMBKM.append("nama_instansi", this.judul_topik);
+        formMBKM.append("deskripsi", this.latar_belakang);
+        formMBKM.append("jenis_mbkm", this.id_jenis_mbkm);
+        formMBKM.append("id_pengguna", this.id_pengguna);
+        formMBKM.append("id_semester", this.id_semester);
+        Axios.post(`${config.apiMahasiswaUrl}/mbkm/pendaftaran`, formMBKM, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
           .then(() => {
             this.loading = false;
             this.$router.push("/topik/histori");
           })
           .catch((response) => {
             this.loading = false;
-            console.log(response);
           });
       }
     },

@@ -74,21 +74,13 @@ class MBKMController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_instansi' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'jenis_mbkm_id' => 'required|integer',
-            'idPengguna'=> 'required|integer',
-            'id_semester'=> 'required|integer',
-        ]);
-
-        // Create a new MBKM record
-        $mbkm = new MBKM;
-        $mbkm->nama_instansi = $request->nama_instansi;
-        $mbkm->deskripsi = $request->deskripsi;
-        $mbkm->id_jenis_mbkm = $request->jenis_mbkm_id;
-        $mbkm->id_pengguna = $request->idPengguna;
-        $mbkm->id_semester = $request->id_semester;
+        
+        $mbkm = $request->isMethod('put') ? MBKM::find($request->id_mbkm) : new MBKM;
+        $mbkm->nama_instansi = $request->input('nama_instansi');
+        $mbkm->deskripsi = $request->input('deskripsi');
+        $mbkm->id_jenis_mbkm = $request->input('jenis_mbkm');
+        $mbkm->id_pengguna = $request->input('id_pengguna');
+        $mbkm->id_semester = $request->input('id_semester');
         $mbkm->status = 0;
         $mbkm->save();
         return 'success';

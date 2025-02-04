@@ -97,7 +97,6 @@ export default {
      * Mengambil pengguna yang terautentikasi dari Vuex store.
      */
     async authUser() {
-      console.log(this.$store.getters.pengguna.Id)
       return this.$store.getters.pengguna;
     },
 
@@ -141,7 +140,6 @@ export default {
       try {
         const user = await this.authUser();
         await this.getSemesterId();
-        console.log(this.id_semester);
         // Pastikan properti user.id sesuai dengan yang dikembalikan oleh authUser()
         const response = await Axios.get(`${config.apiMahasiswaUrl}/mbkm-status/${user.Id}/${this.id_semester}`);
 
@@ -194,7 +192,6 @@ export default {
           };
 
           const response = await Axios.post(`${config.apiMahasiswaUrl}/mbkm/pendaftaran`, payload);
-          console.log("Pendaftaran Response:", response.data);
 
           // Menetapkan status dan pesan berdasarkan status dari API
           if (response.data.status === "pending") {
@@ -252,7 +249,6 @@ export default {
           this.statusMessage = "Terjadi kesalahan saat mengajukan pendaftaran.";
         }
       }
-
     },
 
 

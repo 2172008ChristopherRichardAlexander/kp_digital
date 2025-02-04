@@ -78,6 +78,8 @@ import config from "../../../config";
 export default {
   data() {
     return {
+      batch: {},
+      id_batch: null,
       id_semester: null,
       semesters: [
         { open: false, courses: [] },
@@ -154,7 +156,38 @@ export default {
           this.dataFetched = false; // Jika terjadi error, pastikan dataFetched false
         });
     },
-
+    getBatchTopik() {
+      this.loading_page = true;
+      const formData = new FormData();
+      formData.append("jenis_batch", 1);
+      Axios.post(`${config.apiUrl}/batch/pengajuan`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((response) => {
+          this.batch = response.data;
+          if (!this.batch) {
+            if (this.$store.getters.batchTopik) {
+              this.id_batch = this.$store.getters.batchTopik.id_batch;
+              this.batch = this.$store.getters.batchTopik;
+              this.getTopik();
+            } else {
+              this.$store.dispatch("batchTopik").then((response) => {
+                this.id_batch = this.$store.getters.batchTopik.id_batch;
+                this.batch = this.$store.getters.batchTopik;
+                this.getTopik();
+              });
+            }
+          } else {
+            this.id_batch = this.batch.id_batch;
+            this.getTopik();
+          }
+        })
+        .catch((response) => {
+          console.log(response);
+        });
+    },
     markSelectedCourses(konversiData) {
       konversiData.forEach(konversi => {
         this.semesters.forEach(semester => {
@@ -184,7 +217,20 @@ export default {
           "Content-Type": "application/json",
         },
       })
+        .catch(error => {
+          console.error('Error submitting courses:', error);
+        });
+      const detail = new FormData();
+      detail.append("id_batch", this.id_batch);
+      detail.append("id_pengaju", this.authUser.UserId);
+      console.log(detail);
+      Axios.post(`${config.apiMahasiswaUrl}/update-status-topik`, detail,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then(response => {
+          console.log(response);
           this.reloadPage();
           this.$bvToast.toast(
             "Konversi SKS berhasil diajukan",
@@ -202,6 +248,7 @@ export default {
   mounted() {
     this.getSemesterId();
     this.fetchCourses();
+    this.getBatchTopik();
   },
 };
 </script>

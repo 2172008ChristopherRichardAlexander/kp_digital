@@ -3,7 +3,7 @@
     <div class="col">
       <div class="row">
         <div class="col text-left">
-          <h4 class="my-1 text-left judul">Detail Topik</h4>
+          <h4 class="my-1 text-left judul">Detail</h4>
         </div>
         <div class="col text-right">
           <router-link
@@ -13,9 +13,9 @@
               topik.status_topik === 'topik dapat di Revisi' ||
               topik.status_topik == 6
             "
-            >Revisi Topik</router-link
+            >Revisi</router-link
           >
-          <div class="btn btn-form-disabled disabled" v-else>Revisi Topik</div>
+          <div class="btn btn-form-disabled disabled" v-else>Revisi</div>
         </div>
       </div>
       <div class="text-center my-2" v-if="loading">
@@ -25,12 +25,12 @@
       <b-table-simple v-else>
         <b-tbody>
           <b-tr>
-            <b-td>Judul</b-td>
+            <b-td>Nama Instansi</b-td>
             <b-td>:</b-td>
             <b-td>{{ topik.judul_topik }}</b-td>
           </b-tr>
           <b-tr>
-            <b-td>Status Topik</b-td>
+            <b-td>Status</b-td>
             <b-td>:</b-td>
             <b-td>{{ topik.status_topik }}</b-td>
           </b-tr>
@@ -186,22 +186,17 @@ export default {
       steps_pengajuan_topik: [
         {
           id_step: -1,
-          judul: "Mengajukan Topik",
+          judul: "Mengajukan Pendaftaran",
           isi: "",
         },
         {
-          id_step: 3,
-          judul: "Menunggu Persetujuan Dosen",
+          id_step: 13,
+          judul: "Melakukan Konversi SKS",
           isi: "",
         },
         {
-          id_step: 2,
+          id_step: 12,
           judul: "Menunggu Persetujuan Koordinator KP",
-          isi: "",
-        },
-        {
-          id_step: 1,
-          judul: "Menunggu Persetujuan Koordinator KBK",
           isi: "",
         },
       ],
@@ -336,19 +331,21 @@ export default {
         return "diterima Koordinator KP";
       } else if (status == 2) {
         return "sedang diajukan";
-      } else if (status == 3) {
+      } else if (status == 3 ) {
         return "menunggu persetujuan dosen";
       } else if (status == 4) {
-        return "ditolak Koordinator KBK";
+        return "ditolak Koordinator RG";
       } else if (status == 5) {
-        return "diterima Koordinator KBK";
+        return "diterima Koordinator KP";
       } else if (status == 6) {
         return "topik dapat di Revisi";
       } else if (status == 7) {
         return "masa sidang";
       } else if (status == 8) {
         return "topik tidak aktif";
-      } else {
+      } else if(status == 13) {
+        return "lakukan konversi SKS"
+      }else {
         return "";
       }
     },
